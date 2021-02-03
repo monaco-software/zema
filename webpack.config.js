@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -58,5 +60,9 @@ module.exports = {
       inject: 'head',
       scriptLoading: 'defer',
     }),
+    new ESLintPlugin({
+      extensions: ['.ts', '.tsx'],
+    }),
+    new StylelintPlugin(),
   ],
 }
