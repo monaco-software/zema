@@ -10,7 +10,7 @@ import '../assets/styles/Layer.css';
 export const BallsLayer: FC = () => {
   const level = 0; // TODO: get level from state
   const history = useHistory();
-  const canvasRef = React.createRef<HTMLCanvasElement>();
+  const ballCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const levelData = levels[level];
@@ -63,9 +63,13 @@ export const BallsLayer: FC = () => {
     requestAnimationFrame(() => drawBalls());
   };
 
+  const start = () => {
+    loop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
+  };
+
   const fastForward = () => {
-    if (speed <= levelData.speed) {
-      loop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
+    if (speed <= 15) {
+      setTimeout(() => start(), 1000 );
     } else {
       speed -= 1;
       pushBalls();
@@ -74,7 +78,7 @@ export const BallsLayer: FC = () => {
   };
 
   useEffect(() => {
-    canvas = canvasRef.current as HTMLCanvasElement;
+    canvas = ballCanvasRef.current as HTMLCanvasElement;
     canvas.width = frame.width;
     canvas.height = frame.height;
     canvas.style.border = '1px solid';
@@ -82,10 +86,13 @@ export const BallsLayer: FC = () => {
     path = getPath(levelData.start, levelData.curve);
     initBalls();
     drawBalls();
+    if (process.env.NODE_ENV === 'development') {
+      balls[balls.length - 1].position = 700;
+    }
     fastForward();
   }, []);
 
   return (
-    <canvas className="Layer" ref={canvasRef} />
+    <canvas className="Layer" ref={ballCanvasRef} />
   );
 };

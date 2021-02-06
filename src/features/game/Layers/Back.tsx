@@ -6,13 +6,13 @@ import { frame } from '../constants';
 export const BackLayer: FC = () => {
   const level = 0; // TODO: get level from state
 
-  const canvasRef = React.createRef<HTMLCanvasElement>();
+  const backCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   let image = new Image();
 
   useEffect(() => {
-    canvas = canvasRef.current as HTMLCanvasElement;
+    canvas = backCanvasRef.current as HTMLCanvasElement;
     canvas.width = frame.width;
     canvas.height = frame.height;
     canvas.style.border = '1px solid';
@@ -25,6 +25,6 @@ export const BackLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer" ref={canvasRef} />
+    <canvas className="Layer" ref={backCanvasRef} />
   );
 };

@@ -9,7 +9,7 @@
 
 export const ballRadius = 15;
 export const ballDiameter = 30;
-
+export const frogRadius = 50;
 export const ballColors = Object.freeze({
   BLUE: 0,
   YELLOW: 1,
