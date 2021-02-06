@@ -5,6 +5,7 @@ import { getPath } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
 import { routes } from '../../../constants';
+import '../assets/styles/Layer.css';
 
 export const BallsLayer: FC = () => {
   const level = 0; // TODO: get level from state
@@ -85,6 +86,6 @@ export const BallsLayer: FC = () => {
   }, []);
 
   return (
-    <canvas ref={canvasRef} />
+    <canvas className="Layer" ref={canvasRef} />
   );
 };
