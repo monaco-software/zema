@@ -9,8 +9,9 @@ const reducer = combineReducers({
 
 export const store = configureStore({
   reducer,
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
-export type RootState = ReturnType<typeof reducer>;
+export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = ThunkDispatch<RootState, unknown, Action>;
 export type AppThunk<R> = ThunkAction<R, RootState, unknown, Action<string>>;

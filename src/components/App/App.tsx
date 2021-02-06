@@ -4,7 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTest } from '../../selectors';
 import { appActions } from '../../reducer';
-import { routes } from '../../constants';
+import { ROUTES } from '../../constants';
 import { SignIn } from '../../features/signin/SignIn';
 import { Forum } from '../../features/forum/Forum';
 import { SignUp } from '../../features/signup/SignUp';
@@ -39,56 +39,32 @@ export const App: FC = () => {
           <br />
 
           <ul>
-            <li><Link to={routes.SIGNIN}>SignIn page</Link></li>
-            <li><Link to={routes.SIGNUP}>SignUp page</Link></li>
-            <li><Link to={routes.ACCOUNT}>Account page</Link></li>
-            <li><Link to={routes.LEADERBOARD}>Leaderboard page</Link></li>
-            <li><Link to={routes.FORUM}>Forum page</Link></li>
-            <li><Link to={routes.GAME}>Game page</Link></li>
-            <li><Link to={routes.GAME_LEVELS}>GameLevels page</Link></li>
-            <li><Link to={routes.GAME_OVER}>GameOver page</Link></li>
+            <li><Link to={ROUTES.SIGNIN}>SignIn page</Link></li>
+            <li><Link to={ROUTES.SIGNUP}>SignUp page</Link></li>
+            <li><Link to={ROUTES.ACCOUNT}>Account page</Link></li>
+            <li><Link to={ROUTES.LEADERBOARD}>Leaderboard page</Link></li>
+            <li><Link to={ROUTES.FORUM}>Forum page</Link></li>
+            <li><Link to={ROUTES.GAME}>Game page</Link></li>
+            <li><Link to={ROUTES.GAME_LEVELS}>GameLevels page</Link></li>
+            <li><Link to={ROUTES.GAME_OVER}>GameOver page</Link></li>
           </ul>
         </Route>
 
-        {/* Вход */}
-        <Route path={routes.SIGNIN}>
-          <SignIn />
-        </Route>
+        <Route path={ROUTES.SIGNIN} component={SignIn} />
 
-        {/* Регистрация */}
-        <Route path={routes.SIGNUP}>
-          <SignUp />
-        </Route>
+        <Route path={ROUTES.SIGNUP} component={SignUp} />
 
-        {/* Страница пользователя */}
-        <Route path={routes.ACCOUNT}>
-          <Account />
-        </Route>
+        <Route path={ROUTES.ACCOUNT} component={Account} />
 
-        {/* Лидерборд */}
-        <Route path={routes.LEADERBOARD}>
-          <Leaderboard />
-        </Route>
+        <Route path={ROUTES.LEADERBOARD} component={Leaderboard} />
 
-        {/* Форум */}
-        <Route path={routes.FORUM}>
-          <Forum />
-        </Route>
+        <Route path={ROUTES.FORUM} component={Forum} />
 
-        {/* Игра */}
-        <Route exact path={routes.GAME}>
-          <Game />
-        </Route>
+        <Route exact path={ROUTES.GAME} component={Game} />
 
-        {/* Страница уровней */}
-        <Route path={routes.GAME_LEVELS}>
-          <GameLevels />
-        </Route>
+        <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
 
-        {/* Завершение уровня */}
-        <Route path={routes.GAME_OVER}>
-          <GameOver />
-        </Route>
+        <Route path={ROUTES.GAME_OVER} component={GameOver} />
       </Switch>
     </div>
   );
