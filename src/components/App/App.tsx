@@ -1,7 +1,7 @@
 import './App.css';
 import React, { FC } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getTest } from '../../selectors';
 import { appActions } from '../../reducer';
 import { ROUTES } from '../../constants';
@@ -13,16 +13,17 @@ import { Leaderboard } from '../../features/leaderboard/Leaderboard';
 import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
+import { useAction } from '../../hooks';
 import b_ from 'b_';
 
 const block = b_.lock('app');
 
 export const App: FC = () => {
-  const dispatch = useDispatch();
+  const setTest = useAction(appActions.setTest);
 
   const test = useSelector(getTest);
 
-  const updateTest = () => dispatch(appActions.setTest(Math.random()));
+  const updateTest = () => setTest(Math.random());
 
   return (
     <div className={block()}>
