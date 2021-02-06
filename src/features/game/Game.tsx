@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
+import { BallsLayer } from './Layers/Balls';
 
 export const Game: FC = () => {
   const history = useHistory();
-  const canvas = React.createRef<HTMLCanvasElement>();
   return (
     <div className="Game">
-      <canvas ref={canvas} />
+      <BallsLayer />
       <br />
+
       <button onClick={() => history.goBack()}>Go back</button>
     </div>
   );

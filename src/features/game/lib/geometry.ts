@@ -2,23 +2,27 @@ export function getLineLen(sx: number, sy: number, ex: number, ey: number) {
   return Math.sqrt(Math.pow(sx - ex, 2) + Math.pow(sy - ey, 2));
 }
 
+// Принимает смещение и контрольные точки кривой Безье
+// Возвращает координаты точки
 export function getBezierXY(
   t: number, sx: number, sy: number,
   cp1x: number, cp1y: number, cp2x: number, cp2y: number,
   ex: number, ey: number
 ) {
-  return {
-    x: Math.pow(1 - t, 3) * sx +
+  return [
+    Math.pow(1 - t, 3) * sx +
       3 * t * Math.pow(1 - t, 2) * cp1x +
       3 * t * t * (1 - t) * cp2x +
       t * t * t * ex,
-    y: Math.pow(1 - t, 3) * sy +
+    Math.pow(1 - t, 3) * sy +
       3 * t * Math.pow(1 - t, 2) * cp1y +
       3 * t * t * (1 - t) * cp2y +
       t * t * t * ey,
-  };
+  ];
 }
 
+// Принимает смещение и контрольные точки кривой Безье
+// Возвращает угол касательной
 export function getBezierAngle(
   t: number, sx: number, sy: number,
   cp1x: number, cp1y: number, cp2x: number, cp2y: number,
@@ -28,3 +32,30 @@ export function getBezierAngle(
   const dy = Math.pow(1 - t, 2) * (cp1y - sy) + 2 * t * (1 - t) * (cp2y - cp1y) + t * t * (ey - cp2y);
   return -Math.atan2(dx, dy) + 0.5 * Math.PI;
 }
+
+// Принимает стартовую точку и массив контрольных точек кривых Безье
+// возвращает массив точек через промежутки >= quantum
+export function getPath(start: number[], curve: number[][], quantum = 1, quantize = 3000) {
+  let last = start.slice();
+  let dirtyPath: number[][] = [];
+  curve.forEach((c) => {
+    for (let i = 0; i < quantize; i += 1) {
+      const coordinates = getBezierXY(i / quantize, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]);
+      coordinates.push(getBezierAngle(i / quantize, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]));
+      dirtyPath.push(coordinates);
+    }
+    last = [c[4], c[5]];
+  });
+  return dirtyPath.reduce((memo, current) => {
+    if (memo.length === 0) {
+      return [current];
+    }
+    const lastMemo = memo[memo.length - 1];
+    const len = getLineLen(lastMemo[0], lastMemo[1], current[0], current[1]);
+    if (len >= quantum) {
+      return [...memo, current];
+    }
+    return memo;
+  }, [dirtyPath[0]]);
+}
+
