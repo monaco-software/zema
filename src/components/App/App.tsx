@@ -13,6 +13,9 @@ import { Leaderboard } from '../../features/leaderboard/Leaderboard';
 import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
+import b_ from 'b_';
+
+const block = b_.lock('app');
 
 export const App: FC = () => {
   const dispatch = useDispatch();
@@ -22,11 +25,11 @@ export const App: FC = () => {
   const updateTest = () => dispatch(appActions.setTest(Math.random()));
 
   return (
-    <div className="App">
+    <div className={block()}>
       <Switch>
         {/* Главная страница */}
         <Route exact path="/">
-          <div className="App__test">
+          <div className={block('test')}>
             {test}
             <br />
             <button onClick={updateTest}>
