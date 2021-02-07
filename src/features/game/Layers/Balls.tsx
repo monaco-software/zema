@@ -1,13 +1,19 @@
 import React, { FC, useEffect } from 'react';
 import levels from '../levels';
-import { ballColors, ballDiameter, ballRadius, frame } from '../constants';
+import { ballColors, ballDiameter, ballRadius, bulletSpeed, frame, frogRadius } from '../constants';
 import { getPath } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
 import { routes } from '../../../constants';
 import '../assets/styles/Layer.css';
+import eventBus from '../lib/event-bus';
 
 export const BallsLayer: FC = () => {
+  let bulletBall: Ball;
+  let bulletPath: number[][] = [];
+  let bulletPosition = 0;
+  let bulletPresent = false;
+
   const level = 0; // TODO: get level from state
   const history = useHistory();
   const ballCanvasRef = React.createRef<HTMLCanvasElement>();
@@ -17,8 +23,8 @@ export const BallsLayer: FC = () => {
   let path: number[][];
   let balls: Ball[] = [];
   let position = -levelData.balls * ballDiameter;
-  let loop: number;
-  let speed = levelData.speed * 30;
+
+  let speed = 500;
 
   const initBalls = () => {
     balls = [];
@@ -40,6 +46,21 @@ export const BallsLayer: FC = () => {
       ctx.shadowBlur = 10;
       ctx.drawImage(ball.canvas, path[ball.position][0] - ballRadius, path[ball.position][1] - ballRadius, ballDiameter, ballDiameter);
     });
+    if (bulletPresent) {
+      bulletBall.update(bulletPosition, bulletPath[bulletPosition][2]);
+      ctx.drawImage(
+        bulletBall.canvas,
+        bulletPath[bulletPosition][0] - ballRadius,
+        bulletPath[bulletPosition][1] - ballRadius,
+        ballDiameter, ballDiameter);
+    }
+    if (bulletPresent && bulletPath) {
+      bulletPath.forEach((c) => {
+        ctx.fillStyle = '#000';
+        // ctx.strokeStyle = '#000';
+        ctx.fillRect(c[0], c[1], 1, 1); // fill in the pixel at (10,10)
+      });
+    }
   };
 
   const pushBalls = () => {
@@ -54,8 +75,7 @@ export const BallsLayer: FC = () => {
       }
       if (ball.position >= path.length) {
         alert('Game over');
-        window.clearInterval(loop);
-        initBalls();
+        balls.length = 0;
         history.push(routes.GAME_OVER);
         return;
       }
@@ -63,17 +83,22 @@ export const BallsLayer: FC = () => {
     requestAnimationFrame(() => drawBalls());
   };
 
-  const start = () => {
-    loop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
+  const pushBullet = () => {
+    if (bulletPresent) {
+      if (bulletPosition >= bulletPath.length - 1) {
+        bulletPresent = false;
+      } else {
+        bulletPosition += 1;
+      }
+    }
+    requestAnimationFrame(() => drawBalls());
   };
 
   const fastForward = () => {
-    if (speed <= 15) {
-      setTimeout(() => start(), 1000 );
-    } else {
+    if (speed >= levelData.speed) {
       speed -= 1;
       pushBalls();
-      setTimeout(() => fastForward(), 1000 * (1 / speed) );
+      setTimeout(() => fastForward(), 1000 * (1 / speed));
     }
   };
 
@@ -89,10 +114,33 @@ export const BallsLayer: FC = () => {
     if (process.env.NODE_ENV === 'development') {
       balls[balls.length - 1].position = 700;
     }
+    const ballsPushLoop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
+    const shotLoop = window.setInterval(pushBullet, 20);
     fastForward();
+    return () => {
+      clearInterval(ballsPushLoop);
+      clearInterval(shotLoop);
+    };
   }, []);
 
+  eventBus.on('shot', (angle, color) => {
+    bulletBall = new Ball(color);
+    bulletPath = [];
+    bulletPosition = 0;
+    bulletPresent = true;
+
+    for (let i = frogRadius; i < frame.width; i += bulletSpeed) {
+      const x = Math.round(levelData.frogPosition.x + i * Math.cos(angle));
+      const y = Math.round(levelData.frogPosition.y + i * Math.sin(angle));
+      if (x >= 0 && x <= frame.width && y >= 0 && y <= frame.height) {
+        bulletPath.push([x, y, angle]);
+      }
+    }
+    console.dir(bulletPath);
+  });
+
   return (
-    <canvas className="Layer" ref={ballCanvasRef} />
+    <canvas className="Layer"
+      ref={ballCanvasRef} />
   );
 };

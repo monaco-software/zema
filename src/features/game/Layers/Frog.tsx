@@ -4,6 +4,7 @@ import { ballColors, ballRadius, frame, frogRadius } from '../constants';
 import Ball from '../lib/ball';
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
+import eventBus from '../lib/event-bus';
 
 export const FrogLayer: FC = () => {
   const level = 0; // TODO: get level from state
@@ -59,8 +60,9 @@ export const FrogLayer: FC = () => {
 
   const mouseClick = () => {
     if (ballPosition < 0) { return; }
+    eventBus.emit('shot', angle - Math.PI / 2, ball.color);
     ball = new Ball(Math.floor(Math.random() * Object.keys(ballColors).length));
-    ballPosition = -20;
+    ballPosition = -40;
   };
 
   useEffect(() => {
