@@ -1,24 +1,29 @@
 import React, { FC, useEffect } from 'react';
 import levels from '../levels';
-import { ballColors, ballRadius, frame, frogRadius } from '../constants';
+import { ballColors, ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '../constants';
 import Ball from '../lib/ball';
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
-import eventBus from '../lib/event-bus';
+import { bulletActions } from '../reducer';
+import { useDispatch } from 'react-redux';
+import { store } from '../../../store';
 
 export const FrogLayer: FC = () => {
   const level = 0; // TODO: get level from state
+  const dispatch = useDispatch();
   const frogCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const levelData = levels[level];
-  let ball = new Ball(Math.floor(Math.random() * Object.keys(ballColors).length));
+  let ball: Ball;
   let frogPosition = levelData.frogPosition;
   let ballPosition = -20;
   const frog = new Image();
-  frog.src = frogImage;
   let angle = 0;
+  let burpBallInterval: number;
+  let state = bulletStates.IDLE;
 
+  // отрезает часть шарика, "накрытого" губой лягушки
   const coverWithLip = (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number) => {
     ctx.save();
     ctx.globalCompositeOperation = 'destination-in';
@@ -29,29 +34,47 @@ export const FrogLayer: FC = () => {
     ctx.restore();
   };
 
+  // отрисрвывает лягушку
   const drawFrog = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.translate(frogPosition.x, frogPosition.y);
     ctx.rotate(angle);
     ctx.translate(-frogRadius, -frogRadius);
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 1;
 
     ctx.drawImage(frog, 0, 0, frogRadius * 2, frogRadius * 2);
-    ball.update(ballPosition + 20, Math.PI * 1.5);
-    coverWithLip(ball.ctx, ballRadius, ballPosition - ballRadius, 40);
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 5;
-    ctx.drawImage(ball.canvas, 35, -ballPosition + 5);
-  };
-
-  const burpBall = () => {
-    if (ballPosition < 0) {
-      ballPosition += 1;
-      drawFrog();
+    if (state === bulletStates.ARMING || state === bulletStates.ARMED ) {
+      ball.update(ballPosition + 20, Math.PI * 1.5);
+      coverWithLip(ball.ctx, ballRadius, ballPosition - ballRadius, 40);
+      ctx.drawImage(ball.canvas, 35, -ballPosition + 5);
     }
   };
+
+  // Интервал хендлер. Выкатывает шарик из брюха, устанавливает состояние "ЗАРЯЖЕНО"
+  const burpBall = () => {
+    if (ballPosition < 0 && state === bulletStates.ARMING) {
+      ballPosition += 1;
+    } else {
+      dispatch(bulletActions.setState({ state: bulletStates.ARMED, color: ball.color, angle: 0 }));
+      clearInterval(burpBallInterval);
+    }
+    drawFrog();
+  };
+
+  // листнер для реакции на изменение стостояния bullet
+  const makeShot = () => {
+    const newValue = store.getState().bullet;
+    if (newValue.state === state) {
+      return;
+    }
+    state = newValue.state;
+    if (state === bulletStates.ARMING) {
+      ball = new Ball(Math.floor(Math.random() * Object.keys(ballColors).length));
+      ballPosition = ballStartPosition;
+      burpBallInterval = window.setInterval(() => burpBall(), 20);
+    }
+  };
+  const unsubscribe = store.subscribe(makeShot);
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     angle = Math.atan2(e.pageX - frogPosition.x, -(e.pageY - frogPosition.y));
@@ -59,10 +82,10 @@ export const FrogLayer: FC = () => {
   };
 
   const mouseClick = () => {
-    if (ballPosition < 0) { return; }
-    eventBus.emit('shot', angle - Math.PI / 2, ball.color);
-    ball = new Ball(Math.floor(Math.random() * Object.keys(ballColors).length));
-    ballPosition = -40;
+    if (state !== bulletStates.ARMED) { return; }
+    ballPosition = ballStartPosition;
+    dispatch(bulletActions.setState({ state: bulletStates.SHOT, color: ball.color, angle: angle - Math.PI / 2 }));
+    drawFrog();
   };
 
   useEffect(() => {
@@ -71,7 +94,15 @@ export const FrogLayer: FC = () => {
     canvas.height = frame.height;
     canvas.style.border = '1px solid';
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    setInterval(() => burpBall(), 20);
+    frog.onload = () => {
+      drawFrog();
+    };
+    frog.src = frogImage;
+
+    return () => {
+      clearInterval(burpBallInterval);
+      unsubscribe();
+    };
   }, []);
 
   return (

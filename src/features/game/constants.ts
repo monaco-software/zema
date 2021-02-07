@@ -1,7 +1,9 @@
 export const ballRadius = 15;
+export const ballStartPosition = -30;
 export const ballDiameter = 30;
 export const frogRadius = 50;
 export const bulletSpeed = 10;
+
 export const ballColors = Object.freeze({
   BLUE: 0,
   YELLOW: 1,
@@ -9,6 +11,13 @@ export const ballColors = Object.freeze({
   RED: 3,
   PINK: 4,
   GREY: 5,
+});
+
+export const bulletStates = Object.freeze({
+  IDLE: 0,
+  ARMING: 1,
+  ARMED: 2,
+  SHOT: 3,
 });
 
 export const frame = Object.freeze({

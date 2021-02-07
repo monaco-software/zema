@@ -8,3 +8,9 @@ export interface spriteOptions {
   tick: number;
 }
 
+export interface BulletState {
+  state: number;
+  angle: number;
+  color: number;
+}
+

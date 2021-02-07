@@ -13,15 +13,10 @@ export default class Sprite {
 
   constructor(options?: Partial<spriteOptions>) {
     Object.assign(this, options);
-    // this.ctx = options?.ctx as CanvasRenderingContext2D;
-    // if (!(this.ctx instanceof CanvasRenderingContext2D)) {
     this.canvas = document.createElement('canvas');
     this.canvas.width = this.width;
     this.canvas.height = this.height;
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-    // } else {
-    //   this.canvas = this.ctx.canvas;
-    // }
   }
 
   update(index = 0, angle = 0): void {
