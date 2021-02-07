@@ -29,7 +29,7 @@ module.exports = {
     "@typescript-eslint/typedef": "off",
     "@typescript-eslint/no-unnecessary-type-arguments": "off",
 
-    // Delete then @vkontakte/eslint-config update @typescript-eslint/eslint-plugin and @typescript-eslint/parser deps
+    // TODO: Удалить эти правила, когда в @vkontakte/eslint-config обновят @typescript-eslint/eslint-plugin и @typescript-eslint/parser
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/class-name-casing": "off"
   }
