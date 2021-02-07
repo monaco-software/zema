@@ -1,6 +1,6 @@
 import { Action, combineReducers, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { appReducer } from './reducer';
-import { accountReducer } from './features/account/reducer';
+import { accountReducer } from '../features/account/reducer';
 
 const reducer = combineReducers({
   app: appReducer,
