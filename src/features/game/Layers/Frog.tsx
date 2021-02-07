@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import levels from '../levels';
-import { ballColors, ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '../constants';
+import { ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '../constants';
 import Ball from '../lib/ball';
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
@@ -15,7 +15,7 @@ export const FrogLayer: FC = () => {
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const levelData = levels[level];
-  let ball: Ball;
+  let ball = new Ball(Math.floor(Math.random() * levelData.ballsTypes));
   let frogPosition = levelData.frogPosition;
   let ballPosition = -20;
   const frog = new Image();
@@ -64,14 +64,16 @@ export const FrogLayer: FC = () => {
   // листнер для реакции на изменение стостояния bullet
   const makeShot = () => {
     const newValue = store.getState().bullet;
-    if (newValue.state === state) {
-      return;
-    }
+    if (newValue.state === state) { return; }
     state = newValue.state;
     if (state === bulletStates.ARMING) {
-      ball = new Ball(Math.floor(Math.random() * Object.keys(ballColors).length));
+      ball.setColor(Math.floor(Math.random() * levelData.ballsTypes));
       ballPosition = ballStartPosition;
       burpBallInterval = window.setInterval(() => burpBall(), 20);
+    }
+    if (state === bulletStates.IDLE) {
+      ballPosition = ballStartPosition;
+      drawFrog();
     }
   };
   const unsubscribe = store.subscribe(makeShot);
