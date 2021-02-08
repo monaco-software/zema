@@ -1,4 +1,4 @@
-import './App.css';
+import './app.css';
 import React, { FC } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
