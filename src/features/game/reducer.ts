@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BulletState, RemainingColorsState } from './types';
-import { ballColors, bulletStates } from './constants';
+import { BALL_COLORS, BULLET_STATE } from './constants';
 
 const initialBulletState: BulletState = {
-  state: bulletStates.IDLE,
-  color: ballColors.BLUE,
+  state: BULLET_STATE.IDLE,
+  color: BALL_COLORS.BLUE,
   angle: 0,
 };
 

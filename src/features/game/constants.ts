@@ -1,28 +1,28 @@
-export const ballRadius = 15;
-export const ballStartPosition = -30;
-export const ballDiameter = 30;
-export const frogRadius = 50;
-export const bulletSpeed = 9;
-export const skullRadius = 52;
-export const allowance = 5;
+export const BALL_RADIUS = 15;
+export const BALL_START_POSITION = -20;
+export const BALL_DIAMETER = 30;
+export const FROG_RADIUS = 50;
+export const BULLET_SPEED = 9;
+export const SKULL_RADIUS = 52;
+export const ALLOWANCE = 7;
 
-export const ballColors = Object.freeze({
-  BLUE: 0,
-  YELLOW: 1,
-  GREEN: 2,
-  RED: 3,
-  PINK: 4,
-  GREY: 5,
-});
+export enum BALL_COLORS {
+  BLUE,
+  YELLOW,
+  GREEN,
+  RED,
+  PINK,
+  GREY,
+}
 
-export const bulletStates = Object.freeze({
-  IDLE: 0,
-  ARMING: 1,
-  ARMED: 2,
-  SHOT: 3,
-});
+export enum BULLET_STATE {
+  IDLE,
+  ARMING,
+  ARMED,
+  SHOT,
+}
 
-export const frame = Object.freeze({
-  width: 800,
-  height: 600,
-});
+export enum FRAME {
+  WIDTH= 800,
+  HEIGHT = 600,
+}
