@@ -64,15 +64,13 @@
   "dependencies": {
     "@reduxjs/toolkit": "1.5.0",
     "b_": "1.3.4",
-    "compression": "^1.7.4",
-    "express": "^4.17.1",
-    "lint": "^0.7.0",
+    "compression": "1.7.4",
+    "express": "4.17.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-redux": "7.2.2",
     "react-router-dom": "5.2.0",
-    "redux": "4.0.5",
-    "typecheck": "^0.1.2"
+    "redux": "4.0.5"
   },
   "husky": {
     "hooks": {
