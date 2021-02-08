@@ -2,8 +2,9 @@ export const ballRadius = 15;
 export const ballStartPosition = -30;
 export const ballDiameter = 30;
 export const frogRadius = 50;
-export const bulletSpeed = 10;
+export const bulletSpeed = 9;
 export const skullRadius = 52;
+export const allowance = 5;
 
 export const ballColors = Object.freeze({
   BLUE: 0,

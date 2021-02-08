@@ -1,15 +1,25 @@
 import React, { FC, useEffect } from 'react';
 import levels from '../levels';
-import { ballDiameter, ballRadius, bulletSpeed, bulletStates, frame, frogRadius, skullRadius } from '../constants';
-import { getPath } from '../lib/geometry';
+import {
+  allowance,
+  ballDiameter,
+  ballRadius,
+  bulletSpeed,
+  bulletStates,
+  frame,
+  frogRadius,
+  skullRadius,
+} from '../constants';
+import { getCloserPoint, getLineLen, getPath } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
 import { routes } from '../../../constants';
 import '../assets/styles/Layer.css';
 import skullImage from '../assets/images/skull.png';
 import { store } from '../../../store';
-import { bulletActions } from '../reducer';
+import { bulletActions, remainingColorsActions } from '../reducer';
 import { useDispatch } from 'react-redux';
+import Explosion from '../lib/explosion';
 
 export const BallsLayer: FC = () => {
   const dispatch = useDispatch();
@@ -33,13 +43,16 @@ export const BallsLayer: FC = () => {
   let ctx: CanvasRenderingContext2D;
   let path: number[][];
   let balls: Ball[] = [];
-  let position = levelData.balls * ballDiameter;
+  let position = -levelData.balls * ballDiameter;
   position = 0;
 
-  let speed = 1500;
+  let speed = 100;
   let win = true;
   let ended = false;
+  let inserting = false;
   let skullAngle = 0;
+  let skullRotateAngle = 0;
+  let explosed: Explosion[] = [];
 
   const drawBalls = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -76,17 +89,95 @@ export const BallsLayer: FC = () => {
         ctx.fillRect(c[0], c[1], 1, 1);
       });
     }
+    explosed.forEach((boom, index) => {
+      if (boom.phase < boom.numberOfFrames) {
+        boom.update(boom.phase);
+        boom.phase += 1;
+        ctx.drawImage(boom.canvas, boom.x - ballRadius, boom.y - ballRadius, ballDiameter, ballDiameter);
+      } else {
+        explosed.splice(index, 1);
+      }
+    });
+  };
+
+  const letArming = () => {
+    bulletPath.length = 0;
+    if (store.getState().bullet.state !== bulletStates.IDLE) { // если ира еще не окончена
+      dispatch(bulletActions.setState({ state: bulletStates.ARMING, color: 0, angle: 0 }));
+    }
+    clearInterval(shotLoop);
+  };
+
+  // возвращает массив индексов одинаковых шариков рядом с заданным
+  const findSame = (index: number): number[] => {
+    let res = [];
+    let color = balls[index].color;
+    let fail = false;
+    for (let f = index; f < balls.length; f += 1) {
+      if (balls[f].color === color && !fail) {
+        res.push(f);
+      } else {
+        fail = true;
+      }
+    }
+    fail = false;
+    for (let b = index; b >= 0; b -= 1) {
+      if (balls[b].color === color && !fail) {
+        res.push(b);
+      } else {
+        fail = true;
+      }
+    }
+    return [...new Set(res.sort((n1, n2) => n1 - n2))];
+  };
+
+  const setRemainigColors = (array: Ball[]) => {
+    const remainingColors: number[] = [];
+    array.forEach((ball) => {
+      if (! remainingColors.includes(ball.color)) {
+        remainingColors.push(ball.color);
+      }
+    });
+    dispatch(remainingColorsActions.setColors(remainingColors));
+  };
+
+  const explode = (explodeBalls: number[]) => {
+    explodeBalls.forEach((ball) => {
+      const pathPosition = path[balls[ball].position];
+      explosed.push(new Explosion( pathPosition[0], pathPosition[1]));
+    });
+    balls.splice(explodeBalls[0], explodeBalls.length);
   };
 
   const pushBullet = () => {
-    if (bulletPath.length) {
+    if (bulletPath.length && !inserting && !ended) {
       if (bulletPosition >= bulletPath.length - 1) { // промахнулись
-        bulletPath.length = 0;
-        if (store.getState().bullet.state !== bulletStates.IDLE) { // если ира еще не окончена
-          dispatch(bulletActions.setState({ state: bulletStates.ARMING, color: 0, angle: 0 }));
-        }
-        clearInterval(shotLoop);
+        letArming();
       } else {
+        balls.forEach((ball, index) => {
+          if (inserting) { return; }
+          const bullet = { x: bulletPath[bulletPosition][0], y: bulletPath[bulletPosition][1] };
+          if (getLineLen(
+            bullet.x, bullet.y,
+            path[ball.position][0], path[ball.position][1]
+          ) < ballRadius + allowance) {
+            if (!inserting) {
+              inserting = true;
+              const closerPoint = getCloserPoint(path, bullet.x, bullet.y);
+              const insertedIndex = closerPoint > ball.position ? index + 1 : index;
+              balls.splice(insertedIndex, 0, new Ball(bulletBall.color));
+              const sameBalls = findSame(insertedIndex);
+              if (sameBalls.length >= 3) {
+                // делаем копию, чтобы сразу выставить значение по оставшимся шарам
+                const ballsCopy = balls.slice();
+                ballsCopy.splice(sameBalls[0], sameBalls.length);
+                setRemainigColors(ballsCopy);
+                setTimeout(() => explode(sameBalls), 500);
+              }
+              letArming();
+            }
+          }
+        });
         bulletPosition += 1;
       }
     }
@@ -107,6 +198,7 @@ export const BallsLayer: FC = () => {
           bulletPath.push([x, y, bullet.angle]);
         }
       }
+      inserting = false;
       shotLoop = window.setInterval(pushBullet, 20);
     }
   };
@@ -146,12 +238,13 @@ export const BallsLayer: FC = () => {
       if (ball.position >= path.length) {
         if (win) {
           win = false;
+          skullRotateAngle = Math.PI * 2 / balls.length;
           dispatch(bulletActions.setState({ state: bulletStates.IDLE, color: 0, angle: 0 }));
         }
         balls.pop();
         position += 28;
         // делаем один оборот
-        skullAngle < Math.PI * 2 ? skullAngle += Math.PI / 15 : skullAngle = Math.PI * 2;
+        skullAngle < Math.PI * 2 ? skullAngle += skullRotateAngle : skullAngle = Math.PI * 2;
       }
     });
     requestAnimationFrame(() => drawBalls());
@@ -175,7 +268,7 @@ export const BallsLayer: FC = () => {
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     path = getPath(levelData.start, levelData.curve);
     initBalls();
-    // drawBalls();
+    setRemainigColors(balls);
     if (process.env.NODE_ENV === 'development') {
       balls[balls.length - 1].position = 700;
     }

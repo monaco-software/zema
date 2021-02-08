@@ -14,3 +14,7 @@ export interface BulletState {
   color: number;
 }
 
+export interface RemainingColorsState {
+  colors: number[];
+}
+

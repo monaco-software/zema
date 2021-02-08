@@ -62,12 +62,15 @@ export const FrogLayer: FC = () => {
   };
 
   // листнер для реакции на изменение стостояния bullet
-  const makeShot = () => {
+  const makeBullet = () => {
     const newValue = store.getState().bullet;
     if (newValue.state === state) { return; }
     state = newValue.state;
     if (state === bulletStates.ARMING) {
-      ball.setColor(Math.floor(Math.random() * levelData.ballsTypes));
+      const remainingColors = store.getState().remainingColors.colors;
+      console.log(remainingColors);
+      const randomColorIndex = Math.floor(Math.random() * remainingColors.length);
+      ball.setColor(remainingColors[randomColorIndex]);
       ballPosition = ballStartPosition;
       burpBallInterval = window.setInterval(() => burpBall(), 20);
     }
@@ -76,7 +79,7 @@ export const FrogLayer: FC = () => {
       drawFrog();
     }
   };
-  const unsubscribe = store.subscribe(makeShot);
+  const unsubscribe = store.subscribe(makeBullet);
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     angle = Math.atan2(e.pageX - frogPosition.x, -(e.pageY - frogPosition.y));

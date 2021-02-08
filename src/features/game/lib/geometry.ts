@@ -59,3 +59,35 @@ export function getPath(start: number[], curve: number[][], quantum = 1, quantiz
   }, [dirtyPath[0]]);
 }
 
+// Принимает 2 массива координат
+// Возвращает индексы ближайших точек
+export function getCloserPoints(a: number[][], b: number[][]): number[] {
+  let res = [0, 0];
+  let minDistance = Number.MAX_SAFE_INTEGER;
+  for (let ai = 0; ai < a.length; ai += 1) {
+    for (let bi = 0; bi < b.length; bi += 1) {
+      let currentDistance = getLineLen(a[ai][0], a[ai][1], b[bi][0], b[bi][1]);
+      if (minDistance > currentDistance) {
+        minDistance = currentDistance;
+        res = [ai, bi];
+      }
+    }
+  }
+  return res;
+}
+
+// Принимает массив координат и координаты точки
+// Возвращает индекс ближайшей точки из массива
+export function getCloserPoint(a: number[][], x: number, y: number): number {
+  let res = 0;
+  let minDistance = Number.MAX_SAFE_INTEGER;
+  for (let ai = 0; ai < a.length; ai += 1) {
+    let currentDistance = getLineLen(a[ai][0], a[ai][1], x, y);
+    if (minDistance > currentDistance) {
+      minDistance = currentDistance;
+      res = ai;
+    }
+  }
+  return res;
+}
+
