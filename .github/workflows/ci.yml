@@ -1,10 +1,6 @@
 name: ci
 
 on:
-  push:
-    branches:
-      - master
-      - sdemidov/heroku
   pull_request:
     branches:
       - master
