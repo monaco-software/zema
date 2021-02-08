@@ -28,6 +28,8 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/typedef": "off",
     "@typescript-eslint/no-unnecessary-type-arguments": "off",
+    'linebreak-style': 0,
+
 
     // TODO: Удалить эти правила, когда в @vkontakte/eslint-config обновят @typescript-eslint/eslint-plugin и @typescript-eslint/parser
     "@typescript-eslint/camelcase": "off",
