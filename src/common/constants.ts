@@ -1,4 +1,4 @@
-export enum routes {
+export enum ROUTES {
   SIGNIN = '/signin',
   SIGNUP = '/signup',
   ACCOUNT = '/account',

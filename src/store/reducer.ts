@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppState } from './types';
+import { AppState } from '../common/types';
 
 const initialState: AppState = {
   test: 'test string',

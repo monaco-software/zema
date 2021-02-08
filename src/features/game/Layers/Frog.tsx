@@ -6,8 +6,8 @@ import { ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
 import { bulletActions } from '../reducer';
-import { store } from '../../../store';
 import { random } from '../lib/utils';
+import { store } from '../../../store/store';
 
 export const FrogLayer: FC = () => {
   const level = 0; // TODO: get level from state

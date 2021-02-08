@@ -1,21 +1,26 @@
-import './AccountForm.css';
+import './account-form.css';
 import React, { ChangeEvent, FC, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getAccountEmail, getAccountName } from '../../selectors';
 import { accountActions } from '../../reducer';
+import { useAction } from '../../../../hooks';
+import b_ from 'b_';
+
+const block = b_.lock('account-form');
 
 export const AccountForm: FC = () => {
-  const dispatch = useDispatch();
+  const setName = useAction(accountActions.setAccountName);
+  const setEmail = useAction(accountActions.setAccountEmail);
 
   const name = useSelector(getAccountName);
   const email = useSelector(getAccountEmail);
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(accountActions.setAccountName(event.target.value));
+    setName(event.target.value);
   };
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(accountActions.setAccountEmail(event.target.value));
+    setEmail(event.target.value);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -25,18 +30,18 @@ export const AccountForm: FC = () => {
   };
 
   return (
-    <form className="AccountForm" onSubmit={onSubmit}>
-      <label className="AccountForm__label">
+    <form className={block()} onSubmit={onSubmit}>
+      <label className={block('label')}>
         Name
-        <input className="AccountForm__input" type="text" value={name} onChange={onNameChange} />
+        <input className={block('input')} type="text" value={name} onChange={onNameChange} />
       </label>
 
-      <label className="AccountForm__label">
+      <label className={block('label')}>
         Email
-        <input className="AccountForm__input" type="email" value={email} onChange={onEmailChange} />
+        <input className={block('input')} type="email" value={email} onChange={onEmailChange} />
       </label>
 
-      <button type="submit" className="AccountForm__submitButton">Отправить</button>
+      <button type="submit" className={block('submit-button')}>Отправить</button>
     </form>
   );
 };

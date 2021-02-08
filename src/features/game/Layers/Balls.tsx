@@ -13,14 +13,14 @@ import {
 import { getCloserPoint, getLineLen, getPath } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
-import { routes } from '../../../constants';
 import '../assets/styles/Layer.css';
 import skullImage from '../assets/images/skull.png';
-import { store } from '../../../store';
 import { bulletActions, remainingColorsActions } from '../reducer';
 import { useDispatch } from 'react-redux';
 import Explosion from '../lib/explosion';
 import { random } from '../lib/utils';
+import { ROUTES } from '../../../common/constants';
+import { store } from '../../../store/store';
 
 export const BallsLayer: FC = () => {
   const dispatch = useDispatch();
@@ -227,10 +227,10 @@ export const BallsLayer: FC = () => {
         clearInterval(ballsPushLoop);
         if (win) {
           alert('You win!)');
-          history.push(routes.GAME_LEVELS);
+          history.push(ROUTES.GAME_LEVELS);
         } else {
           alert('You are a loser');
-          history.push(routes.GAME_OVER);
+          history.push(ROUTES.GAME_OVER);
         }
       }, 1000);
       return;
