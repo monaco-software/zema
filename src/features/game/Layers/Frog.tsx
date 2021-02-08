@@ -1,12 +1,13 @@
 import React, { FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import levels from '../levels';
-import { ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '../constants';
 import Ball from '../lib/ball';
+import { ballRadius, ballStartPosition, bulletStates, frame, frogRadius } from '../constants';
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
 import { bulletActions } from '../reducer';
-import { useDispatch } from 'react-redux';
 import { store } from '../../../store';
+import { random } from '../lib/utils';
 
 export const FrogLayer: FC = () => {
   const level = 0; // TODO: get level from state
@@ -15,7 +16,7 @@ export const FrogLayer: FC = () => {
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const levelData = levels[level];
-  let ball = new Ball(Math.floor(Math.random() * levelData.ballsTypes));
+  let ball = new Ball(random(levelData.ballsTypes));
   let frogPosition = levelData.frogPosition;
   let ballPosition = -20;
   const frog = new Image();
@@ -34,7 +35,6 @@ export const FrogLayer: FC = () => {
     ctx.restore();
   };
 
-  // отрисрвывает лягушку
   const drawFrog = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -44,7 +44,7 @@ export const FrogLayer: FC = () => {
 
     ctx.drawImage(frog, 0, 0, frogRadius * 2, frogRadius * 2);
     if (state === bulletStates.ARMING || state === bulletStates.ARMED ) {
-      ball.update(ballPosition + 20, Math.PI * 1.5);
+      ball.update(ballPosition + 20 + ball.positionOffset, Math.PI * 1.5);
       coverWithLip(ball.ctx, ballRadius, ballPosition - ballRadius, 40);
       ctx.drawImage(ball.canvas, 35, -ballPosition + 5);
     }
@@ -69,8 +69,9 @@ export const FrogLayer: FC = () => {
     if (state === bulletStates.ARMING) {
       const remainingColors = store.getState().remainingColors.colors;
       console.log(remainingColors);
-      const randomColorIndex = Math.floor(Math.random() * remainingColors.length);
+      const randomColorIndex = random(remainingColors.length);
       ball.setColor(remainingColors[randomColorIndex]);
+      ball.positionOffset = random(60);
       ballPosition = ballStartPosition;
       burpBallInterval = window.setInterval(() => burpBall(), 20);
     }

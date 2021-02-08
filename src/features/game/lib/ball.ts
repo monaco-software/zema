@@ -6,10 +6,15 @@ export default class Ball extends Sprite {
   image: HTMLImageElement;
   color = 0;
   position = 0;
+  positionOffset = 0;
 
-  constructor(color = Math.floor(Math.random() * 6)) {
+  constructor(
+    color = Math.floor(Math.random() * 6),
+    positionOffset = Math.floor(Math.random() * 60)
+  ) {
     super({ yOffset: color * 180, numberOfFrames: 60, width: ballDiameter, height: ballDiameter });
     this.color = color;
+    this.positionOffset = positionOffset;
     this.image = new Image();
     this.image.src = ballSprite;
   }
