@@ -1,11 +1,11 @@
+import { Level } from './types';
 
-const levels = Object.freeze([{
+const levels: Level[] = [{
   speed: 20,
   balls: 77,
   ballsTypes: 2,
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 515, y: 310 },
-  offset: { x: 0, y: 0 },
   start: [421, 0],
   curve: [
     [502, 36, 623, 113, 690, 195],
@@ -29,6 +29,6 @@ const levels = Object.freeze([{
     [394, 184, 448, 205, 470, 219],
     [512, 246, 543, 266, 562, 312],
   ],
-}]);
+}];
 
-export default levels;
+export default Object.freeze(levels);

@@ -1,3 +1,5 @@
+/** eslint prefer-const: "error" */
+
 import React, { FC, useEffect } from 'react';
 import levels from '../levels';
 import {
@@ -13,7 +15,6 @@ import {
 import { getCloserPoint, getLineLen, getPath } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
-import '../assets/styles/Layer.css';
 import skullImage from '../assets/images/skull.png';
 import { gameActions } from '../reducer';
 import { useDispatch } from 'react-redux';
@@ -23,6 +24,8 @@ import { random } from '../lib/utils';
 import { ROUTES } from '../../../common/constants';
 import { store } from '../../../store/store';
 import Particle from '../lib/paricle';
+
+import '../assets/styles/Layer.css';
 
 export const BallsLayer: FC = () => {
   const dispatch = useDispatch();
@@ -34,12 +37,12 @@ export const BallsLayer: FC = () => {
   const levelData = levels[level];
 
   const bulletPath: number[][] = [];
-  let bulletBall = new Ball(random(levelData.ballsTypes));
+  const bulletBall = new Ball(random(levelData.ballsTypes));
   let bulletPosition = 0;
   let shotLoop = 0;
   let ballsPusherLoop = 0;
 
-  let skull = new Image();
+  const skull = new Image();
 
   const ballCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
@@ -49,16 +52,12 @@ export const BallsLayer: FC = () => {
   let pusherPosition = -levelData.balls * BALL_DIAMETER;
   let speed = 500;
 
-  // TODO: удалить после тестирования механики
-  pusherPosition = 0;
-  speed = 100;
-
   let win = true;
   let ended = false;
   let inserting = false;
   let skullAngle = 0;
   let skullRotateAngle = 0;
-  let explosed: Explosion[] = [];
+  const explosed: Explosion[] = [];
   let deleteBall = false;
 
   const drawBalls = () => {
@@ -121,8 +120,8 @@ export const BallsLayer: FC = () => {
 
   // возвращает массив индексов одинаковых шариков рядом с заданным
   const findSame = (index: number): number[] => {
-    let res = [];
-    let color = balls[index].color;
+    const res = [];
+    const color = balls[index].color;
     let fail = false;
     for (let f = index; f < balls.length; f += 1) {
       if (balls[f].color === color && !fail) {

@@ -1,6 +1,7 @@
 import Sprite from './sprite';
 import { BALL_DIAMETER } from '../constants';
 import ballSprite from '../assets/images/balls.png';
+import { random } from './utils';
 
 export default class Ball extends Sprite {
   image: HTMLImageElement;
@@ -10,8 +11,8 @@ export default class Ball extends Sprite {
   acceleration = 0;
 
   constructor(
-    color = Math.floor(Math.random() * 6),
-    positionOffset = Math.floor(Math.random() * 60)
+    color = random(6),
+    positionOffset = random(60)
   ) {
     super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_DIAMETER, height: BALL_DIAMETER });
     this.color = color;

@@ -23,6 +23,6 @@ export enum BULLET_STATE {
 }
 
 export enum FRAME {
-  WIDTH= 800,
+  WIDTH = 800,
   HEIGHT = 600,
 }

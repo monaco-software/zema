@@ -18,3 +18,17 @@ export interface RemainingColorsState {
   colors: number[];
 }
 
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface Level {
+  speed: number;
+  balls: number;
+  ballsTypes: number;
+  frogPosition: Point;
+  skullPosition: Point;
+  start: number[];
+  curve: number[][];
+}

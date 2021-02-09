@@ -1,3 +1,4 @@
+/** eslint prefer-const: "error" */
 import React, { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import levels from '../levels';
@@ -16,8 +17,8 @@ export const FrogLayer: FC = () => {
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const levelData = levels[level];
-  let ball = new Ball(random(levelData.ballsTypes));
-  let frogPosition = levelData.frogPosition;
+  const ball = new Ball(random(levelData.ballsTypes));
+  const frogPosition = levelData.frogPosition;
   let ballPosition = BALL_START_POSITION;
   const frog = new Image();
   let angle = 0;

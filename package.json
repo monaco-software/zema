@@ -9,7 +9,6 @@
   "scripts": {
     "start": "node server",
     "dev": "npx webpack serve",
-    "serve": "npx webpack serve",
     "build": "npx webpack",
     "typecheck": "npx tsc --noEmit",
     "lint:ts": "npx eslint --ext .tsx,.ts src/",
