@@ -15,6 +15,7 @@ import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
 import { useAction } from '../../hooks';
 import b_ from 'b_';
+import { grommet, Grommet } from 'grommet';
 
 const block = b_.lock('app');
 
@@ -26,7 +27,7 @@ export const App: FC = () => {
   const updateTest = () => setTest(Math.random());
 
   return (
-    <div className={block()}>
+    <Grommet className={block()} theme={grommet}>
       <Switch>
         {/* Главная страница */}
         <Route exact path="/">
@@ -67,6 +68,6 @@ export const App: FC = () => {
 
         <Route path={ROUTES.GAME_OVER} component={GameOver} />
       </Switch>
-    </div>
+    </Grommet>
   );
 };
