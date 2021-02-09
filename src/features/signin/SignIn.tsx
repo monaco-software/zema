@@ -7,20 +7,35 @@ import { SignInForm } from './Components/Form/SignInForm';
 import { SignInFormFields } from './types';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../common/constants';
-import { useAuth } from '../../hooks';
+import { useAction, useAuth } from '../../hooks';
+import { apiGetUser, apiPerformSignIn } from '../../api/methods';
+import { appActions } from '../../store/reducer';
 
 const block = b_.lock('sign-in');
 
 export const SignIn: FC = () => {
   useAuth(false);
 
+  const setUser = useAction(appActions.setUser);
+  const setIsSignedIn = useAction(appActions.setIsSignedIn);
+
   const history = useHistory();
 
   const [formFields, setFormFields] = useState<SignInFormFields>({ login: '', password: '' });
   const onFieldsChange = (value: SignInFormFields) => setFormFields(value);
   const onSubmit = ({ value }: FormExtendedEvent<SignInFormFields>) => {
-    console.log(value);
-    // TODO: запрос в апи
+    apiPerformSignIn(value)
+      .then(() => {
+        apiGetUser()
+          .then((response) => {
+            setUser(response);
+            setIsSignedIn(true);
+
+            history.replace(ROUTES.ROOT);
+          })
+          .catch(alert);
+      })
+      .catch(alert);
   };
 
   const goToSignUp = () => history.push(ROUTES.SIGNUP);
