@@ -7,6 +7,7 @@ export default class Ball extends Sprite {
   color = 0;
   position = 0;
   positionOffset = 0;
+  acceleration = 0;
 
   constructor(
     color = Math.floor(Math.random() * 6),

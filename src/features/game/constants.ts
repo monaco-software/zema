@@ -1,5 +1,5 @@
 export const BALL_RADIUS = 15;
-export const BALL_START_POSITION = -20;
+export const BALL_START_POSITION = -25;
 export const BALL_DIAMETER = 30;
 export const FROG_RADIUS = 50;
 export const BULLET_SPEED = 9;

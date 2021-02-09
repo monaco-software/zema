@@ -18,7 +18,7 @@ export const FrogLayer: FC = () => {
   const levelData = levels[level];
   let ball = new Ball(random(levelData.ballsTypes));
   let frogPosition = levelData.frogPosition;
-  let ballPosition = -20;
+  let ballPosition = BALL_START_POSITION;
   const frog = new Image();
   let angle = 0;
   let burpBallInterval: number;
@@ -68,7 +68,6 @@ export const FrogLayer: FC = () => {
     state = newValue.state;
     if (state === BULLET_STATE.ARMING) {
       const remainingColors = store.getState().game.colors;
-      console.log(remainingColors);
       const randomColorIndex = random(remainingColors.length);
       ball.setColor(remainingColors[randomColorIndex]);
       ball.positionOffset = random(60);

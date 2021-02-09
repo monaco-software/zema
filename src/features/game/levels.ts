@@ -1,8 +1,8 @@
 
 const levels = Object.freeze([{
   speed: 20,
-  balls: 50,
-  ballsTypes: 5,
+  balls: 77,
+  ballsTypes: 2,
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 515, y: 310 },
   offset: { x: 0, y: 0 },
