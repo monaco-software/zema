@@ -8,6 +8,8 @@ interface GameState {
     angle: number;
   };
   colors: number[];
+  currentLevel: number;
+  openedLevel: number;
 }
 
 const initialGameState: GameState = {
@@ -17,6 +19,8 @@ const initialGameState: GameState = {
     angle: 0,
   },
   colors: [],
+  currentLevel: 0,
+  openedLevel: 0,
 };
 
 const game = createSlice({
@@ -29,9 +33,14 @@ const game = createSlice({
     setColors(state, { payload }: PayloadAction<GameState['colors']>) {
       state.colors = payload;
     },
+    setCurrentLevel(state, { payload }: PayloadAction<GameState['currentLevel']>) {
+      state.currentLevel = payload;
+    },
+    setOpenedLevel(state, { payload }: PayloadAction<GameState['openedLevel']>) {
+      state.openedLevel = payload;
+    },
   },
 });
 
 export const gameActions = game.actions;
 export const gameReducer = game.reducer;
-

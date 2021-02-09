@@ -10,7 +10,7 @@ import { random } from '../lib/utils';
 import { store } from '../../../store/store';
 
 export const FrogLayer: FC = () => {
-  const level = 0; // TODO: get level from state
+  const level = store.getState().game.currentLevel;
   const dispatch = useDispatch();
   const frogCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;

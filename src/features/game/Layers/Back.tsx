@@ -1,10 +1,10 @@
 import '../assets/styles/Layer.css';
-
 import React, { FC, useEffect } from 'react';
 import { FRAME } from '../constants';
+import { store } from '../../../store/store';
 
 export const BackLayer: FC = () => {
-  const level = 0; // TODO: get level from state
+  const level = store.getState().game.currentLevel;
 
   const backCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;

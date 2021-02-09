@@ -28,7 +28,7 @@ export const BallsLayer: FC = () => {
 
   let bullet = { ...store.getState().game.bullet };
 
-  const level = 0; // TODO: get level from state
+  const level = store.getState().game.currentLevel;
   const levelData = levels[level];
 
   const bulletPath: number[][] = [];
