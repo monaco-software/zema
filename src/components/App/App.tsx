@@ -1,9 +1,6 @@
-import './App.css';
-import React, { FC } from 'react';
+import './app.css';
+import React, { FC, useEffect, useState } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { getTest } from '../../store/selectors';
-import { appActions } from '../../store/reducer';
 import { ROUTES } from '../../common/constants';
 import { SignIn } from '../../features/signin/SignIn';
 import { Forum } from '../../features/forum/Forum';
@@ -13,18 +10,28 @@ import { Leaderboard } from '../../features/leaderboard/Leaderboard';
 import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
-import { useAction } from '../../hooks';
 import b_ from 'b_';
 import { grommet, Grommet } from 'grommet';
 
 const block = b_.lock('app');
 
 export const App: FC = () => {
-  const setTest = useAction(appActions.setTest);
+  const setUser = useAction(appActions.setUser);
+  const setIsSignedIn = useAction(appActions.setIsSignedIn);
 
-  const test = useSelector(getTest);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const updateTest = () => setTest(Math.random());
+  useEffect(() => {
+    apiGetUser()
+      .then((response) => {
+        setUser(response);
+        setIsSignedIn(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
     <Grommet className={block()} theme={grommet}>
