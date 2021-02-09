@@ -11,7 +11,11 @@ import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
 import b_ from 'b_';
-import { grommet, Grommet } from 'grommet';
+import { grommet, Grommet, Main } from 'grommet';
+import { Spinner } from '../Spinner';
+import { apiGetUser } from '../../api/methods';
+import { useAction } from '../../hooks';
+import { appActions } from '../../store/reducer';
 
 const block = b_.lock('app');
 
@@ -35,46 +39,45 @@ export const App: FC = () => {
 
   return (
     <Grommet className={block()} theme={grommet}>
-      <Switch>
-        {/* Главная страница */}
-        <Route exact path="/">
-          <div className={block('test')}>
-            {test}
-            <br />
-            <button onClick={updateTest}>
-              Set random test state
-            </button>
-          </div>
-          <br />
+      {isLoading && (
+        <Main justify="center" align="center">
+          <Spinner size={48} />
+        </Main>
+      )}
 
-          <ul>
-            <li><Link to={ROUTES.SIGNIN}>SignIn page</Link></li>
-            <li><Link to={ROUTES.SIGNUP}>SignUp page</Link></li>
-            <li><Link to={ROUTES.ACCOUNT}>Account page</Link></li>
-            <li><Link to={ROUTES.LEADERBOARD}>Leaderboard page</Link></li>
-            <li><Link to={ROUTES.FORUM}>Forum page</Link></li>
-            <li><Link to={ROUTES.GAME}>Game page</Link></li>
-            <li><Link to={ROUTES.GAME_LEVELS}>GameLevels page</Link></li>
-            <li><Link to={ROUTES.GAME_OVER}>GameOver page</Link></li>
-          </ul>
-        </Route>
+      {!isLoading && (
+        <Switch>
+          {/* Главная страница */}
+          <Route exact path="/">
+            <ul>
+              <li><Link to={ROUTES.SIGNIN}>SignIn page</Link></li>
+              <li><Link to={ROUTES.SIGNUP}>SignUp page</Link></li>
+              <li><Link to={ROUTES.ACCOUNT}>Account page</Link></li>
+              <li><Link to={ROUTES.LEADERBOARD}>Leaderboard page</Link></li>
+              <li><Link to={ROUTES.FORUM}>Forum page</Link></li>
+              <li><Link to={ROUTES.GAME}>Game page</Link></li>
+              <li><Link to={ROUTES.GAME_LEVELS}>GameLevels page</Link></li>
+              <li><Link to={ROUTES.GAME_OVER}>GameOver page</Link></li>
+            </ul>
+          </Route>
 
-        <Route path={ROUTES.SIGNIN} component={SignIn} />
+          <Route path={ROUTES.SIGNIN} component={SignIn} />
 
-        <Route path={ROUTES.SIGNUP} component={SignUp} />
+          <Route path={ROUTES.SIGNUP} component={SignUp} />
 
-        <Route path={ROUTES.ACCOUNT} component={Account} />
+          <Route path={ROUTES.ACCOUNT} component={Account} />
 
-        <Route path={ROUTES.LEADERBOARD} component={Leaderboard} />
+          <Route path={ROUTES.LEADERBOARD} component={Leaderboard} />
 
-        <Route path={ROUTES.FORUM} component={Forum} />
+          <Route path={ROUTES.FORUM} component={Forum} />
 
-        <Route exact path={ROUTES.GAME} component={Game} />
+          <Route exact path={ROUTES.GAME} component={Game} />
 
-        <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
+          <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
 
-        <Route path={ROUTES.GAME_OVER} component={GameOver} />
-      </Switch>
+          <Route path={ROUTES.GAME_OVER} component={GameOver} />
+        </Switch>
+      )}
     </Grommet>
   );
 };
