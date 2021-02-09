@@ -21,9 +21,16 @@ export const SignIn: FC = () => {
 
   const history = useHistory();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formFields, setFormFields] = useState<SignInFormFields>({ login: '', password: '' });
   const onFieldsChange = (value: SignInFormFields) => setFormFields(value);
   const onSubmit = ({ value }: FormExtendedEvent<SignInFormFields>) => {
+    if (Object.values(value).some((field) => field.trim() === '')) {
+      return;
+    }
+
+    setIsLoading(true);
     apiPerformSignIn(value)
       .then(() => {
         apiGetUser()
@@ -33,9 +40,15 @@ export const SignIn: FC = () => {
 
             history.replace(ROUTES.ROOT);
           })
-          .catch(alert);
+          .catch((error) => {
+            setIsLoading(false);
+            alert(error);
+          });
       })
-      .catch(alert);
+      .catch((error) => {
+        setIsLoading(false);
+        alert(error);
+      });
   };
 
   const goToSignUp = () => history.push(ROUTES.SIGNUP);
@@ -52,6 +65,7 @@ export const SignIn: FC = () => {
           onChange={onFieldsChange}
           onSubmit={onSubmit}
           goToSignUp={goToSignUp}
+          isLoading={isLoading}
         />
       </Main>
     </div>
