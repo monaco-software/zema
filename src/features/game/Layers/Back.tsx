@@ -1,3 +1,4 @@
+/** eslint prefer-const: "error" */
 import '../assets/styles/Layer.css';
 import React, { FC, useEffect } from 'react';
 import { FRAME } from '../constants';
@@ -9,7 +10,7 @@ export const BackLayer: FC = () => {
   const backCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
-  let image = new Image();
+  const image = new Image();
 
   useEffect(() => {
     canvas = backCanvasRef.current as HTMLCanvasElement;

@@ -90,14 +90,6 @@ export const BallsLayer: FC = () => {
         BALL_DIAMETER, BALL_DIAMETER);
     }
 
-    // TODO: удалить после тестирования механики
-    if (bulletPath.length) {
-      bulletPath.forEach((c) => {
-        ctx.fillStyle = '#F0F';
-        ctx.fillRect(c[0], c[1], 1, 1);
-      });
-    }
-
     explosed.forEach((boom, index) => {
       if (boom.phase < boom.numberOfFrames) {
         boom.update(boom.phase);
@@ -241,25 +233,10 @@ export const BallsLayer: FC = () => {
 
   let initBalls = () => {
     balls = [];
-    for (let i = 0; i < levelData.balls; i += 2) {
+    for (let i = 0; i < levelData.balls; i += 1) {
       const ball = new Ball(random(levelData.ballsTypes));
       ball.position = pusherPosition + i * BALL_DIAMETER;
       balls.push(ball);
-    }
-  };
-
-  // TODO: удалить после тестирования механики
-  let color = 0;
-  initBalls = () => {
-    balls = [];
-    for (let i = 0; i < levelData.balls; i += 2) {
-      color = random(2);
-      const ball = new Ball(color);
-      ball.position = pusherPosition + i * BALL_DIAMETER;
-      balls.push(ball);
-      const ball2 = new Ball(color);
-      ball2.position = pusherPosition + BALL_DIAMETER + i * BALL_DIAMETER;
-      balls.push(ball2);
     }
   };
 

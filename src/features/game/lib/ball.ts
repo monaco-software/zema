@@ -1,7 +1,8 @@
 import Sprite from './sprite';
-import { BALL_DIAMETER } from '../constants';
-import ballSprite from '../assets/images/balls.png';
 import { random } from './utils';
+import { BALL_DIAMETER } from '../constants';
+
+import ballSprite from '../assets/images/balls.png';
 
 export default class Ball extends Sprite {
   image: HTMLImageElement;
