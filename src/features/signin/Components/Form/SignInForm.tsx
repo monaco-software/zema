@@ -1,7 +1,7 @@
 import './sign-in-form.css';
 import React, { FC } from 'react';
 import b_ from 'b_';
-import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent } from 'grommet';
+import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent, Box, Text } from 'grommet';
 import { getLang } from '../../../../common/langUtils';
 import { SignInFormFields } from '../../types';
 import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
@@ -16,9 +16,17 @@ interface Props {
   onSubmit: (event: FormExtendedEvent<SignInFormFields>) => void;
   goToSignUp: VoidFunction;
   isLoading: boolean;
+  errorMessage?: string;
 }
 
-export const SignInForm: FC<Props> = ({ fields, onChange, onSubmit, goToSignUp, isLoading }) => {
+export const SignInForm: FC<Props> = ({
+  fields,
+  onChange,
+  onSubmit,
+  goToSignUp,
+  isLoading,
+  errorMessage,
+}) => {
   return (
     <TypedForm
       className={block()}
@@ -34,6 +42,12 @@ export const SignInForm: FC<Props> = ({ fields, onChange, onSubmit, goToSignUp, 
         <FormField label={getLang('signin_form_password_label')} htmlFor="signin_password">
           <TextInput id="signin_password" name="password" type="password" />
         </FormField>
+
+        {errorMessage && (
+          <Box pad={{ horizontal: 'small' }}>
+            <Text color="status-error">{errorMessage}</Text>
+          </Box>
+        )}
 
         <Grid gap="small" margin={{ top: 'medium' }}>
           <Button primary type="submit" label={getLang('signin_form_submit_button')} />

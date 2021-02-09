@@ -22,6 +22,7 @@ export const SignIn: FC = () => {
   const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const [formFields, setFormFields] = useState<SignInFormFields>({ login: '', password: '' });
   const onFieldsChange = (value: SignInFormFields) => setFormFields(value);
@@ -42,12 +43,12 @@ export const SignIn: FC = () => {
           })
           .catch((error) => {
             setIsLoading(false);
-            alert(error);
+            setErrorMessage(error.message);
           });
       })
       .catch((error) => {
         setIsLoading(false);
-        alert(error);
+        setErrorMessage(error.message);
       });
   };
 
@@ -66,6 +67,7 @@ export const SignIn: FC = () => {
           onSubmit={onSubmit}
           goToSignUp={goToSignUp}
           isLoading={isLoading}
+          errorMessage={errorMessage}
         />
       </Main>
     </div>

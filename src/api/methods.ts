@@ -27,16 +27,11 @@ export const apiPerformSignIn = (params: SignInParams): Promise<string> => {
     body: JSON.stringify(params),
   })
     .then((response) => {
-      if (response.text) {
-        return response.text();
-      }
-      return response.json();
+      return response.json()
+        .catch(() => undefined);
     })
     .then((responseData) => {
-      if (typeof responseData === 'string') {
-        return responseData;
-      }
-      if (responseData.reason) {
+      if (responseData?.reason) {
         throw new Error(responseData.reason);
       }
       return responseData;
