@@ -12,7 +12,7 @@ import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
 import b_ from 'b_';
 import { grommet, Grommet, Main } from 'grommet';
-import { Spinner } from '../Spinner';
+import { Spinner } from '../Spinner/Spinner';
 import { apiGetUser } from '../../api/methods';
 import { useAction } from '../../hooks';
 import { appActions } from '../../store/reducer';

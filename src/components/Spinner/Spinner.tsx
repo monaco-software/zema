@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-interface Props {
+export interface SpinnerProps {
   color?: string;
   size?: number;
 }
 
-export const Spinner: FC<Props> = ({
+export const Spinner: FC<SpinnerProps> = ({
   color = '#7D4CDB',
   size = 28,
 }) => {
