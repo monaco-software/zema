@@ -1,41 +1,37 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BulletState, RemainingColorsState } from './types';
 import { BALL_COLORS, BULLET_STATE } from './constants';
 
-const initialBulletState: BulletState = {
-  state: BULLET_STATE.IDLE,
-  color: BALL_COLORS.BLUE,
-  angle: 0,
-};
+interface GameState {
+  bullet: {
+    state: BULLET_STATE;
+    color: BALL_COLORS;
+    angle: number;
+  };
+  colors: number[];
+}
 
-const initialRemainingColorsState: RemainingColorsState = {
+const initialGameState: GameState = {
+  bullet: {
+    state: BULLET_STATE.IDLE,
+    color: BALL_COLORS.BLUE,
+    angle: 0,
+  },
   colors: [],
 };
 
-const bullet = createSlice({
-  name: 'bullet',
-  initialState: initialBulletState,
+const game = createSlice({
+  name: 'game',
+  initialState: initialGameState,
   reducers: {
-    setState(state, { payload }: PayloadAction<BulletState>) {
-      state.state = payload.state;
-      state.color = payload.color;
-      state.angle = payload.angle;
+    setBullet(state, { payload }: PayloadAction<GameState['bullet']>) {
+      state.bullet = payload;
     },
-  },
-});
-
-const remainingColors = createSlice({
-  name: 'remainingColors',
-  initialState: initialRemainingColorsState,
-  reducers: {
-    setColors(state, { payload }: PayloadAction<number[]>) {
+    setColors(state, { payload }: PayloadAction<GameState['colors']>) {
       state.colors = payload;
     },
   },
 });
 
-export const bulletActions = bullet.actions;
-export const bulletReducer = bullet.reducer;
+export const gameActions = game.actions;
+export const gameReducer = game.reducer;
 
-export const remainingColorsActions = remainingColors.actions;
-export const remainingColorsReducer = remainingColors.reducer;

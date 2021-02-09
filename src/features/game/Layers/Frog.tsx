@@ -5,7 +5,7 @@ import Ball from '../lib/ball';
 import { BALL_RADIUS, BALL_START_POSITION, BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
 import frogImage from '../assets/images/frog.png';
 import '../assets/styles/Layer.css';
-import { bulletActions } from '../reducer';
+import { gameActions } from '../reducer';
 import { random } from '../lib/utils';
 import { store } from '../../../store/store';
 
@@ -55,7 +55,7 @@ export const FrogLayer: FC = () => {
     if (ballPosition < 0 && state === BULLET_STATE.ARMING) {
       ballPosition += 1;
     } else {
-      dispatch(bulletActions.setState({ state: BULLET_STATE.ARMED, color: ball.color, angle: 0 }));
+      dispatch(gameActions.setBullet({ state: BULLET_STATE.ARMED, color: ball.color, angle: 0 }));
       clearInterval(burpBallInterval);
     }
     drawFrog();
@@ -63,11 +63,11 @@ export const FrogLayer: FC = () => {
 
   // листнер для реакции на изменение стостояния bullet
   const makeBullet = () => {
-    const newValue = store.getState().bullet;
+    const newValue = store.getState().game.bullet;
     if (newValue.state === state) { return; }
     state = newValue.state;
     if (state === BULLET_STATE.ARMING) {
-      const remainingColors = store.getState().remainingColors.colors;
+      const remainingColors = store.getState().game.colors;
       console.log(remainingColors);
       const randomColorIndex = random(remainingColors.length);
       ball.setColor(remainingColors[randomColorIndex]);
@@ -90,7 +90,7 @@ export const FrogLayer: FC = () => {
   const mouseClick = () => {
     if (state !== BULLET_STATE.ARMED) { return; }
     ballPosition = BALL_START_POSITION;
-    dispatch(bulletActions.setState({ state: BULLET_STATE.SHOT, color: ball.color, angle: angle - Math.PI / 2 }));
+    dispatch(gameActions.setBullet({ state: BULLET_STATE.SHOT, color: ball.color, angle: angle - Math.PI / 2 }));
     drawFrog();
   };
 

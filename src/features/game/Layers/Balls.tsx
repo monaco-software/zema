@@ -15,7 +15,7 @@ import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
 import '../assets/styles/Layer.css';
 import skullImage from '../assets/images/skull.png';
-import { bulletActions, remainingColorsActions } from '../reducer';
+import { gameActions } from '../reducer';
 import { useDispatch } from 'react-redux';
 import Explosion from '../lib/explosion';
 import { random } from '../lib/utils';
@@ -26,7 +26,7 @@ export const BallsLayer: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  let bullet = { ...store.getState().bullet };
+  let bullet = { ...store.getState().game.bullet };
 
   const level = 0; // TODO: get level from state
   const levelData = levels[level];
@@ -103,8 +103,8 @@ export const BallsLayer: FC = () => {
   const letArming = () => {
     bulletPath.length = 0;
     bulletBall.positionOffset = random(60);
-    if (store.getState().bullet.state !== BULLET_STATE.IDLE) { // если ира еще не окончена
-      dispatch(bulletActions.setState({ state: BULLET_STATE.ARMING, color: 0, angle: 0 }));
+    if (store.getState().game.bullet.state !== BULLET_STATE.IDLE) { // если ира еще не окончена
+      dispatch(gameActions.setBullet({ state: BULLET_STATE.ARMING, color: 0, angle: 0 }));
     }
     clearInterval(shotLoop);
   };
@@ -139,7 +139,7 @@ export const BallsLayer: FC = () => {
         remainingColors.push(ball.color);
       }
     });
-    dispatch(remainingColorsActions.setColors(remainingColors));
+    dispatch(gameActions.setColors(remainingColors));
   };
 
   const explode = (explodeBalls: number[]) => {
@@ -192,7 +192,7 @@ export const BallsLayer: FC = () => {
 
   // начало выстрела
   const makeShot = () => {
-    const newValue = store.getState().bullet;
+    const newValue = store.getState().game.bullet;
     if (newValue.state === bullet.state) { return; }
     bullet = Object.assign(bullet, newValue);
     if (newValue.state === BULLET_STATE.SHOT) {
@@ -273,7 +273,7 @@ export const BallsLayer: FC = () => {
         if (win) {
           win = false;
           skullRotateAngle = Math.PI * 2 / balls.length;
-          dispatch(bulletActions.setState({ state: BULLET_STATE.IDLE, color: 0, angle: 0 }));
+          dispatch(gameActions.setBullet({ state: BULLET_STATE.IDLE, color: 0, angle: 0 }));
         }
         // быстро сливаем шары
         balls.pop();
@@ -291,7 +291,7 @@ export const BallsLayer: FC = () => {
       pushBalls();
       setTimeout(() => fastForward(), 1000 * (1 / speed));
     } else {
-      dispatch(bulletActions.setState({ state: BULLET_STATE.ARMING, color: 0, angle: 0 }));
+      dispatch(gameActions.setBullet({ state: BULLET_STATE.ARMING, color: 0, angle: 0 }));
     }
   };
 
