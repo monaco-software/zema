@@ -48,7 +48,7 @@ export const App: FC = () => {
       {!isLoading && (
         <Switch>
           {/* Главная страница */}
-          <Route exact path="/">
+          <Route exact path={ROUTES.ROOT}>
             <ul>
               <li><Link to={ROUTES.SIGNIN}>SignIn page</Link></li>
               <li><Link to={ROUTES.SIGNUP}>SignUp page</Link></li>

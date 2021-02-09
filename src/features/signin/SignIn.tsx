@@ -7,10 +7,13 @@ import { SignInForm } from './Components/Form/SignInForm';
 import { SignInFormFields } from './types';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../common/constants';
+import { useAuth } from '../../hooks';
 
 const block = b_.lock('sign-in');
 
 export const SignIn: FC = () => {
+  useAuth(false);
+
   const history = useHistory();
 
   const [formFields, setFormFields] = useState<SignInFormFields>({ login: '', password: '' });
