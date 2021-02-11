@@ -6,6 +6,7 @@ interface GameState {
     state: BULLET_STATE;
     color: BALL_COLORS;
     angle: number;
+    position: number;
   };
   colors: number[];
   currentLevel: number;
@@ -17,6 +18,7 @@ const initialGameState: GameState = {
     state: BULLET_STATE.IDLE,
     color: BALL_COLORS.BLUE,
     angle: 0,
+    position: 0,
   },
   colors: [],
   currentLevel: 0,
@@ -29,6 +31,15 @@ const game = createSlice({
   reducers: {
     setBullet(state, { payload }: PayloadAction<GameState['bullet']>) {
       state.bullet = payload;
+    },
+    setBulletPosition(state, { payload }: PayloadAction<GameState['bullet']['position']>) {
+      state.bullet.position = payload;
+    },
+    setBulletState(state, { payload }: PayloadAction<GameState['bullet']['state']>) {
+      state.bullet.state = payload;
+    },
+    setBulletColor(state, { payload }: PayloadAction<GameState['bullet']['color']>) {
+      state.bullet.color = payload;
     },
     setColors(state, { payload }: PayloadAction<GameState['colors']>) {
       state.colors = payload;

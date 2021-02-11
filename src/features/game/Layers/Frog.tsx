@@ -1,29 +1,35 @@
 /** eslint prefer-const: "error" */
 import React, { FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import levels from '../levels';
-import Ball from '../lib/ball';
-import { BALL_RADIUS, BALL_START_POSITION, BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
-import frogImage from '../assets/images/frog.png';
-import '../assets/styles/Layer.css';
+import {
+  BALL_RADIUS,
+  BULLET_ARMED_POSITION,
+  BULLET_START_POSITION,
+  BULLET_STATE,
+  FRAME,
+  FROG_RADIUS,
+} from '../constants';
 import { gameActions } from '../reducer';
-import { random } from '../lib/utils';
-import { store } from '../../../store/store';
+import { getBulletPosition, getBulletState, getCurrentLevel } from '../selectors';
+
+import Frog from '../lib/frog';
+import bullet from '../lib/bullet';
+
+import '../assets/styles/Layer.css';
 
 export const FrogLayer: FC = () => {
-  const level = store.getState().game.currentLevel;
+  const level = useSelector(getCurrentLevel);
   const dispatch = useDispatch();
+
+  const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | null>(null);
   const frogCanvasRef = React.createRef<HTMLCanvasElement>();
-  let canvas: HTMLCanvasElement;
-  let ctx: CanvasRenderingContext2D;
-  const levelData = levels[level];
-  const ball = new Ball(random(levelData.ballsTypes));
-  const frogPosition = levelData.frogPosition;
-  let ballPosition = BALL_START_POSITION;
-  const frog = new Image();
-  let angle = 0;
-  let burpBallInterval: number;
-  let state = BULLET_STATE.IDLE;
+  const [angle, setAngle] = React.useState(0);
+  const bulletState = useSelector(getBulletState);
+
+  const frog = new Frog();
+  const bulletPosition = useSelector(getBulletPosition);
 
   // отрезает часть шарика, "накрытого" губой лягушки
   const coverWithLip = (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number) => {
@@ -37,84 +43,86 @@ export const FrogLayer: FC = () => {
   };
 
   const drawFrog = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!ctx) {
+      throw new Error('Context not found');
+    }
+    ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.translate(frogPosition.x, frogPosition.y);
+    ctx.translate(levels[level].frogPosition.x, levels[level].frogPosition.y);
     ctx.rotate(angle);
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
 
-    ctx.drawImage(frog, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
-    if (state === BULLET_STATE.ARMING || state === BULLET_STATE.ARMED ) {
-      ball.update(ballPosition + 20 + ball.positionOffset, Math.PI * 1.5);
-      coverWithLip(ball.ctx, BALL_RADIUS, ballPosition - BALL_RADIUS, 40);
-      ctx.drawImage(ball.canvas, 35, -ballPosition + 5);
+    ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
+    if (bulletState === BULLET_STATE.ARMING || bulletState === BULLET_STATE.ARMED) {
+      bullet.update(bulletPosition + bullet.positionOffset, Math.PI * 1.5);
+      coverWithLip(bullet.ctx, BALL_RADIUS, bulletPosition - 35, 40);
+      ctx.drawImage(bullet.canvas, 35, -bulletPosition + 25);
     }
   };
-
-  // Интервал хендлер. Выкатывает шарик из брюха, устанавливает состояние "ЗАРЯЖЕНО"
-  const burpBall = () => {
-    if (ballPosition < 0 && state === BULLET_STATE.ARMING) {
-      ballPosition += 1;
-    } else {
-      dispatch(gameActions.setBullet({ state: BULLET_STATE.ARMED, color: ball.color, angle: 0 }));
-      clearInterval(burpBallInterval);
-    }
-    drawFrog();
-  };
-
-  // листнер для реакции на изменение стостояния bullet
-  const makeBullet = () => {
-    const newValue = store.getState().game.bullet;
-    if (newValue.state === state) { return; }
-    state = newValue.state;
-    if (state === BULLET_STATE.ARMING) {
-      const remainingColors = store.getState().game.colors;
-      const randomColorIndex = random(remainingColors.length);
-      ball.setColor(remainingColors[randomColorIndex]);
-      ball.positionOffset = random(60);
-      ballPosition = BALL_START_POSITION;
-      burpBallInterval = window.setInterval(() => burpBall(), 20);
-    }
-    if (state === BULLET_STATE.IDLE) {
-      ballPosition = BALL_START_POSITION;
-      drawFrog();
-    }
-  };
-  const unsubscribe = store.subscribe(makeBullet);
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    angle = Math.atan2(frogPosition.x - e.pageX, e.pageY - frogPosition.y) + Math.PI;
+    setAngle(
+      Math.atan2(
+        levels[level].frogPosition.x - e.pageX,
+        e.pageY - levels[level].frogPosition.y) + Math.PI);
     drawFrog();
   };
 
   const mouseClick = () => {
-    if (state !== BULLET_STATE.ARMED) { return; }
-    ballPosition = BALL_START_POSITION;
-    dispatch(gameActions.setBullet({ state: BULLET_STATE.SHOT, color: ball.color, angle: angle - Math.PI / 2 }));
+    if (bulletState !== BULLET_STATE.ARMED) {
+      return;
+    }
+    dispatch(gameActions.setBullet({
+      state: BULLET_STATE.SHOT,
+      color: bullet.color,
+      angle: angle - Math.PI / 2,
+      position: bullet.position,
+    }));
     drawFrog();
   };
 
   useEffect(() => {
-    canvas = frogCanvasRef.current as HTMLCanvasElement;
+    if (!ctx) {
+      return;
+    }
+    if (bulletState === BULLET_STATE.ARMING) {
+      // выкатываем шар из брюха
+      if (bulletPosition < BULLET_ARMED_POSITION) {
+        setTimeout(() => {
+          dispatch(gameActions.setBulletPosition(bulletPosition + 1));
+        }, 15);
+      } else {
+        dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
+      }
+    }
+    if (bulletState === BULLET_STATE.IDLE) {
+      bullet.position = BULLET_START_POSITION;
+    }
+    drawFrog();
+  }, [bulletState, bulletPosition]);
+
+  // init
+  useEffect(() => {
+    if (!frogCanvasRef.current) {
+      throw new Error('Frog canvas not found');
+    }
+    const canvas = frogCanvasRef.current;
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    canvas.style.border = '1px solid';
-    ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    frog.onload = () => {
-      drawFrog();
-    };
-    frog.src = frogImage;
-
-    return () => {
-      clearInterval(burpBallInterval);
-      unsubscribe();
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('Cant create frog context');
+    }
+    setCtx(context);
+    frog.image.onload = () => {
+      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
     };
   }, []);
 
   return (
-    <canvas className="Layer" ref={frogCanvasRef}
+    <canvas className="Layer"
+      ref={frogCanvasRef}
       onMouseMove={mouseMove}
-      onClick={mouseClick}
-    />
+      onClick={mouseClick} />
   );
 };
