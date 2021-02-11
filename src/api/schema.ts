@@ -13,3 +13,14 @@ export interface SignInParams {
   login: string;
   password: string;
 }
+
+export interface SignUpParams extends SignInParams{
+  first_name: string;
+  second_name: string;
+  email: string;
+  phone: string;
+}
+
+export interface SignUpResponse {
+  id: number;
+}

@@ -1,20 +1,80 @@
-import React, { FC } from 'react';
-import { useHistory } from 'react-router-dom';
+import './sign-up.css';
+
+import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAuth } from '../../hooks';
+import { useAction, useAuth } from '../../hooks';
+import { SignUpForm } from './Components/Form/SignUpForm';
+import { FormExtendedEvent, Heading, Main } from 'grommet';
+import { getLang } from '../../common/langUtils';
+import { ROUTES } from '../../common/constants';
+import { useHistory } from 'react-router-dom';
+import { SignUpFormFields } from './types';
+import { apiGetUser, apiPerformSignUp } from '../../api/methods';
+import { appActions } from '../../store/reducer';
 
 const block = b_.lock('sign-up');
 
 export const SignUp: FC = () => {
   useAuth(false);
 
+  const setUser = useAction(appActions.setUser);
+  const setIsSignedIn = useAction(appActions.setIsSignedIn);
+
   const history = useHistory();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+  const [formFields, setFormFields] = useState<SignUpFormFields>({
+    login: '',
+    password: '',
+    email: '',
+    first_name: '',
+    second_name: '',
+    password_confirm: '',
+    phone: '',
+  });
+  const onFieldsChange = (value: SignUpFormFields) => setFormFields(value);
+  const onFormSubmit = ({ value }: FormExtendedEvent<SignUpFormFields>) => {
+    setIsLoading(true);
+    apiPerformSignUp(value)
+      .then(() => {
+        apiGetUser()
+          .then((response) => {
+            setUser(response);
+            setIsSignedIn(true);
+
+            history.replace(ROUTES.ROOT);
+          })
+          .catch((error) => {
+            setIsLoading(false);
+            setErrorMessage(error.message);
+          });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setErrorMessage(error.message);
+      });
+  };
+
+  const goToSignIn = () => history.push(ROUTES.SIGNIN);
 
   return (
     <div className={block()}>
-      SignUp
-      <br />
-      <button onClick={() => history.goBack()}>Go back</button>
+      <Main justify="center" align="center">
+        <Heading>
+          {getLang('signup_page_header')}
+        </Heading>
+
+        <SignUpForm
+          fields={formFields}
+          onChange={onFieldsChange}
+          onSubmit={onFormSubmit}
+          isLoading={isLoading}
+          goToSignIn={goToSignIn}
+          errorMessage={errorMessage}
+        />
+      </Main>
     </div>
   );
 };

@@ -26,6 +26,10 @@ export const useAuth = (needAuth = true) => {
       return;
     }
 
+    if (!isSignedIn && !needAuth) {
+      return;
+    }
+
     history.replace(ROUTES.SIGNIN);
   }, [isSignedIn, needAuth]);
 };
