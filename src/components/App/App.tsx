@@ -11,11 +11,12 @@ import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
 import b_ from 'b_';
-import { grommet, Grommet, Main } from 'grommet';
+import { Grommet, Main } from 'grommet';
 import { Spinner } from '../Spinner/Spinner';
 import { apiGetUser } from '../../api/methods';
 import { useAction } from '../../hooks';
 import { appActions } from '../../store/reducer';
+import { grommetTheme } from './grommetTheme';
 
 const block = b_.lock('app');
 
@@ -38,7 +39,7 @@ export const App: FC = () => {
   }, []);
 
   return (
-    <Grommet className={block()} theme={grommet}>
+    <Grommet className={block()} theme={grommetTheme}>
       {isLoading && (
         <Main justify="center" align="center">
           <Spinner size={48} />

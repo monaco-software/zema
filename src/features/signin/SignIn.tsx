@@ -56,7 +56,7 @@ export const SignIn: FC = () => {
 
   return (
     <div className={block()}>
-      <Main justify="center" align="center">
+      <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
         <Heading>
           {getLang('signin_page_header')}
         </Heading>
