@@ -35,11 +35,11 @@ export const SignInForm: FC<Props> = ({
       onSubmit={onSubmit}
     >
       <LoadingOverlay isLoading={isLoading}>
-        <FormField label={getLang('signin_form_login_label')} htmlFor="signin_login">
+        <FormField label={getLang('form_login_label')} htmlFor="signin_login">
           <TextInput id="signin_login" name="login" autoFocus />
         </FormField>
 
-        <FormField label={getLang('signin_form_password_label')} htmlFor="signin_password">
+        <FormField label={getLang('form_password_label')} htmlFor="signin_password">
           <TextInput id="signin_password" name="password" type="password" />
         </FormField>
 
