@@ -1,0 +1,88 @@
+.navbar {
+  --navbar-padding-top: 5px;
+  --navbar-link-size: 32px;
+  --navbar-link-text-line-height: 14px;
+  cursor: pointer;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: var(--light-1);
+  background-color: var(--brand);
+  padding: var(--navbar-padding-top) 10px 10px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.navbar_with-transition {
+  transition: transform .3s ease-in-out;
+}
+
+.navbar_hidden {
+  transform: translate(-50%, calc(-1 * (var(--navbar-padding-top) + var(--navbar-link-size) + var(--navbar-link-text-line-height))));
+}
+
+.navbar__link {
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: opacity .4s ease-in-out;
+}
+
+.navbar_hidden .navbar__link {
+  opacity: 0;
+}
+
+.navbar__link-icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--navbar-link-size);
+  height: var(--navbar-link-size);
+  transition: background-color .4s ease-in-out;
+  border-radius: 10px;
+}
+
+.navbar__link_active .navbar__link-icon-wrap,
+.navbar__link:hover .navbar__link-icon-wrap {
+  background-color: var(--light-1);
+}
+
+.navbar__link_active .navbar__link-icon,
+.navbar__link:hover .navbar__link-icon {
+  stroke: var(--brand);
+  fill: var(--brand);
+}
+
+.navbar__link-icon {
+  width: 18px;
+  height: 18px;
+  transition: stroke .2s ease-in-out;
+}
+
+.navbar__separator {
+  opacity: 1;
+  height: 70%;
+  width: 1px;
+  margin: auto 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: opacity .4s ease-in-out;
+}
+
+.navbar_hidden .navbar__separator {
+  opacity: 0;
+}
+
+.navbar__link-text {
+  font-size: 10px;
+  line-height: var(--navbar-link-text-line-height);
+  color: var(--light-1);
+  text-decoration: none;
+}
