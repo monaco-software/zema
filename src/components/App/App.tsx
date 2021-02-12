@@ -10,32 +10,23 @@ import { Leaderboard } from '../../features/leaderboard/Leaderboard';
 import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
-import { useAction } from '../../hooks';
 import { Navbar } from '../Navbar/Navbar';
 import b_ from 'b_';
 import { Grommet, Main } from 'grommet';
 import { Spinner } from '../Spinner/Spinner';
-import { apiGetUser } from '../../api/methods';
-import { appActions } from '../../store/reducer';
 import { grommetTheme } from './grommetTheme';
+import { asyncAppActions } from '../../store/asyncActions';
+import { useAsyncAction } from '../../hooks';
 
 const block = b_.lock('app');
 
 export const App: FC = () => {
-  const setUser = useAction(appActions.setUser);
-  const setIsSignedIn = useAction(appActions.setIsSignedIn);
+  const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    apiGetUser()
-      .then((response) => {
-        setUser(response);
-        setIsSignedIn(true);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
+    fetchUser(undefined)
       .finally(() => setIsLoading(false));
   }, []);
 

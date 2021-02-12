@@ -7,17 +7,15 @@ import { SignInForm } from './Components/Form/SignInForm';
 import { SignInFormFields } from './types';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../common/constants';
-import { useAction, useAuth } from '../../hooks';
-import { apiGetUser, apiPerformSignIn } from '../../api/methods';
-import { appActions } from '../../store/reducer';
+import { useAsyncAction, useAuth } from '../../hooks';
+import { asyncAppActions } from '../../store/asyncActions';
 
 const block = b_.lock('sign-in');
 
 export const SignIn: FC = () => {
   useAuth(false);
 
-  const setUser = useAction(appActions.setUser);
-  const setIsSignedIn = useAction(appActions.setIsSignedIn);
+  const signInUser = useAsyncAction(asyncAppActions.signInUser);
 
   const history = useHistory();
 
@@ -32,19 +30,9 @@ export const SignIn: FC = () => {
     }
 
     setIsLoading(true);
-    apiPerformSignIn(value)
+    signInUser(value)
       .then(() => {
-        apiGetUser()
-          .then((response) => {
-            setUser(response);
-            setIsSignedIn(true);
-
-            history.replace(ROUTES.ROOT);
-          })
-          .catch((error) => {
-            setIsLoading(false);
-            setErrorMessage(error.message);
-          });
+        history.replace(ROUTES.ROOT);
       })
       .catch((error) => {
         setIsLoading(false);

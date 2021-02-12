@@ -2,23 +2,21 @@ import './sign-up.css';
 
 import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAction, useAuth } from '../../hooks';
+import { useAsyncAction, useAuth } from '../../hooks';
 import { SignUpForm } from './Components/Form/SignUpForm';
 import { FormExtendedEvent, Heading, Main } from 'grommet';
 import { getLang } from '../../common/langUtils';
 import { ROUTES } from '../../common/constants';
 import { useHistory } from 'react-router-dom';
 import { SignUpFormFields } from './types';
-import { apiGetUser, apiPerformSignUp } from '../../api/methods';
-import { appActions } from '../../store/reducer';
+import { asyncAppActions } from '../../store/asyncActions';
 
 const block = b_.lock('sign-up');
 
 export const SignUp: FC = () => {
   useAuth(false);
 
-  const setUser = useAction(appActions.setUser);
-  const setIsSignedIn = useAction(appActions.setIsSignedIn);
+  const signUpUser = useAsyncAction(asyncAppActions.signUpUser);
 
   const history = useHistory();
 
@@ -37,19 +35,9 @@ export const SignUp: FC = () => {
   const onFieldsChange = (value: SignUpFormFields) => setFormFields(value);
   const onFormSubmit = ({ value }: FormExtendedEvent<SignUpFormFields>) => {
     setIsLoading(true);
-    apiPerformSignUp(value)
+    signUpUser(value)
       .then(() => {
-        apiGetUser()
-          .then((response) => {
-            setUser(response);
-            setIsSignedIn(true);
-
-            history.replace(ROUTES.ROOT);
-          })
-          .catch((error) => {
-            setIsLoading(false);
-            setErrorMessage(error.message);
-          });
+        history.replace(ROUTES.ROOT);
       })
       .catch((error) => {
         setIsLoading(false);

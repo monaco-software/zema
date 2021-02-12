@@ -1,61 +1,26 @@
-import { SignInParams, SignUpParams, SignUpResponse, UserObject } from './schema';
+import { SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserObject } from './schema';
+import { createApiMethod } from './core';
 
 const YANDEX_API_URL = 'https://ya-praktikum.tech/api/v2';
 const getFullPath = (path: string) => `${YANDEX_API_URL}${path}`;
 
-// TODO: написать общую обертку для хождения в АПИ и обработки ошибок
+export const apiGetUser = createApiMethod<undefined, UserObject>(getFullPath('/auth/user'), {
+  method: 'GET',
+  credentials: 'include',
+});
 
-export const apiGetUser = (): Promise<UserObject> => {
-  return fetch(getFullPath('/auth/user'), {
-    credentials: 'include',
-  })
-    .then((response) => response.json())
-    .then((responseData) => {
-      if (responseData.reason) {
-        throw new Error(responseData.reason);
-      }
-      return responseData;
-    });
-};
+export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(getFullPath('/auth/signin'), {
+  method: 'POST',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const apiPerformSignIn = (params: SignInParams): Promise<string> => {
-  return fetch(getFullPath('/auth/signin'), {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  })
-    .then((response) => {
-      return response.json()
-        .catch(() => undefined);
-    })
-    .then((responseData) => {
-      if (responseData?.reason) {
-        throw new Error(responseData.reason);
-      }
-      return responseData;
-    });
-};
-
-export const apiPerformSignUp = (params: SignUpParams): Promise<SignUpResponse> => {
-  return fetch(getFullPath('/auth/signup'), {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  })
-    .then((response) => {
-      return response.json()
-        .catch(() => undefined);
-    })
-    .then((responseData) => {
-      if (responseData?.reason) {
-        throw new Error(responseData.reason);
-      }
-      return responseData;
-    });
-};
+export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(getFullPath('/auth/signup'), {
+  method: 'POST',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
