@@ -2,8 +2,7 @@ import frogImage from '../assets/images/frog.png';
 
 export default class Frog {
   image = new Image();
-  constructor(
-  ) {
+  constructor() {
     this.image.src = frogImage;
   }
 }

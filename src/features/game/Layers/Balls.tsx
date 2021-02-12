@@ -4,19 +4,16 @@ import React, { FC, useEffect } from 'react';
 import levels from '../levels';
 import {
   ALLOWANCE,
-  BALL_DIAMETER,
   BALL_RADIUS,
   BULLET_SPEED,
   BULLET_START_POSITION,
   BULLET_STATE,
   FRAME,
   FROG_RADIUS,
-  SKULL_RADIUS,
 } from '../constants';
-import { getCloserPoint, getLineLen, getPath } from '../lib/geometry';
+import { getCloserPoint, getLineLen } from '../lib/geometry';
 import Ball from '../lib/ball';
 import { useHistory } from 'react-router-dom';
-import skullImage from '../assets/images/skull.png';
 import { gameActions } from '../reducer';
 import { useDispatch } from 'react-redux';
 import Explosion from '../lib/explosion';
@@ -29,7 +26,11 @@ import bulletOBJ from '../lib/bullet';
 
 import '../assets/styles/Layer.css';
 
-export const BallsLayer: FC = () => {
+interface Props {
+  ballsPath: number[][];
+}
+
+export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -44,14 +45,12 @@ export const BallsLayer: FC = () => {
   let shotLoop = 0;
   let ballsPusherLoop = 0;
 
-  const skull = new Image();
-
   const ballCanvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
-  let ballsPath: number[][];
   let balls: Ball[] = [];
-  let pusherPosition = -levelData.balls * BALL_DIAMETER;
+  let pusherPosition = -levelData.balls * BALL_RADIUS * 2;
+  // pusherPosition = 0;
   let speed = 500;
 
   let win = true;
@@ -71,17 +70,8 @@ export const BallsLayer: FC = () => {
       ball.update(ball.position + ball.positionOffset, ballsPath[ball.position][2]);
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 10;
-      ctx.drawImage(ball.canvas, ballsPath[ball.position][0] - BALL_RADIUS, ballsPath[ball.position][1] - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
+      ctx.drawImage(ball.canvas, ballsPath[ball.position][0] - BALL_RADIUS, ballsPath[ball.position][1] - BALL_RADIUS, BALL_RADIUS * 2, BALL_RADIUS * 2);
     });
-    if (skullAngle !== 0) {
-      ctx.translate(levelData.skullPosition.x + SKULL_RADIUS, levelData.skullPosition.y + SKULL_RADIUS);
-      ctx.rotate(skullAngle);
-      ctx.translate(-SKULL_RADIUS, -SKULL_RADIUS);
-      ctx.drawImage(skull, 0, 0);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-    } else {
-      ctx.drawImage(skull, levelData.skullPosition.x, levelData.skullPosition.y);
-    }
 
     if (bulletPath.length) {
       bulletBall.update(bulletPosition, bulletPath[bulletPosition][2]);
@@ -89,14 +79,14 @@ export const BallsLayer: FC = () => {
         bulletBall.canvas,
         bulletPath[bulletPosition][0] - BALL_RADIUS,
         bulletPath[bulletPosition][1] - BALL_RADIUS,
-        BALL_DIAMETER, BALL_DIAMETER);
+        BALL_RADIUS * 2, BALL_RADIUS * 2);
     }
 
     explosed.forEach((boom, index) => {
       if (boom.phase < boom.numberOfFrames) {
         boom.update(boom.phase);
         boom.phase += 1;
-        ctx.drawImage(boom.canvas, boom.x - BALL_RADIUS, boom.y - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
+        ctx.drawImage(boom.canvas, boom.x - BALL_RADIUS, boom.y - BALL_RADIUS, BALL_RADIUS * 2, BALL_RADIUS * 2);
       } else {
         explosed.splice(index, 1);
       }
@@ -109,9 +99,7 @@ export const BallsLayer: FC = () => {
         remainColors.push(ball.color);
       }
     });
-    console.log(remainColors);
     const randomColorIndex = random(remainColors.length);
-    console.log(randomColorIndex);
     return remainColors[randomColorIndex];
   };
 
@@ -156,7 +144,7 @@ export const BallsLayer: FC = () => {
   };
 
   const shine = () => {
-    for (let i = 0; i < ballsPath.length; i += BALL_DIAMETER) {
+    for (let i = 0; i < ballsPath.length; i += BALL_RADIUS * 2) {
       setTimeout(() =>
         explosed.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
       Math.floor(i / 3));
@@ -165,11 +153,12 @@ export const BallsLayer: FC = () => {
 
   const explode = (explodeBalls: number[]) => {
     explodeBalls.forEach((ball, index) => {
-      const pathPosition = ballsPath[balls[ball].position];
+      const ballPosition = balls[ball].position;
+      const pathPosition = ballsPath[ballPosition];
       if (pathPosition) { // шар не за экраном
         setTimeout(() =>
-          explosed.push(new Explosion(pathPosition[0], pathPosition[1])),
-        (explodeBalls.length - index) * 20);
+          dispatch(gameActions.setExplosion(ballPosition)),
+        (explodeBalls.length - index) * 30);
       }
     });
     balls.splice(explodeBalls[0], explodeBalls.length);
@@ -249,7 +238,7 @@ export const BallsLayer: FC = () => {
     balls = [];
     for (let i = 0; i < levelData.balls; i += 1) {
       const ball = new Ball(random(levelData.ballsTypes));
-      ball.position = pusherPosition + i * BALL_DIAMETER;
+      ball.position = pusherPosition + i * BALL_RADIUS * 2;
       balls.push(ball);
     }
   };
@@ -293,17 +282,17 @@ export const BallsLayer: FC = () => {
         // признак того, что был вставлен шар
         const inserting = prevBallDistance <= BALL_RADIUS;
         // сдвигаем шар до тех пор, пока он не перестанет наезжать на соседний
-        while (ball.position < prevBallPosition + BALL_DIAMETER - 1) {
+        while (ball.position < prevBallPosition + BALL_RADIUS * 2 - 1) {
           ball.position += 1;
           if (inserting) {
             // перемещаем не прокручивая
             ball.positionOffset -= 1;
           }
         }
-        if (prevBallDistance > BALL_DIAMETER) {
+        if (prevBallDistance > BALL_RADIUS * 2) {
           ball.acceleration += 1;
           for (let i = ballIndex; i < balls.length; i += 1) {
-            balls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
+            balls[i].position -= ball.acceleration > BALL_RADIUS * 2 ? BALL_RADIUS * 2 : ball.acceleration;
           }
         } else {
           // чем сильнее разгон, тем дальше отлетают шары
@@ -328,7 +317,7 @@ export const BallsLayer: FC = () => {
         }
         deleteBall = true;
         // быстро сливаем шары
-        pusherPosition += BALL_DIAMETER - 2;
+        pusherPosition += BALL_RADIUS * 2 - 2;
         // делаем один оборот черепа
         skullAngle < Math.PI * 2 ? skullAngle += skullRotateAngle : skullAngle = Math.PI * 2;
       }
@@ -357,14 +346,10 @@ export const BallsLayer: FC = () => {
     canvas.height = FRAME.HEIGHT;
     canvas.style.border = '1px solid';
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    ballsPath = getPath(levelData.start, levelData.curve);
     initBalls();
     ballsPusherLoop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
-    skull.src = skullImage;
-    skull.onload = () => {
-      ctx.drawImage(skull, levelData.skullPosition.x, levelData.skullPosition.y);
-      fastForward();
-    };
+    fastForward();
+
     return () => {
       clearInterval(ballsPusherLoop);
       clearInterval(shotLoop);

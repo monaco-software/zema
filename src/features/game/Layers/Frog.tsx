@@ -9,10 +9,10 @@ import {
   BULLET_START_POSITION,
   BULLET_STATE,
   FRAME,
-  FROG_RADIUS,
+  FROG_RADIUS, GAME_PHASE,
 } from '../constants';
 import { gameActions } from '../reducer';
-import { getBulletPosition, getBulletState, getCurrentLevel } from '../selectors';
+import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
 
 import Frog from '../lib/frog';
 import bullet from '../lib/bullet';
@@ -23,6 +23,7 @@ export const FrogLayer: FC = () => {
   const dispatch = useDispatch();
 
   const bulletState = useSelector(getBulletState);
+  const gamePhase = useSelector(getGamePhase);
   const bulletPosition = useSelector(getBulletPosition);
   const level = useSelector(getCurrentLevel);
 
@@ -43,7 +44,6 @@ export const FrogLayer: FC = () => {
 
   const drawFrog = () => {
     const ctx = frogCanvasRef.current?.getContext('2d');
-
     if (!ctx) {
       throw new Error('Context not found');
     }
@@ -104,23 +104,26 @@ export const FrogLayer: FC = () => {
     drawFrog();
   }, [bulletState, bulletPosition]);
 
+  useEffect(() => {
+    const ctx = frogCanvasRef.current?.getContext('2d');
+    if (!ctx) { return; }
+    if (gamePhase === GAME_PHASE.ENDING) {
+      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+    }
+    drawFrog();
+  }, [gamePhase]);
+
   // init
   useEffect(() => {
     const canvas = frogCanvasRef.current;
     if (!canvas) {
       throw new Error('Frog canvas not found');
     }
-
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      throw new Error('Cant create frog context');
-    }
-
     frog.current.image.onload = () => {
-      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+      dispatch(gameActions.setGamePhase(GAME_PHASE.STARTING));
     };
   }, []);
 

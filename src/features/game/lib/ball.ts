@@ -1,8 +1,8 @@
 import Sprite from './sprite';
 import { random } from './utils';
-import { BALL_DIAMETER } from '../constants';
 
 import ballSprite from '../assets/images/balls.png';
+import { BALL_RADIUS } from '../constants';
 
 export default class Ball extends Sprite {
   image: HTMLImageElement;
@@ -15,7 +15,7 @@ export default class Ball extends Sprite {
     color = random(6),
     positionOffset = random(60)
   ) {
-    super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_DIAMETER, height: BALL_DIAMETER });
+    super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 });
     this.color = color;
     this.positionOffset = positionOffset;
     this.image = new Image();

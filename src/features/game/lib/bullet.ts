@@ -1,6 +1,6 @@
 import Sprite from './sprite';
 import { random } from './utils';
-import { BALL_DIAMETER, BULLET_ARMED_POSITION } from '../constants';
+import { BALL_RADIUS, BULLET_ARMED_POSITION } from '../constants';
 
 import ballSprite from '../assets/images/balls.png';
 
@@ -16,7 +16,7 @@ class Bullet extends Sprite {
     color = random(6),
     positionOffset = random(60)
   ) {
-    super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_DIAMETER, height: BALL_DIAMETER });
+    super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 });
     if (Bullet.instance) {
       return Bullet.instance;
     }

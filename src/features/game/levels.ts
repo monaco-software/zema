@@ -3,7 +3,7 @@ import { Level } from './types';
 const levels: Level[] = [{
   speed: 25,
   balls: 77,
-  ballsTypes: 4,
+  ballsTypes: 2,
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 515, y: 310 },
   start: [421, 0],
