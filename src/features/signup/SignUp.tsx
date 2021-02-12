@@ -5,7 +5,7 @@ import b_ from 'b_';
 import { useAsyncAction, useAuth } from '../../hooks';
 import { SignUpForm } from './Components/Form/SignUpForm';
 import { FormExtendedEvent, Heading, Main } from 'grommet';
-import { getLang } from '../../common/langUtils';
+import { getText } from '../../common/langUtils';
 import { ROUTES } from '../../common/constants';
 import { useHistory } from 'react-router-dom';
 import { SignUpFormFields } from './types';
@@ -51,7 +51,7 @@ export const SignUp: FC = () => {
     <div className={block()}>
       <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
         <Heading>
-          {getLang('signup_page_header')}
+          {getText('signup_page_header')}
         </Heading>
 
         <SignUpForm

@@ -2,7 +2,7 @@ import './sign-in.css';
 import React, { FC, useState } from 'react';
 import b_ from 'b_';
 import { FormExtendedEvent, Heading, Main } from 'grommet';
-import { getLang } from '../../common/langUtils';
+import { getText } from '../../common/langUtils';
 import { SignInForm } from './Components/Form/SignInForm';
 import { SignInFormFields } from './types';
 import { useHistory } from 'react-router-dom';
@@ -46,7 +46,7 @@ export const SignIn: FC = () => {
     <div className={block()}>
       <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
         <Heading>
-          {getLang('signin_page_header')}
+          {getText('signin_page_header')}
         </Heading>
 
         <SignInForm

@@ -16,7 +16,7 @@ import {
 } from 'grommet';
 import { SignUpFormFields } from '../../types';
 import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
-import { getLang } from '../../../../common/langUtils';
+import { getText } from '../../../../common/langUtils';
 import {
   emailValidate,
   loginValidate,
@@ -32,7 +32,7 @@ const TypedForm = Form as TypedForm<SignUpFormFields>;
 const block = b_.lock('sign-up-form');
 
 const messages = {
-  required: getLang('required_field'),
+  required: getText('required_field'),
 };
 
 interface Props {
@@ -63,7 +63,7 @@ export const SignUpForm: FC<Props> = ({
     >
       <LoadingOverlay isLoading={isLoading}>
         <FormField
-          label={getLang('form_email_label')}
+          label={getText('form_email_label')}
           htmlFor="signup_email"
           name="email"
           required
@@ -73,7 +73,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_login_label')}
+          label={getText('form_login_label')}
           htmlFor="signup_login"
           name="login"
           required
@@ -83,7 +83,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_first_name_label')}
+          label={getText('form_first_name_label')}
           htmlFor="signup_first_name"
           name="first_name"
           required
@@ -93,7 +93,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_second_name_label')}
+          label={getText('form_second_name_label')}
           htmlFor="signup_second_name"
           name="second_name"
           required
@@ -103,7 +103,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_phone_label')}
+          label={getText('form_phone_label')}
           htmlFor="signup_phone"
           name="phone"
           required
@@ -113,7 +113,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_password_label')}
+          label={getText('form_password_label')}
           htmlFor="signup_password"
           name="password"
           required
@@ -123,7 +123,7 @@ export const SignUpForm: FC<Props> = ({
         </FormField>
 
         <FormField
-          label={getLang('form_password_confirm_label')}
+          label={getText('form_password_confirm_label')}
           htmlFor="signup_password_confirm"
           name="password_confirm"
           required
@@ -139,8 +139,8 @@ export const SignUpForm: FC<Props> = ({
         )}
 
         <Grid gap="small" margin={{ top: 'medium' }}>
-          <Button primary type="submit" label={getLang('signup_form_submit_button')} />
-          <Anchor className={block('no-account-button')} onClick={goToSignIn} label={getLang('signup_form_no_account_button')} />
+          <Button primary type="submit" label={getText('signup_form_submit_button')} />
+          <Anchor className={block('no-account-button')} onClick={goToSignIn} label={getText('signup_form_no_account_button')} />
         </Grid>
       </LoadingOverlay>
     </TypedForm>

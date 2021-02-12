@@ -2,7 +2,7 @@ import './sign-in-form.css';
 import React, { FC } from 'react';
 import b_ from 'b_';
 import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent, Box, Text } from 'grommet';
-import { getLang } from '../../../../common/langUtils';
+import { getText } from '../../../../common/langUtils';
 import { SignInFormFields } from '../../types';
 import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
 
@@ -35,11 +35,11 @@ export const SignInForm: FC<Props> = ({
       onSubmit={onSubmit}
     >
       <LoadingOverlay isLoading={isLoading}>
-        <FormField label={getLang('form_login_label')} htmlFor="signin_login">
+        <FormField label={getText('form_login_label')} htmlFor="signin_login">
           <TextInput id="signin_login" name="login" autoFocus />
         </FormField>
 
-        <FormField label={getLang('form_password_label')} htmlFor="signin_password">
+        <FormField label={getText('form_password_label')} htmlFor="signin_password">
           <TextInput id="signin_password" name="password" type="password" />
         </FormField>
 
@@ -50,8 +50,8 @@ export const SignInForm: FC<Props> = ({
         )}
 
         <Grid gap="small" margin={{ top: 'medium' }}>
-          <Button primary type="submit" label={getLang('signin_form_submit_button')} />
-          <Anchor className={block('no-account-button')} onClick={goToSignUp} label={getLang('signin_form_no_account_button')} />
+          <Button primary type="submit" label={getText('signin_form_submit_button')} />
+          <Anchor className={block('no-account-button')} onClick={goToSignUp} label={getText('signin_form_no_account_button')} />
         </Grid>
       </LoadingOverlay>
     </TypedForm>

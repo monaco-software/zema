@@ -31,4 +31,4 @@ const langPack = {
   form_password_equal_confirm: 'Пароли должны совпадать',
 };
 
-export const getLang = (key: keyof typeof langPack): string => langPack[key];
+export const getText = (key: keyof typeof langPack): string => langPack[key];

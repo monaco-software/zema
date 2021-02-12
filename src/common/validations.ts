@@ -1,5 +1,5 @@
 import { FormFieldProps } from 'grommet';
-import { getLang } from './langUtils';
+import { getText } from './langUtils';
 
 // eslint-disable-next-line max-len
 export const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -8,47 +8,47 @@ type FormFiledValidation = FormFieldProps['validate'];
 
 export const emailValidate: FormFiledValidation = {
   regexp: EMAIL_REGEXP,
-  message: getLang('form_email_input_error'),
+  message: getText('form_email_input_error'),
   status: 'error',
 };
 
 export const loginValidate: FormFiledValidation = {
   regexp: /^[a-z\d]{3,}$/i,
-  message: getLang('form_login_input_error'),
+  message: getText('form_login_input_error'),
   status: 'error',
 };
 
 export const nameValidate: FormFiledValidation = {
   regexp: /^[a-zа-я]{3,}$/i,
-  message: getLang('form_second_name_error'),
+  message: getText('form_second_name_error'),
   status: 'error',
 };
 
 export const phoneValidate: FormFiledValidation = {
   regexp: /^8 \([0-9]{1,3}\) [0-9]{1,3}-[0-9]{1,4}$/,
-  message: getLang('form_phone_input_error'),
+  message: getText('form_phone_input_error'),
   status: 'error',
 };
 
 export const passwordValidate: FormFiledValidation = [
   {
     regexp: /(?=.*?[A-Z])/,
-    message: getLang('form_password_min_uppercase'),
+    message: getText('form_password_min_uppercase'),
     status: 'error',
   },
   {
     regexp: /(?=.*?[a-z])/,
-    message: getLang('form_password_min_lowercase'),
+    message: getText('form_password_min_lowercase'),
     status: 'error',
   },
   {
     regexp: /(?=.*?[#?!@$ %^&*-])/,
-    message: getLang('form_password_min_special'),
+    message: getText('form_password_min_special'),
     status: 'error',
   },
   {
     regexp: /.{8,}/,
-    message: getLang('form_password_min_chars'),
+    message: getText('form_password_min_chars'),
     status: 'error',
   },
 ];
@@ -56,7 +56,7 @@ export const passwordValidate: FormFiledValidation = [
 export const passwordConfirmValidate: FormFiledValidation = [
   (value: string, fields: Record<string, any>) => {
     if (value !== fields.password) {
-      return getLang('form_password_equal_confirm');
+      return getText('form_password_equal_confirm');
     }
     return undefined;
   },
