@@ -24,22 +24,23 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
       };
 
       return fetch(path, preparedOptions)
-        .catch((error) => {
-          defaultErrorHandling && dispatch(appActions.setError(JSON.stringify(error)));
-          console.error(error);
-          throw error;
-        })
         .then((response) => {
           return response.json()
             .catch(() => undefined);
         })
         .then((responseData) => {
           if (responseData?.reason) {
-            defaultErrorHandling && dispatch(appActions.setError(responseData.reason));
-            console.error(responseData.reason);
             throw new Error(responseData.reason);
           }
           return responseData;
+        })
+        .catch((error) => {
+          if (defaultErrorHandling) {
+            const errorString = typeof error === 'string' ? error : JSON.stringify(error);
+            dispatch(appActions.setError(errorString));
+          }
+          console.error(error);
+          throw error;
         });
     };
   };

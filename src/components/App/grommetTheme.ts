@@ -57,6 +57,6 @@ export const grommetTheme: ThemeType = deepMerge(grommet, {
         horizontal: 'none',
       },
     },
-    round: '4px',
+    round: '3px',
   },
 });
