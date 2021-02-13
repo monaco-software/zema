@@ -1,11 +1,14 @@
 import { Level } from './types';
+import { BALL_COLORS } from './constants';
 
 const levels: Level[] = [{
+  title: 'Level 1\nSomewhere in Mexico',
   speed: 25,
-  balls: 77,
-  ballsTypes: 2,
+  balls: 30,
+  ballColors: [BALL_COLORS.BLUE, BALL_COLORS.YELLOW, BALL_COLORS.PINK],
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 515, y: 310 },
+  rollOut: 77,
   start: [421, 0],
   curve: [
     [502, 36, 623, 113, 690, 195],

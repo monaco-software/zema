@@ -3,17 +3,15 @@
 import React, { FC, useEffect, useRef } from 'react';
 
 import '../assets/styles/Layer.css';
-import {
-  BALL_RADIUS,
-  FRAME, GAME_PHASE,
-} from '../constants';
+import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 import Explosion from '../lib/explosion';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentLevel, getExplosion, getGamePhase, getParticle } from '../selectors';
+import { getCurrentLevel, getExplosion, getGamePhase, getGameResult, getShotPath, getShotPosition } from '../selectors';
 import Particle from '../lib/paricle';
-import { gameActions } from '../reducer';
 import Skull from '../lib/skull';
 import levels from '../levels';
+import bulletObject from '../lib/bullet';
+import { gameActions } from '../reducer';
 
 interface Props {
   ballsPath: number[][];
@@ -26,18 +24,19 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   const effects = useRef<Explosion[] | Particle[]>([]);
   const gamePhase = useSelector(getGamePhase);
   const level = useSelector(getCurrentLevel);
+  const shotPath = useSelector(getShotPath);
+  const shotPosition = useSelector(getShotPosition);
+  const gameResult = useSelector(getGameResult);
 
   const drawn = useRef(false);
 
   const explosion = useSelector(getExplosion);
-  const particle = useSelector(getParticle);
   const skull = useRef(new Skull());
+  const bullet = useRef(bulletObject);
 
   const drawEffects = () => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      throw new Error('Context not found');
-    }
+    if (!ctx) { return; }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     effects.current.forEach((effect, index) => {
       if (effect.phase < effect.numberOfFrames) {
@@ -49,14 +48,31 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
       }
     });
     ctx.drawImage(skull.current.image, levels[level].skullPosition.x, levels[level].skullPosition.y);
+    if (shotPath.length) {
+      shotPath.forEach((p) => {
+        ctx.fillStyle = '#f0f';
+        ctx.fillRect(p[0], p[1], 1, 1);
+      });
+      if (bullet.current.position >= shotPath.length) { // промахнулись
+        dispatch(gameActions.setShotPath([]));
+        dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+      } else {
+        const x = shotPath[bullet.current.position][0];
+        const y = shotPath[bullet.current.position][1];
+        bullet.current.update(
+          bullet.current.position * 3 + bullet.current.positionOffset,
+          shotPath[bullet.current.position][2]);
+        ctx.drawImage(bullet.current.canvas, x - BALL_RADIUS, y - BALL_RADIUS,
+        );
+        bullet.current.position += 1;
+        dispatch(gameActions.setShotPosition([x, y]));
+      }
+    }
     if (effects.current.length) {
       drawn.current = true;
-      setTimeout(() => drawEffects(), 30);
+      setTimeout(() => window.requestAnimationFrame(drawEffects), 25);
     } else {
       drawn.current = false;
-    }
-    if (gamePhase === GAME_PHASE.STARTING && !effects.current.length) {
-      dispatch(gameActions.setGamePhase(GAME_PHASE.STARTED));
     }
   };
 
@@ -64,46 +80,54 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     for (let i = 0; i < ballsPath.length; i += BALL_RADIUS * 2) {
       setTimeout(
         () => effects.current.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
-        Math.floor(i / 3));
+        Math.floor(i / 2));
     }
-    setTimeout(() => drawEffects(), 0 );
+    setTimeout(() => drawEffects(), 1);
   };
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx || explosion < 0 ) {
+    if (!ctx || !explosion.length) {
       return;
     }
-    effects.current.push(
-      new Explosion(ballsPath[explosion][0], ballsPath[explosion][1])
-    );
+    explosion.forEach((exp, index) => {
+      if (exp < 0 || exp >= ballsPath.length) {
+        return;
+      }
+      setTimeout(
+        () => effects.current.push(
+          new Explosion(ballsPath[exp][0], ballsPath[exp][1])
+        ),
+        index * 30);
+    });
     if (!drawn.current) {
-      drawEffects();
+      setTimeout(() => drawEffects(), 1);
     }
   }, [explosion]);
-
-  useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx || particle < 0) {
-      return;
-    }
-    effects.current.push(
-      new Particle(ballsPath[particle][0], ballsPath[particle][1])
-    );
-    if (!drawn.current) {
-      drawEffects();
-    }
-  }, [particle]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) {
       return;
     }
-    if (gamePhase === GAME_PHASE.STARTING || gamePhase === GAME_PHASE.ENDING) {
+    if (gamePhase === GAME_PHASE.STARTING ||
+      gamePhase === GAME_PHASE.ENDING && gameResult === GAME_RESULT.WIN) {
       runParticles();
     }
   }, [gamePhase]);
+
+  useEffect(() => {
+    if (shotPath.length) {
+      bullet.current.position = 0;
+    } else {
+
+    }
+    drawEffects();
+  }, [shotPath]);
+
+  useEffect(() => {
+    setTimeout(() => drawEffects(), 30);
+  }, [shotPosition]);
 
   // init
   useEffect(() => {

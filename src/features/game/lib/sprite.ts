@@ -6,7 +6,7 @@ export default class Sprite {
   image: HTMLImageElement = new Image();
   frameIndex = 0;
   numberOfFrames = 1;
-  yOffset= 0;
+  yOffset = 0;
   width = 0;
   height = 0;
   tick = 1;
@@ -20,6 +20,10 @@ export default class Sprite {
   }
 
   update(index = 0, angle = 0): void {
+    if (index < 0) {
+      console.warn('Index of frame must be >= 0');
+      index = 0;
+    }
     const rotateAngle = angle - Math.PI / 2;
     this.frameIndex = Math.floor(index / this.tick) % this.numberOfFrames;
     this.ctx.clearRect(0, 0, this.width, this.height);

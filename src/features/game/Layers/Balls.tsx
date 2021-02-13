@@ -1,30 +1,16 @@
 /** eslint prefer-const: "error" */
-
-import React, { FC, useEffect } from 'react';
-import levels from '../levels';
-import {
-  ALLOWANCE,
-  BALL_RADIUS,
-  BULLET_SPEED,
-  BULLET_START_POSITION,
-  BULLET_STATE,
-  FRAME,
-  FROG_RADIUS,
-} from '../constants';
-import { getCloserPoint, getLineLen } from '../lib/geometry';
-import Ball from '../lib/ball';
-import { useHistory } from 'react-router-dom';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ALLOWANCE, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_PHASE_TIMEOUTS, GAME_RESULT } from '../constants';
 import { gameActions } from '../reducer';
-import { useDispatch } from 'react-redux';
-import Explosion from '../lib/explosion';
-
-import { random } from '../lib/utils';
-import { ROUTES } from '../../../common/constants';
-import { store } from '../../../store/store';
-import Particle from '../lib/paricle';
-import bulletOBJ from '../lib/bullet';
+import { getCurrentLevel, getGamePhase, getShotPosition } from '../selectors';
 
 import '../assets/styles/Layer.css';
+import { applyPhysic, calculateRemainColors, createBalls, findSame } from './utils/Balls';
+import Ball from '../lib/ball';
+import levels from '../levels';
+import { getCloserPoint, getLineLen } from '../lib/geometry';
+import bulletObject from '../lib/bullet';
 
 interface Props {
   ballsPath: number[][];
@@ -32,333 +18,165 @@ interface Props {
 
 export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
-  let bullet = { ...store.getState().game.bullet };
+  const gamePhase = useSelector(getGamePhase);
+  const level = useSelector(getCurrentLevel);
+  const shotPosition = useSelector(getShotPosition);
 
-  const level = store.getState().game.currentLevel;
-  const levelData = levels[level];
+  const balls = useMemo<Ball[]>(() => createBalls(level), []);
 
-  const bulletPath: number[][] = [];
-  const bulletBall = new Ball(random(levelData.ballsTypes));
-  let bulletPosition = 0;
-  let shotLoop = 0;
-  let ballsPusherLoop = 0;
+  const bullet = useRef(bulletObject);
+  const inserting = useRef(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const pusherIncrement = useRef(0);
+  const pusherStartPosition = -levels[level].balls * BALL_RADIUS * 2;
 
-  const ballCanvasRef = React.createRef<HTMLCanvasElement>();
-  let canvas: HTMLCanvasElement;
-  let ctx: CanvasRenderingContext2D;
-  let balls: Ball[] = [];
-  let pusherPosition = -levelData.balls * BALL_RADIUS * 2;
-  // pusherPosition = 0;
-  let speed = 500;
+  const [pusher, setPusher] = useState(pusherStartPosition);
 
-  let win = true;
-  let ended = false;
-  let inserting = false;
-  let skullAngle = 0;
-  let skullRotateAngle = 0;
-  const explosed: Explosion[] = [];
-  let deleteBall = false;
+  const draw = () => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx || !balls) {
+      return;
+    }
 
-  const drawBalls = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
+    let ballsRemain = 0;
     balls.forEach((ball) => {
-      if (ball.position < 0) {
+      if (ball.position < 0 || ball.position >= ballsPath.length - 1) {
         return;
       }
+      ballsRemain += 1;
       ball.update(ball.position + ball.positionOffset, ballsPath[ball.position][2]);
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 10;
-      ctx.drawImage(ball.canvas, ballsPath[ball.position][0] - BALL_RADIUS, ballsPath[ball.position][1] - BALL_RADIUS, BALL_RADIUS * 2, BALL_RADIUS * 2);
+      ctx.drawImage(ball.canvas,
+        ballsPath[ball.position][0] - BALL_RADIUS,
+        ballsPath[ball.position][1] - BALL_RADIUS);
     });
-
-    if (bulletPath.length) {
-      bulletBall.update(bulletPosition, bulletPath[bulletPosition][2]);
-      ctx.drawImage(
-        bulletBall.canvas,
-        bulletPath[bulletPosition][0] - BALL_RADIUS,
-        bulletPath[bulletPosition][1] - BALL_RADIUS,
-        BALL_RADIUS * 2, BALL_RADIUS * 2);
-    }
-
-    explosed.forEach((boom, index) => {
-      if (boom.phase < boom.numberOfFrames) {
-        boom.update(boom.phase);
-        boom.phase += 1;
-        ctx.drawImage(boom.canvas, boom.x - BALL_RADIUS, boom.y - BALL_RADIUS, BALL_RADIUS * 2, BALL_RADIUS * 2);
-      } else {
-        explosed.splice(index, 1);
-      }
-    });
-  };
-  const getRemainColor = (array: Ball[]) => {
-    const remainColors: number[] = [];
-    array.forEach((ball) => {
-      if (!remainColors.includes(ball.color)) {
-        remainColors.push(ball.color);
-      }
-    });
-    const randomColorIndex = random(remainColors.length);
-    return remainColors[randomColorIndex];
-  };
-
-  const letArming = () => {
-    bulletPath.length = 0;
-    bulletBall.positionOffset = random(60);
-    const state = store.getState().game.bullet.state;
-    if (state === BULLET_STATE.SHOT || state === BULLET_STATE.ARMING) {
-      const color = getRemainColor(balls);
-      dispatch(gameActions.setBullet({
-        state: BULLET_STATE.ARMING,
-        color: color,
-        angle: 0,
-        position: BULLET_START_POSITION,
-      }));
-      bulletOBJ.color = color;
-    }
-    clearInterval(shotLoop);
-  };
-
-  // возвращает массив индексов одинаковых шариков рядом с заданным
-  const findSame = (index: number): number[] => {
-    const res = [];
-    const color = balls[index].color;
-    let fail = false;
-    for (let f = index; f < balls.length; f += 1) {
-      if (balls[f].color === color && !fail) {
-        res.push(f);
-      } else {
-        fail = true;
-      }
-    }
-    fail = false;
-    for (let b = index; b >= 0; b -= 1) {
-      if (balls[b].color === color && !fail) {
-        res.push(b);
-      } else {
-        fail = true;
-      }
-    }
-    return [...new Set(res.sort((n1, n2) => n1 - n2))];
-  };
-
-  const shine = () => {
-    for (let i = 0; i < ballsPath.length; i += BALL_RADIUS * 2) {
-      setTimeout(() =>
-        explosed.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
-      Math.floor(i / 3));
+    if (ballsRemain === 0 && gamePhase === GAME_PHASE.ENDING) {
+      // шаров не осталось, выходим
+      dispatch(gameActions.setGamePhase(GAME_PHASE.ENDED));
     }
   };
 
-  const explode = (explodeBalls: number[]) => {
-    explodeBalls.forEach((ball, index) => {
-      const ballPosition = balls[ball].position;
-      const pathPosition = ballsPath[ballPosition];
-      if (pathPosition) { // шар не за экраном
-        setTimeout(() =>
-          dispatch(gameActions.setExplosion(ballPosition)),
-        (explodeBalls.length - index) * 30);
-      }
-    });
-    balls.splice(explodeBalls[0], explodeBalls.length);
+  const explode = (sameBalls: number[]) => {
+    const positions = sameBalls.reduce((memo: number[], index) => [...memo, balls[index].position], []);
+    dispatch(gameActions.setExplosion(positions));
+    balls.splice(sameBalls[0], sameBalls.length);
   };
 
-  const explodeSameBalls = (ballIndex: number, timeout: number) => {
-    const sameBalls = findSame(ballIndex);
+  const explodeSameBalls = (balls: Ball[], ballIndex: number, timeout: number) => {
+    const sameBalls = findSame(balls, ballIndex);
     if (sameBalls.length >= 3) {
-      // делаем копию, чтобы сразу выставить значение по цветам оставшихся шаров
-      const ballsCopy = balls.slice();
-      ballsCopy.splice(sameBalls[0], sameBalls.length);
       setTimeout(() => explode(sameBalls), timeout);
     }
   };
 
-  const pushBullet = () => {
-    if (bulletPath.length && !inserting && !ended) {
-      if (bulletPosition >= bulletPath.length - 1) { // промахнулись
-        letArming();
-      } else {
-        balls.forEach((ball, index) => {
-          if (inserting || ball.position < 0) {
-            return;
-          }
-          const bulletXY = { x: bulletPath[bulletPosition][0], y: bulletPath[bulletPosition][1] };
-          const distance = getLineLen(
-            bulletXY.x, bulletXY.y,
-            ballsPath[ball.position][0], ballsPath[ball.position][1]
-          );
-          // проверка на попадание c допуском
-          if (distance < BALL_RADIUS + ALLOWANCE) {
-            // вставка шара. Запускаем один раз
-            if (!inserting) {
-              inserting = true;
-              // рассчитываем, всталять перед шаром, в который попали или после
-              const closerPoint = getCloserPoint(ballsPath, bulletXY.x, bulletXY.y);
-              const insertedIndex = closerPoint > ball.position ? index + 1 : index;
-              balls.splice(insertedIndex, 0, new Ball(bulletBall.color));
-              balls[insertedIndex].position = closerPoint;
-              explodeSameBalls(insertedIndex, 400);
-              letArming();
-            }
-          }
-        });
-        bulletPosition += 1;
-      }
-    }
-    requestAnimationFrame(() => drawBalls());
-  };
-
-  // начало выстрела
-  const makeShot = () => {
-    const newValue = store.getState().game.bullet;
-    if (newValue.state === bullet.state) {
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx || gamePhase === GAME_PHASE.ENDED) {
       return;
     }
-    bullet = Object.assign(bullet, newValue);
-    if (newValue.state === BULLET_STATE.SHOT) {
-      bulletBall.setColor(newValue.color);
-      bulletPosition = 0;
-      inserting = false;
-      // рассчитываем путь
-      for (let i = FROG_RADIUS; i < FRAME.WIDTH; i += BULLET_SPEED) {
-        const x = Math.round(levelData.frogPosition.x + i * Math.cos(bullet.angle));
-        const y = Math.round(levelData.frogPosition.y + i * Math.sin(bullet.angle));
-        if (x >= 0 && x <= FRAME.WIDTH && y >= 0 && y <= FRAME.HEIGHT) {
-          bulletPath.push([x, y, bullet.angle]);
-        }
-      }
-      shotLoop = window.setInterval(pushBullet, 20);
-    }
-  };
-
-  const unsubscribe = store.subscribe(makeShot);
-
-  let initBalls = () => {
-    balls = [];
-    for (let i = 0; i < levelData.balls; i += 1) {
-      const ball = new Ball(random(levelData.ballsTypes));
-      ball.position = pusherPosition + i * BALL_RADIUS * 2;
-      balls.push(ball);
-    }
-  };
-
-  const pushBalls = () => {
-    // шары кончились. запускаем один раз
-    if (!balls.length && !ended) {
-      ended = true;
-      if (win) {
-        shine();
-      }
-      dispatch(gameActions.setBullet({ state: BULLET_STATE.IDLE, color: 0, angle: 0, position: BULLET_START_POSITION }));
-      setTimeout(() => {
-        clearInterval(ballsPusherLoop);
-        if (win) {
-          alert('You win!)');
-          history.push(ROUTES.GAME_LEVELS);
-        } else {
-          alert('You are a loser');
-          history.push(ROUTES.GAME_OVER);
-        }
-      }, 2000);
+    // шары кончились, победа
+    if (!balls.length && gamePhase === GAME_PHASE.STARTED) {
+      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+      dispatch(gameActions.setGamePhase(GAME_PHASE.ENDING));
+      setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.ENDED)), GAME_PHASE_TIMEOUTS.ENDING);
+      window.requestAnimationFrame(() => draw());
       return;
     }
+    if (gamePhase !== GAME_PHASE.ENDING && pusherIncrement.current > 1) {
+      pusherIncrement.current -= 1;
+    }
 
-    pusherPosition += 1;
+    // рассчитываеи положение шаров
+    const result = applyPhysic(balls, pusher);
 
-    balls.forEach((ball, ballIndex) => {
-      if (ballIndex === 0) {
-        if (ball.position <= pusherPosition) {
-          ball.position = pusherPosition;
-        }
-        if (ball.position > pusherPosition) {
-          // толкатель догоняет шары из любой позицци за одинаковое количество тиков
-          const pusherDistance = ball.position - pusherPosition;
-          pusherPosition += pusherDistance >= 4 ? pusherDistance : 1;
-        }
-      } else {
-        const prevBallPosition = balls[ballIndex - 1].position;
-        const prevBallDistance = ball.position - prevBallPosition;
-        // признак того, что был вставлен шар
-        const inserting = prevBallDistance <= BALL_RADIUS;
-        // сдвигаем шар до тех пор, пока он не перестанет наезжать на соседний
-        while (ball.position < prevBallPosition + BALL_RADIUS * 2 - 1) {
-          ball.position += 1;
-          if (inserting) {
-            // перемещаем не прокручивая
-            ball.positionOffset -= 1;
-          }
-        }
-        if (prevBallDistance > BALL_RADIUS * 2) {
-          ball.acceleration += 1;
-          for (let i = ballIndex; i < balls.length; i += 1) {
-            balls[i].position -= ball.acceleration > BALL_RADIUS * 2 ? BALL_RADIUS * 2 : ball.acceleration;
-          }
-        } else {
-          // чем сильнее разгон, тем дальше отлетают шары
-          const moveDistance = Math.floor(Math.pow(ball.acceleration / 4, 3));
-          if (ball.acceleration && moveDistance) {
-            pusherPosition -= moveDistance + 5;
-            for (let i = 0; i < balls.length; i += 1) {
-              balls[i].position -= moveDistance;
-            }
-            ball.acceleration = 0;
-            explodeSameBalls(ballIndex, 300);
-          }
-        }
-      }
+    // проверяем, не добрался ли передний шар до черепа
+    if (gamePhase === GAME_PHASE.STARTED && balls[balls.length - 1].position >= ballsPath.length - 1) {
+      pusherIncrement.current = 15;
+      dispatch(gameActions.setGameResult(GAME_RESULT.FAIL));
+      dispatch(gameActions.setGamePhase(GAME_PHASE.ENDING));
+    }
 
-      // проигрыш
-      if (ball.position >= ballsPath.length) {
-        if (win) {
-          dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
-          win = false;
-          skullRotateAngle = Math.PI * 2 / balls.length;
-        }
-        deleteBall = true;
-        // быстро сливаем шары
-        pusherPosition += BALL_RADIUS * 2 - 2;
-        // делаем один оборот черепа
-        skullAngle < Math.PI * 2 ? skullAngle += skullRotateAngle : skullAngle = Math.PI * 2;
-      }
+    // взрываем
+    result.impacts.forEach((i) => {
+      explodeSameBalls(balls, i, 400);
     });
-    if (deleteBall) {
-      deleteBall = false;
-      balls.pop();
-    }
-    requestAnimationFrame(() => drawBalls());
-  };
+    window.requestAnimationFrame(() => draw());
 
-  const fastForward = () => {
-    if (speed >= levelData.speed) {
-      speed -= 1;
-      pushBalls();
-      setTimeout(() => fastForward(), 1000 * (1 / speed));
-    } else {
-      dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
-      letArming();
+    if (gamePhase !== GAME_PHASE.ENDED && gamePhase !== GAME_PHASE.EXITING) {
+      setTimeout(() => {
+        setPusher(pusher + pusherIncrement.current + result.pusherOffset);
+      }, 1000 * (1 / levels[level].speed));
     }
-  };
+  }, [pusher]);
 
   useEffect(() => {
-    canvas = ballCanvasRef.current as HTMLCanvasElement;
+    if (gamePhase === GAME_PHASE.STARTED) {
+      pusherIncrement.current = levels[level].rollOut;
+      setPusher(pusher + 1);
+    }
+    if (gamePhase === GAME_PHASE.ENDING) {
+      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+    }
+  }, [gamePhase]);
+
+  // полет пули. На каждую позицию проверятся дистанция до каждого шара
+  useEffect(() => {
+    balls.forEach((ball, index) => {
+      if (ball.position < 0 || ball.position >= ballsPath.length || inserting.current) {
+        return;
+      }
+      const distance = getLineLen(
+        shotPosition[0], shotPosition[1],
+        ballsPath[ball.position][0], ballsPath[ball.position][1]
+      );
+      // проверка на попадание c допуском
+      if (distance < BALL_RADIUS + ALLOWANCE) {
+        // выставляем флаг, чтобы следующая итерация
+        // не начала вставлять шар повторно
+        inserting.current = true;
+        dispatch(gameActions.setBulletState(BULLET_STATE.INSERTING));
+
+        // рассчитываем, всталять перед шаром, в который попали или после
+        const closerPoint = getCloserPoint(ballsPath, shotPosition[0], shotPosition[1]);
+        const insertedIndex = closerPoint > ball.position ? index + 1 : index;
+        // вставляем
+        balls.splice(insertedIndex, 0, new Ball(bullet.current.color));
+        balls[insertedIndex].position = closerPoint;
+
+        explodeSameBalls(balls, insertedIndex, 400);
+        dispatch(gameActions.setShotPosition([-BALL_RADIUS, -BALL_RADIUS]));
+        dispatch(gameActions.setShotPath([]));
+
+        const remainColors = calculateRemainColors(balls, insertedIndex);
+        dispatch(gameActions.setRemainColors(remainColors));
+
+        setTimeout(() => {
+          dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+          inserting.current = false;
+        }, 100);
+      }
+    });
+  }, [shotPosition]);
+
+  // init
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      throw new Error('Balls canvas not found');
+    }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    canvas.style.border = '1px solid';
-    ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    initBalls();
-    ballsPusherLoop = window.setInterval(pushBalls, 1000 * (1 / levelData.speed));
-    fastForward();
-
+    setPusher(pusher + pusherIncrement.current);
     return () => {
-      clearInterval(ballsPusherLoop);
-      clearInterval(shotLoop);
-      unsubscribe();
+      setPusher(pusherStartPosition);
     };
   }, []);
 
   return (
     <canvas className="Layer"
-      ref={ballCanvasRef} />
+      ref={canvasRef} />
   );
 };

@@ -24,11 +24,18 @@ export interface Point {
 }
 
 export interface Level {
+  title: string;
   speed: number;
   balls: number;
-  ballsTypes: number;
+  ballColors: number[];
   frogPosition: Point;
   skullPosition: Point;
   start: number[];
   curve: number[][];
+  rollOut: number;
+}
+
+export interface Physics {
+  pusherOffset: number;
+  impacts: number[];
 }

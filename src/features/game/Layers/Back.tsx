@@ -7,13 +7,13 @@ import { store } from '../../../store/store';
 export const BackLayer: FC = () => {
   const level = store.getState().game.currentLevel;
 
-  const backCanvasRef = React.createRef<HTMLCanvasElement>();
+  const canvasRef = React.createRef<HTMLCanvasElement>();
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   const image = new Image();
 
   useEffect(() => {
-    canvas = backCanvasRef.current as HTMLCanvasElement;
+    canvas = canvasRef.current as HTMLCanvasElement;
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
     canvas.style.border = '1px solid';
@@ -26,6 +26,6 @@ export const BackLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer" ref={backCanvasRef} />
+    <canvas className="Layer" ref={canvasRef} />
   );
 };

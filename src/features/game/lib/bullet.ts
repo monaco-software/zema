@@ -1,48 +1,28 @@
-import Sprite from './sprite';
-import { random } from './utils';
-import { BALL_RADIUS, BULLET_ARMED_POSITION } from '../constants';
+import Ball from './ball';
 
-import ballSprite from '../assets/images/balls.png';
-
-class Bullet extends Sprite {
-  image = new Image();
-  _color = 0;
-  position = 0;
-  positionOffset = 0;
+class Bullet extends Ball {
+  protected remainColors: number[] = [];
 
   protected static instance: Bullet;
 
-  constructor(
-    color = random(6),
-    positionOffset = random(60)
-  ) {
-    super({ yOffset: color * 180, numberOfFrames: 60, width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 });
+  // @ts-ignore because a singleton
+  constructor() {
     if (Bullet.instance) {
       return Bullet.instance;
     }
+    super();
     Bullet.instance = this;
-
-    this._color = color;
-    this.positionOffset = positionOffset;
-    this.image.src = ballSprite;
   }
 
-  setColor(color: number): void {
-    this.color = color;
-    this.yOffset = color * 180;
-  }
-  isArmed() {
-    return this.position >= BULLET_ARMED_POSITION;
-  }
-  get color() {
-    return this._color;
-  }
-
-  set color(newColor) {
-    console.log(`setting color ${newColor}`);
-    this._color = newColor;
-    this.yOffset = this._color * 180;
-  }
+  // setRemainColors(remain: number[]) {
+  //   this.remainColors = remain.slice();
+  //   console.log(this.remainColors);
+  // }
+  //
+  // setRandomColorFromRemain() {
+  //   this.color = this.remainColors[random(this.remainColors.length)];
+  // }
 }
+const bulletObject = new Bullet();
+export default bulletObject;
 
-export default new Bullet();

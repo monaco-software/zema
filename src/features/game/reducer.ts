@@ -1,34 +1,46 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BALL_COLORS, BULLET_STATE, GAME_PHASE } from './constants';
+import { BALL_COLORS, BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 
 interface Game {
   phase: number;
   bullet: {
     state: BULLET_STATE;
-    color: BALL_COLORS;
+    color: number;
     angle: number;
     position: number;
   };
-  colors: number[];
+  remainColors: number[];
   currentLevel: number;
   openedLevel: number;
-  explosion: number;
+  explosion: number[];
   particle: number;
+  pusher: number;
+  shotPath: number[][];
+  shotPosition: number[];
+  angle: number;
+  gameResult: number;
+  title: string;
 }
 
 const initialGame: Game = {
-  phase: GAME_PHASE.IDLE,
+  phase: GAME_PHASE.LOADING,
   bullet: {
     state: BULLET_STATE.IDLE,
     color: BALL_COLORS.BLUE,
     angle: 0,
-    position: 0,
+    position: -1,
   },
-  colors: [],
+  remainColors: [],
   currentLevel: 0,
   openedLevel: 0,
-  explosion: -1,
+  explosion: [],
   particle: -1,
+  pusher: Number.MIN_SAFE_INTEGER,
+  shotPath: [],
+  shotPosition: [0, 0],
+  angle: 0,
+  gameResult: GAME_RESULT.WIN,
+  title: '',
 };
 
 const game = createSlice({
@@ -47,8 +59,8 @@ const game = createSlice({
     setBulletColor(state, { payload }: PayloadAction<Game['bullet']['color']>) {
       state.bullet.color = payload;
     },
-    setColors(state, { payload }: PayloadAction<Game['colors']>) {
-      state.colors = payload;
+    setRemainColors(state, { payload }: PayloadAction<Game['remainColors']>) {
+      state.remainColors = payload;
     },
     setCurrentLevel(state, { payload }: PayloadAction<Game['currentLevel']>) {
       state.currentLevel = payload;
@@ -64,6 +76,24 @@ const game = createSlice({
     },
     setGamePhase(state, { payload }: PayloadAction<Game['phase']>) {
       state.phase = payload;
+    },
+    setGameResult(state, { payload }: PayloadAction<Game['gameResult']>) {
+      state.gameResult = payload;
+    },
+    increasePusher(state, { payload }: PayloadAction<Game['pusher']>) {
+      state.pusher += payload ? payload : 1;
+    },
+    setShotPath(state, { payload }: PayloadAction<Game['shotPath']>) {
+      state.shotPath = payload;
+    },
+    setShotPosition(state, { payload }: PayloadAction<Game['shotPosition']>) {
+      state.shotPosition = payload;
+    },
+    setAngle(state, { payload }: PayloadAction<Game['angle']>) {
+      state.angle = payload;
+    },
+    setTitle(state, { payload }: PayloadAction<Game['title']>) {
+      state.title = payload;
     },
   },
 });
