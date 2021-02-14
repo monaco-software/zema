@@ -14,6 +14,7 @@ import { Game } from '../../features/game/Game';
 import { GameLevels } from '../../features/gameLevels/GameLevels';
 import { GameOver } from '../../features/gameOver/GameOver';
 import { useAction } from '../../hooks';
+import { Navbar } from '../Navbar/Navbar';
 import b_ from 'b_';
 import { grommet, Grommet } from 'grommet';
 
@@ -27,7 +28,9 @@ export const App: FC = () => {
   const updateTest = () => setTest(Math.random());
 
   return (
-    <Grommet className={block()} theme={grommet}>
+    <Grommet className={block()} theme={grommet} cssVars>
+      <Navbar />
+
       <Switch>
         {/* Главная страница */}
         <Route exact path="/">
