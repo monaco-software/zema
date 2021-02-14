@@ -3,29 +3,29 @@ import React, { FC } from 'react';
 import { Avatar, Box } from 'grommet';
 import b_ from 'b_';
 import { User } from 'grommet-icons';
-import { UserObjectWithPoints } from '../../types';
+import { LeaderboardRecord } from '../../types';
 
 const block = b_.lock('leaderboard-top');
 
 interface LeaderboardTopUserProps {
   place: number;
-  user: UserObjectWithPoints;
+  record: LeaderboardRecord;
   isCurrentUser: boolean;
 }
 
-const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, user, isCurrentUser }) => {
-  const name = user.display_name ?? `${user.first_name} ${user.second_name}`;
+const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, record, isCurrentUser }) => {
+  const name = record.display_name ?? `${record.first_name} ${record.second_name}`;
 
-  const points = user.points.toLocaleString();
+  const points = record.points.toLocaleString();
 
   return (
     <Box className={block('user', { 'current': isCurrentUser })} justify="center" align="center">
       <span className={block('user-place')}>{place}</span>
 
-      {user.avatar &&
-        <Avatar className={block('user-avatar')} src={user.avatar} size="64px" />
+      {record.avatar &&
+        <Avatar className={block('user-avatar')} src={record.avatar} size="64px" />
       }
-      {!user.avatar &&
+      {!record.avatar &&
         <Avatar className={block('user-avatar')} size="64px">
           <User color="light-1" size="24" />
         </Avatar>
@@ -39,22 +39,22 @@ const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, user, isCurren
 };
 
 interface Props {
-  users: UserObjectWithPoints[];
+  records: LeaderboardRecord[];
   currentUserId: number;
 }
 
-export const LeaderboardTop: FC<Props> = ({ users, currentUserId }) => {
+export const LeaderboardTop: FC<Props> = ({ records, currentUserId }) => {
   return (
     <div className={block()}>
-      {users.map((user, index) => {
-        const isCurrentUser = user.id === currentUserId;
+      {records.map((record, index) => {
+        const isCurrentUser = record.id === currentUserId;
         const place = index + 1;
 
         return (
           <LeaderboardTopUser
-            key={user.id}
+            key={record.id}
             place={place}
-            user={user}
+            record={record}
             isCurrentUser={isCurrentUser}
           />
         );
