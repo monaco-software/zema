@@ -29,6 +29,9 @@ const langPack = {
   form_password_min_special: 'Минимум один специальный символ',
   form_password_min_chars: 'От 8 символов',
   form_password_equal_confirm: 'Пароли должны совпадать',
+  leaderboard_page_header: 'Рейтинг',
+  leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
+  leaderboard_table_placeholder_cta: 'Играть',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];
