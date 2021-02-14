@@ -1,8 +1,11 @@
 /** eslint prefer-const: "error" */
-import '../assets/styles/Layer.css';
+// Бэкграунд
 import React, { FC, useEffect } from 'react';
+
 import { FRAME } from '../constants';
 import { store } from '../../../store/store';
+
+import '../assets/styles/Layer.css';
 
 export const BackLayer: FC = () => {
   const level = store.getState().game.currentLevel;

@@ -1,26 +1,26 @@
 /** eslint prefer-const: "error" */
-import React, { FC, useEffect, useRef, useState } from 'react';
+// Модуль взаимодействует с пользователем
+// слушает мышь и рассчитывает путь пули
+
+import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import levels from '../levels';
-import { BULLET_SPEED, BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
+import { BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
+import { BULLET_SPEED } from '../setup';
 import { gameActions } from '../reducer';
-import { getBulletState, getCurrentLevel, getGamePhase, getTitle } from '../selectors';
+import { getBulletState, getCurrentLevel } from '../selectors';
+import levels from '../levels';
 
 import '../assets/styles/Layer.css';
-import { decimalToHex } from '../lib/utils';
 
 export const UiLayer: FC = () => {
   const dispatch = useDispatch();
 
   const bulletState = useSelector(getBulletState);
-  const gamePhase = useSelector(getGamePhase);
   const level = useSelector(getCurrentLevel);
-  const title = useSelector(getTitle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const angle = useRef(0);
-  const [blackout, setBlackout] = useState(255);
 
   const calculateShotPath = () => {
     // рассчитываем путь
@@ -36,44 +36,6 @@ export const UiLayer: FC = () => {
     dispatch(gameActions.setShotPath(path));
   };
 
-  const doBlackout = (reverse = false) => {
-    setTimeout(() => {
-      reverse ? setBlackout(blackout - 4) : setBlackout(blackout + 4);
-    }, 20);
-  };
-
-  const draw = () => {
-    if (!canvasRef.current) { return; }
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
-    ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-
-    // затемнение в начале и конце
-    if (gamePhase === GAME_PHASE.LOADED && blackout > 0) {
-      doBlackout(true);
-    }
-    if (gamePhase === GAME_PHASE.ENDED && blackout < 255) {
-      doBlackout();
-    }
-    if (gamePhase === GAME_PHASE.LOADING || gamePhase === GAME_PHASE.LOADED
-      || gamePhase === GAME_PHASE.EXITING || gamePhase === GAME_PHASE.ENDED) {
-      ctx.fillStyle = `#000000${decimalToHex(blackout)}`;
-      ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    }
-
-    if (title) {
-      ctx.fillStyle = '#FFFFFFBB';
-      const lineHeight = 40;
-      ctx.font = `${lineHeight}px Bangers, "Courier New"`;
-      let lines = title.split('\n');
-      lines.forEach((line, index) => {
-        let textWidth = ctx.measureText(line).width;
-        ctx.fillText(line, (canvasRef.current as HTMLCanvasElement) .width / 2 - textWidth / 2,
-          (canvasRef.current as HTMLCanvasElement).height / 2 + index * lineHeight);
-      });
-    }
-  };
-
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const y = levels[level].frogPosition.x - e.pageX;
     const x = e.pageY - levels[level].frogPosition.y;
@@ -86,16 +48,9 @@ export const UiLayer: FC = () => {
       return;
     }
     calculateShotPath();
+    dispatch(gameActions.resetCombo());
     dispatch(gameActions.setBulletState(BULLET_STATE.SHOT));
   };
-
-  useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-    draw();
-  }, [gamePhase, blackout]);
 
   // init
   useEffect(() => {

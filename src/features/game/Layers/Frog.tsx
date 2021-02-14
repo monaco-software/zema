@@ -1,8 +1,9 @@
 /** eslint prefer-const: "error" */
+// Модуль отображает лягушку
+
 import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import levels from '../levels';
 import {
   BALL_RADIUS,
   BULLET_ARMED_POSITION,
@@ -12,7 +13,6 @@ import {
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
-import { gameActions } from '../reducer';
 import {
   getAngle,
   getBulletPosition,
@@ -21,12 +21,13 @@ import {
   getGamePhase,
   getRemainColors,
 } from '../selectors';
-
+import { gameActions } from '../reducer';
+import levels from '../levels';
 import Frog from '../lib/frog';
 import bullet from '../lib/bullet';
+import { random } from '../lib/utils';
 
 import '../assets/styles/Layer.css';
-import { random } from '../lib/utils';
 
 export const FrogLayer: FC = () => {
   const dispatch = useDispatch();
@@ -36,14 +37,10 @@ export const FrogLayer: FC = () => {
   const bulletPosition = useSelector(getBulletPosition);
   const level = useSelector(getCurrentLevel);
   const remainColors = useSelector(getRemainColors);
+  const angle = useSelector(getAngle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const angle = useSelector(getAngle);
   const frog = useMemo(() => new Frog(), []);
-  frog.image.onload = () => {
-    console.log('frog loaded');
-    dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
-  };
 
   // отрезает часть шарика, "накрытого" губой лягушки
   const coverWithLip = (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number) => {

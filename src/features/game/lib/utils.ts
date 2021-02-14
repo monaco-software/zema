@@ -14,3 +14,13 @@ export function decimalToHex(d: number, padding = 2) {
   }
   return hex;
 }
+
+export function distort(max: number, phases: number, phase: number, gain = 0.5) {
+  const value = max * gain + max * phase / phases;
+  return value > max ? max : Math.floor(value);
+}
+
+export function fps(frames: number): number {
+  return 1000 * (1 / frames);
+}
+

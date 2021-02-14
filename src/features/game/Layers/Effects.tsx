@@ -1,17 +1,19 @@
 /** eslint prefer-const: "error" */
+// Модуль отображает взрывы, частицы и летящую пулю
 
 import React, { FC, useEffect, useRef } from 'react';
-
-import '../assets/styles/Layer.css';
-import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
-import Explosion from '../lib/explosion';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 import { getCurrentLevel, getExplosion, getGamePhase, getGameResult, getShotPath, getShotPosition } from '../selectors';
+import Explosion from '../lib/explosion';
 import Particle from '../lib/paricle';
 import Skull from '../lib/skull';
 import levels from '../levels';
 import bulletObject from '../lib/bullet';
 import { gameActions } from '../reducer';
+
+import '../assets/styles/Layer.css';
 
 interface Props {
   ballsPath: number[][];
@@ -36,7 +38,9 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
 
   const drawEffects = () => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     effects.current.forEach((effect, index) => {
       if (effect.phase < effect.numberOfFrames) {

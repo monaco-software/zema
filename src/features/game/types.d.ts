@@ -30,6 +30,7 @@ export interface Level {
   ballColors: number[];
   frogPosition: Point;
   skullPosition: Point;
+  scorePosition: Point;
   start: number[];
   curve: number[][];
   rollOut: number;

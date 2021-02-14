@@ -20,6 +20,8 @@ interface Game {
   angle: number;
   gameResult: number;
   title: string;
+  score: number;
+  combo: number;
 }
 
 const initialGame: Game = {
@@ -41,6 +43,8 @@ const initialGame: Game = {
   angle: 0,
   gameResult: GAME_RESULT.WIN,
   title: '',
+  score: 0,
+  combo: 0,
 };
 
 const game = createSlice({
@@ -94,6 +98,18 @@ const game = createSlice({
     },
     setTitle(state, { payload }: PayloadAction<Game['title']>) {
       state.title = payload;
+    },
+    increaseScore(state, { payload }: PayloadAction<Game['score']>) {
+      state.score += payload;
+    },
+    increaseCombo(state) {
+      state.combo += 1;
+    },
+    resetCombo(state) {
+      state.combo = 0;
+    },
+    resetScore(state) {
+      state.score = 0;
     },
   },
 });

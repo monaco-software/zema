@@ -2,15 +2,21 @@ import { Level } from './types';
 import { BALL_COLORS } from './constants';
 
 const levels: Level[] = [{
-  title: 'Level 1\nSomewhere in Mexico',
-  speed: 25,
-  balls: 30,
-  ballColors: [BALL_COLORS.BLUE, BALL_COLORS.YELLOW, BALL_COLORS.PINK],
+  title: `Level 1
+
+A long, long time ago
+somewhere in
+south, south
+America`,
+  speed: 25, // fps и количество тиков pusher в секунду
+  balls: 60,
+  ballColors: [BALL_COLORS.YELLOW, BALL_COLORS.PINK],
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 515, y: 310 },
-  rollOut: 77,
-  start: [421, 0],
-  curve: [
+  scorePosition: { x: 90, y: 50 },
+  rollOut: 60, // как далеко выкатывать в начале уровня
+  start: [421, 0], // начало кривой Безье
+  curve: [ // контрольные точки
     [502, 36, 623, 113, 690, 195],
     [738, 254, 759, 298, 757, 349],
     [755, 406, 722, 458, 694, 480],
