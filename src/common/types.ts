@@ -1,3 +1,7 @@
+import { UserObject } from '../api/schema';
+
 export interface AppState {
-  test: string | number;
+  user: UserObject;
+  isSignedIn: boolean;
+  error?: string;
 }

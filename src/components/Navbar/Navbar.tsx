@@ -7,7 +7,7 @@ import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
 import { ROUTES } from '../../common/constants';
 import { Gamepad } from 'grommet-icons/es6';
 import { Icon } from 'grommet-icons/icons';
-import { getLang } from '../../common/langUtils';
+import { getText } from '../../common/langUtils';
 
 const block = b_.lock('navbar');
 
@@ -81,7 +81,7 @@ export const Navbar: FC = () => {
         exact
         route={ROUTES.ROOT}
         IconComponent={Home}
-        text={getLang('navbar_root')}
+        text={getText('navbar_root')}
       />
 
       <Separator />
@@ -90,13 +90,13 @@ export const Navbar: FC = () => {
         exact
         route={ROUTES.GAME}
         IconComponent={Gamepad}
-        text={getLang('navbar_game')}
+        text={getText('navbar_game')}
       />
 
       <NavbarItem
         route={ROUTES.GAME_LEVELS}
         IconComponent={AppsRounded}
-        text={getLang('navbar_game_levels')}
+        text={getText('navbar_game_levels')}
       />
 
       <Separator />
@@ -104,13 +104,13 @@ export const Navbar: FC = () => {
       <NavbarItem
         route={ROUTES.LEADERBOARD}
         IconComponent={Trophy}
-        text={getLang('navbar_leaderboard')}
+        text={getText('navbar_leaderboard')}
       />
 
       <NavbarItem
         route={ROUTES.FORUM}
         IconComponent={Chat}
-        text={getLang('navbar_forum')}
+        text={getText('navbar_forum')}
       />
 
       <Separator />
@@ -118,7 +118,7 @@ export const Navbar: FC = () => {
       <NavbarItem
         route={ROUTES.ACCOUNT}
         IconComponent={User}
-        text={getLang('navbar_account')}
+        text={getText('navbar_account')}
       />
     </nav>
   );
