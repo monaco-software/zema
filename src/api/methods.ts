@@ -1,4 +1,14 @@
-import { SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserObject } from './schema';
+import {
+  GetLeaderboardParams,
+  GetLeaderboardResponse,
+  SignInParams,
+  SignInResponse,
+  SignUpParams,
+  SignUpResponse,
+  UpdateLeaderboardParams,
+  UpdateLeaderboardResponse,
+  UserObject,
+} from './schema';
 import { createApiMethod } from './core';
 
 export const YANDEX_API_URL = 'https://ya-praktikum.tech';
@@ -18,6 +28,27 @@ export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(ge
 });
 
 export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(getFullPath('/auth/signup'), {
+  method: 'POST',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetUserById = (userId: number) => createApiMethod<undefined, UserObject>(getFullPath(`/user/${userId}`), {
+  method: 'GET',
+  credentials: 'include',
+});
+
+export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, UpdateLeaderboardResponse>(getFullPath('/leaderboard'), {
+  method: 'POST',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeaderboardResponse>(getFullPath('/leaderboard/all'), {
   method: 'POST',
   credentials: 'include',
   headers: {
