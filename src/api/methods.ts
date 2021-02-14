@@ -1,8 +1,8 @@
 import { SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserObject } from './schema';
 import { createApiMethod } from './core';
 
-const YANDEX_API_URL = 'https://ya-praktikum.tech/api/v2';
-const getFullPath = (path: string) => `${YANDEX_API_URL}${path}`;
+export const YANDEX_API_URL = 'https://ya-praktikum.tech';
+const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;
 
 export const apiGetUser = createApiMethod<undefined, UserObject>(getFullPath('/auth/user'), {
   method: 'GET',

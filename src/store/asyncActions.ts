@@ -1,3 +1,4 @@
+import { getUserWithFullAvatarUrl } from '../common/helpers';
 import { AppThunk } from './store';
 import { apiGetUser, apiPerformSignIn, apiPerformSignUp } from '../api/methods';
 import { appActions } from './reducer';
@@ -7,8 +8,9 @@ export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {
     try {
       const user = await dispatch(apiGetUser(undefined, false));
+      const userWithFullAvatarUrl = getUserWithFullAvatarUrl(user);
 
-      dispatch(appActions.setUser(user));
+      dispatch(appActions.setUser(userWithFullAvatarUrl));
       dispatch(appActions.setIsSignedIn(true));
     } catch (error) {
       throw error;
