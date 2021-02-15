@@ -37,9 +37,10 @@ export const UiLayer: FC = () => {
   };
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const y = levels[level].frogPosition.x - e.pageX;
-    const x = e.pageY - levels[level].frogPosition.y;
-    angle.current = Math.atan2(y, x) + Math.PI;
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const y = levels[level].frogPosition.x - e.pageY + rect.top;
+    const x = e.pageX - rect.left - levels[level].frogPosition.y;
+    angle.current = Math.atan2(x, y);
     dispatch(gameActions.setAngle(angle.current));
   };
 

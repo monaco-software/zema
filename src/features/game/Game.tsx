@@ -1,10 +1,14 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Main } from 'grommet';
 import b_ from 'b_';
 
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
+import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
+import { ROUTES } from '../../common/constants';
 import { BallsLayer } from './Layers/Balls';
+import { TitleLayer } from './Layers/Title';
 import { BackLayer } from './Layers/Back';
 import { EffectsLayer } from './Layers/Effects';
 import { FrogLayer } from './Layers/Frog';
@@ -16,9 +20,6 @@ import { UiLayer } from './Layers/Ui';
 import { ScoreLayer } from './Layers/Score';
 import { ComboLayer } from './Layers/Combo';
 import { BlackoutLayer } from './Layers/Blackout';
-import { TitleLayer } from './Layers/Title';
-import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
-import { ROUTES } from '../../common/constants';
 
 const block = b_.lock('game');
 
@@ -81,18 +82,18 @@ export const Game: FC = () => {
   }, []);
 
   return (
-    <div className={block()}>
-      <BackLayer />
-      <BallsLayer ballsPath={ballsPath} />
-      <EffectsLayer ballsPath={ballsPath} />
-      <FrogLayer />
-      <ComboLayer />
-      <ScoreLayer />
-      <BlackoutLayer />
-      <TitleLayer />
-      <UiLayer />
-      <br />
-      <button onClick={() => history.goBack()}>Go back</button>
+    <div className={block()} style={{ height: '100vh' }}>
+      <Main justify="center" align="center">
+        <BackLayer />
+        <BallsLayer ballsPath={ballsPath} />
+        <EffectsLayer ballsPath={ballsPath} />
+        <FrogLayer />
+        <ComboLayer />
+        <ScoreLayer />
+        <BlackoutLayer />
+        <TitleLayer />
+        <UiLayer />
+      </Main>
     </div>
   );
 };
