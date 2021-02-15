@@ -112,7 +112,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     // проверяем, не добрался ли передний шар до черепа
     if (gamePhase === GAME_PHASE.STARTED && balls[balls.length - 1].position >= ballsPath.length - 1) {
       // быстро сливаем оставшиеся шары
-      pusherIncrement.current = 30;
+      pusherIncrement.current = 28;
       dispatch(gameActions.setGameResult(GAME_RESULT.FAIL));
       dispatch(gameActions.setGamePhase(GAME_PHASE.ENDING));
     }
@@ -156,7 +156,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
         // выставляем флаг, чтобы следующая итерация
         // не начала вставлять шар повторно
         inserting.current = true;
-        dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+        dispatch(gameActions.setBulletState(BULLET_STATE.INSERTING));
 
         // рассчитываем, всталять перед шаром, в который попали или после
         const closerPoint = getCloserPoint(ballsPath, shotPosition[0], shotPosition[1]);
