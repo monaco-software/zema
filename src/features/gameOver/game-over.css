@@ -1,5 +1,8 @@
 .game-over {
-  height: 100%;
+  height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .game-over__button {

@@ -30,7 +30,7 @@ export const GameOver: FC = () => {
   return (
     <div className={block()}>
       <Grommet theme={theme}>
-        <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
+        <Main justify="center" align="center">
           <Box gap="small" className={block('box_game')}>
             <Heading color={color}>
               {getText('game_over_page_header')}
