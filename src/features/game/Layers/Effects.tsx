@@ -53,7 +53,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     });
     ctx.drawImage(skull.current.image, levels[level].skullPosition.x, levels[level].skullPosition.y);
     if (shotPath.length) {
-      shotPath.forEach((p) => {
+      shotPath.forEach((p: number[]) => {
         ctx.fillStyle = '#f0f';
         ctx.fillRect(p[0], p[1], 1, 1);
       });
@@ -94,7 +94,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     if (!ctx || !explosion.length) {
       return;
     }
-    explosion.forEach((exp, index) => {
+    explosion.forEach((exp: number, index: number) => {
       if (exp < 0 || exp >= ballsPath.length) {
         return;
       }

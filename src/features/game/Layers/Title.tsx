@@ -27,7 +27,7 @@ export const TitleLayer: FC = () => {
       const lineHeight = TITLE_FONT_SIZE + 10;
       ctx.font = `${TITLE_FONT_SIZE}px Bangers`;
       const lines = title.split('\n');
-      lines.forEach((line, index) => {
+      lines.forEach((line: string, index: number) => {
         const textWidth = ctx.measureText(line).width;
         ctx.fillText(line, (canvasRef.current as HTMLCanvasElement).width / 2 - textWidth / 2,
           (canvasRef.current as HTMLCanvasElement).height / 2 + index * lineHeight - lines.length * lineHeight / 2);
