@@ -1,3 +1,4 @@
+import './game.css';
 import React, { FC, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -82,7 +83,7 @@ export const Game: FC = () => {
   }, []);
 
   return (
-    <div className={block()} style={{ height: '100vh' }}>
+    <div className={block()}>
       <Main justify="center" align="center">
         <BackLayer />
         <BallsLayer ballsPath={ballsPath} />
