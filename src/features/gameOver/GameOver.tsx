@@ -12,6 +12,14 @@ import './game-over.css';
 
 const block = b_.lock('game-over');
 
+const color = '#FFFFFFC0';
+
+const theme = {
+  button: {
+    color: color,
+  },
+};
+
 export const GameOver: FC = () => {
   useAuth();
 
@@ -20,14 +28,6 @@ export const GameOver: FC = () => {
   const goToHome = () => history.push(ROUTES.ROOT);
   const goToLevels = () => history.push(ROUTES.GAME_LEVELS);
   const goToGame = () => history.push(ROUTES.GAME);
-
-  const color = '#FFFFFFC0';
-
-  const theme = {
-    button: {
-      color: color,
-    },
-  };
 
   return (
     <div className={block()}>
