@@ -29,6 +29,10 @@ const langPack = {
   form_password_min_special: 'Минимум один специальный символ',
   form_password_min_chars: 'От 8 символов',
   form_password_equal_confirm: 'Пароли должны совпадать',
+  game_over_page_header: 'Игра окончена',
+  game_over_to_home_button: 'На главную',
+  game_over_to_game_button: 'Попробовать еще раз',
+  game_over_to_levels_button: 'К списку уровней',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];
