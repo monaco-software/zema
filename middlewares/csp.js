@@ -1,7 +1,7 @@
 const CSPHeader = `
     default-src 'self';
     connect-src https://ya-praktikum.tech wss://ya-praktikum.tech;
-    font-src https://fonts.gstatic.com https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com;
     img-src 'self' blob: data: https://ya-praktikum.tech https://ssl.gstatic.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     script-src 'self' 'unsafe-inline';`;

@@ -24,7 +24,6 @@ export const TitleLayer: FC = () => {
       ctx.textBaseline = 'top';
       const lineHeight = TITLE_FONT_SIZE + 10;
       ctx.font = `${TITLE_FONT_SIZE}px Bangers2`;
-      console.dir(ctx.font);
       const lines = title.split('\n');
       lines.forEach((line: string, index: number) => {
         const textWidth = ctx.measureText(line).width;

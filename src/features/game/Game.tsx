@@ -70,17 +70,7 @@ export const Game: FC = () => {
       document.fonts.add(font);
       document.body.style.fontFamily = 'Bangers2, serif';
       dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
-      console.log('FONT LOADED');
     });
-    // дожидаемся загрузки шрифта
-    // (document as any).fonts.ready.then(() => {
-    //   console.log('font loaded');
-    //   setTimeout(
-    //     () => {
-    //       dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
-    //     }, 1000
-    //   );
-    // });
 
     return () => {
       dispatch(gameActions.resetScore());
