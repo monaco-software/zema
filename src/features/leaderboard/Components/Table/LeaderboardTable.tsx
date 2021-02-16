@@ -2,8 +2,7 @@ import './leaderboard-table.css';
 import React, { FC } from 'react';
 import b_ from 'b_';
 import { LeaderboardRecord } from '../../types';
-import { Avatar } from 'grommet';
-import { User } from 'grommet-icons';
+import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/AvatarWithFallback';
 
 const block = b_.lock('leaderboard-table');
 
@@ -18,24 +17,21 @@ const LeaderboardTableRow: FC<LeaderboardTableRowProps> = ({ record, place, isCu
   const points = record.points.toLocaleString();
 
   return (
-    <tr className={block('row')}>
-      <td className={block('cell', { 'type': 'place', 'current-user': isCurrentUser })}>
+    <tr className={block('row', { 'current-user': isCurrentUser })}>
+      <td className={block('cell', { 'type': 'place' })}>
         {place}
       </td>
 
-      <td className={block('cell', { 'type': 'name', 'current-user': isCurrentUser })}>
-        {record.avatar &&
-          <Avatar className={block('user-avatar')} src={record.avatar} size="32px" />
-        }
-        {!record.avatar &&
-          <Avatar className={block('user-avatar')} size="32px">
-            <User color="light-1" size="16" />
-          </Avatar>
-        }
+      <td className={block('cell', { 'type': 'name' })}>
+        <AvatarWithFallback
+          className={block('user-avatar')}
+          url={record.avatar}
+          size={32}
+        />
         {name}
       </td>
 
-      <td className={block('cell', { 'type': 'points', 'current-user': isCurrentUser })}>
+      <td className={block('cell', { 'type': 'points' })}>
         {points}
       </td>
     </tr>

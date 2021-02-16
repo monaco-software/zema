@@ -1,9 +1,9 @@
 import './leaderboard-top.css';
 import React, { FC } from 'react';
-import { Avatar, Box } from 'grommet';
+import { Box } from 'grommet';
 import b_ from 'b_';
-import { User } from 'grommet-icons';
 import { LeaderboardRecord } from '../../types';
+import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/AvatarWithFallback';
 
 const block = b_.lock('leaderboard-top');
 
@@ -22,14 +22,11 @@ const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, record, isCurr
     <Box className={block('user', { 'current': isCurrentUser })} justify="center" align="center">
       <span className={block('user-place')}>{place}</span>
 
-      {record.avatar &&
-        <Avatar className={block('user-avatar')} src={record.avatar} size="64px" />
-      }
-      {!record.avatar &&
-        <Avatar className={block('user-avatar')} size="64px">
-          <User color="light-1" size="24" />
-        </Avatar>
-      }
+      <AvatarWithFallback
+        className={block('user-avatar')}
+        url={record.avatar}
+        size={64}
+      />
 
       <div className={block('user-name')} title={name}>{name}</div>
 

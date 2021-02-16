@@ -17,7 +17,7 @@
   font-weight: 500;
 }
 
-.leaderboard-table__cell_current-user {
+.leaderboard-table__row_current-user .leaderboard-table__cell {
   background-color: #ffeac1;
 }
 
@@ -33,7 +33,7 @@
   font-weight: 700;
 }
 
-.leaderboard-table__cell_current-user:first-child {
+.leaderboard-table__row_current-user .leaderboard-table__cell:first-child {
   background-color: var(--accent-4);
 }
 
@@ -46,7 +46,7 @@
   border-left: var(--leaderboard-table-first-cell-triangle-width) solid var(--brand);
 }
 
-.leaderboard-table__cell_current-user:first-child::after {
+.leaderboard-table__row_current-user .leaderboard-table__cell:first-child::after {
   border-left-color: var(--accent-4);
 }
 

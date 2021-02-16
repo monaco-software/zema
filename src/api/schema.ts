@@ -30,10 +30,10 @@ export interface SignUpResponse {
 }
 
 export interface LeaderboardRecordObject {
-  /** Ключевое поле с кол-вом набранных пользователем очков */
+  // Ключевое поле с кол-вом набранных пользователем очков
   [LEADERBOARD_VALUE_FIELD_NAME]: number;
   user_id: number;
-  /** Unix timestamp */
+  // Unix timestamp
   timestamp: number;
 }
 
