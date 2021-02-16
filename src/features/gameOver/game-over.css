@@ -1,0 +1,26 @@
+.game-over {
+  height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.game-over__button {
+  text-align: center;
+  color: #FFFF0099;
+}
+
+.game-over__box_game {
+  background-color: #000000;
+  width: 800px;
+  height: 600px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.game-over__box_buttons {
+  align-self: center;
+  max-width: 300px;
+  margin: auto;
+}

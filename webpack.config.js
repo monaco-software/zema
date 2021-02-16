@@ -1,9 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -17,6 +18,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx']
@@ -31,6 +33,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+      },
+      {
+        test: /\.png$/,
+        use: ['file-loader'],
       },
     ]
   },
@@ -63,6 +69,7 @@ module.exports = {
       template: './src/index.html',
       inject: 'head',
       scriptLoading: 'defer',
+      favicon: './src/favicon.ico',
     }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
@@ -71,5 +78,10 @@ module.exports = {
       extensions: ['.ts', '.tsx'],
     }),
     new StylelintPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {from: './src/features/game/assets/fonts/Bangers.ttf'},
+      ],
+    }),
   ],
 }
