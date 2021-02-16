@@ -1,4 +1,4 @@
-/** eslint prefer-const: "error" */
+/* eslint prefer-const: "warn" */
 // Модуль отображает лягушку
 
 import React, { FC, useEffect, useMemo, useRef } from 'react';
@@ -25,9 +25,10 @@ import { gameActions } from '../reducer';
 import levels from '../levels';
 import Frog from '../lib/frog';
 import bullet from '../lib/bullet';
-import { random } from '../lib/utils';
+import { fps, random } from '../lib/utils';
+import { coverWithLip } from './utils/frog';
 
-import '../assets/styles/Layer.css';
+import { BULLET_SPEED } from '../setup';
 
 export const FrogLayer: FC = () => {
   const dispatch = useDispatch();
@@ -41,17 +42,6 @@ export const FrogLayer: FC = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frog = useMemo(() => new Frog(), []);
-
-  // отрезает часть шарика, "накрытого" губой лягушки
-  const coverWithLip = (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number) => {
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-in';
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  };
 
   const drawFrog = () => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -78,7 +68,7 @@ export const FrogLayer: FC = () => {
       if (bulletPosition < BULLET_ARMED_POSITION) {
         setTimeout(() => {
           dispatch(gameActions.setBulletPosition(bulletPosition + 1));
-        }, 15);
+        }, fps(BULLET_SPEED));
       } else {
         dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
       }
@@ -89,16 +79,6 @@ export const FrogLayer: FC = () => {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) { return; }
-    if (bulletState === BULLET_STATE.ARMING) {
-      // выкатываем шар из брюха
-      if (bulletPosition < BULLET_ARMED_POSITION) {
-        setTimeout(() => {
-          dispatch(gameActions.setBulletPosition(bulletPosition + 1));
-        }, 15);
-      } else {
-        dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
-      }
-    }
     drawFrog();
   }, [angle]);
 
@@ -141,7 +121,7 @@ export const FrogLayer: FC = () => {
 
   return (
     <canvas
-      className="Layer"
+      style={{ position: 'absolute' }}
       ref={canvasRef}
     />
   );

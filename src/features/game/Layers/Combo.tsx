@@ -10,8 +10,6 @@ import { getCombo, getCurrentLevel } from '../selectors';
 import { decimalToHex, distort, fps } from '../lib/utils';
 import levels from '../levels';
 
-import '../assets/styles/Layer.css';
-
 export const ComboLayer: FC = () => {
   const combo = useSelector(getCombo);
   const level = useSelector(getCurrentLevel);
@@ -73,7 +71,9 @@ export const ComboLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer"
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

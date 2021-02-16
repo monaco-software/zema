@@ -1,4 +1,3 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает рейтинг
 
 import React, { FC, useEffect, useRef } from 'react';
@@ -9,8 +8,6 @@ import { SCORE_FONT_SIZE } from '../setup';
 import { getCurrentLevel, getScore } from '../selectors';
 import levels from '../levels';
 import { fps } from '../lib/utils';
-
-import '../assets/styles/Layer.css';
 
 export const ScoreLayer: FC = () => {
   const level = useSelector(getCurrentLevel);
@@ -77,7 +74,9 @@ export const ScoreLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer"
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

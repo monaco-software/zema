@@ -8,8 +8,6 @@ import { BLACKOUT_INCREMENT, FRAME, GAME_PHASE } from '../constants';
 import { getGamePhase } from '../selectors';
 import { decimalToHex, fps } from '../lib/utils';
 
-import '../assets/styles/Layer.css';
-
 export const BlackoutLayer: FC = () => {
   const gamePhase = useSelector(getGamePhase);
 
@@ -67,7 +65,9 @@ export const BlackoutLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer"
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

@@ -8,8 +8,6 @@ import { FRAME } from '../constants';
 import { TITLE_FONT_SIZE } from '../setup';
 import { getTitle } from '../selectors';
 
-import '../assets/styles/Layer.css';
-
 export const TitleLayer: FC = () => {
   const title = useSelector(getTitle);
 
@@ -50,7 +48,9 @@ export const TitleLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer"
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

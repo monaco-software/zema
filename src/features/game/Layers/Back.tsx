@@ -6,8 +6,6 @@ import React, { FC, useEffect } from 'react';
 
 import { FRAME } from '../constants';
 
-import '../assets/styles/Layer.css';
-
 export const BackLayer: FC = () => {
   const level: number = useSelector(getCurrentLevel);
 
@@ -29,6 +27,9 @@ export const BackLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer" ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

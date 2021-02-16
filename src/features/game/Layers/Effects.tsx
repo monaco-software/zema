@@ -4,7 +4,7 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 import { getCurrentLevel, getExplosion, getGamePhase, getGameResult, getShotPath, getShotPosition } from '../selectors';
 import Explosion from '../lib/explosion';
 import Particle from '../lib/paricle';
@@ -13,7 +13,9 @@ import levels from '../levels';
 import bulletObject from '../lib/bullet';
 import { gameActions } from '../reducer';
 
-import '../assets/styles/Layer.css';
+import { traceShotPath } from './utils/effects';
+import { fps } from '../lib/utils';
+import { BULLET_SPEED } from '../setup';
 
 interface Props {
   ballsPath: number[][];
@@ -42,21 +44,22 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
       return;
     }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
+    // рисуем взрывы и частицы
     effects.current.forEach((effect, index) => {
       if (effect.phase < effect.numberOfFrames) {
         effect.update(effect.phase);
         effect.phase += 1;
-        ctx.drawImage(effect.canvas, effect.x - BALL_RADIUS, effect.y - BALL_RADIUS, BALL_RADIUS * 2, BALL_RADIUS * 2);
+        ctx.drawImage(effect.canvas, effect.x - BALL_RADIUS, effect.y - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
       } else {
         effects.current.splice(index, 1);
       }
     });
+    // рисуем череп
     ctx.drawImage(skull.current.image, levels[level].skullPosition.x, levels[level].skullPosition.y);
+    // рисуем пулю
     if (shotPath.length) {
-      shotPath.forEach((p: number[]) => {
-        ctx.fillStyle = '#f0f';
-        ctx.fillRect(p[0], p[1], 1, 1);
-      });
+      traceShotPath(ctx, shotPath);
+
       if (bullet.current.position >= shotPath.length) { // промахнулись
         dispatch(gameActions.setShotPath([]));
         dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
@@ -74,14 +77,14 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     }
     if (effects.current.length) {
       drawn.current = true;
-      setTimeout(() => window.requestAnimationFrame(drawEffects), 25);
+      setTimeout(() => window.requestAnimationFrame(drawEffects), fps(24));
     } else {
       drawn.current = false;
     }
   };
 
   const runParticles = () => {
-    for (let i = 0; i < ballsPath.length; i += BALL_RADIUS * 2) {
+    for (let i = 0; i < ballsPath.length; i += BALL_DIAMETER) {
       setTimeout(
         () => effects.current.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
         Math.floor(i / 2));
@@ -102,7 +105,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
         () => effects.current.push(
           new Explosion(ballsPath[exp][0], ballsPath[exp][1])
         ),
-        index * 30);
+        index * 25);
     });
     if (!drawn.current) {
       setTimeout(() => drawEffects(), 1);
@@ -123,14 +126,12 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   useEffect(() => {
     if (shotPath.length) {
       bullet.current.position = 0;
-    } else {
-
     }
     drawEffects();
   }, [shotPath]);
 
   useEffect(() => {
-    setTimeout(() => drawEffects(), 30);
+    setTimeout(() => drawEffects(), fps(BULLET_SPEED));
   }, [shotPosition]);
 
   // init
@@ -144,7 +145,9 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   }, []);
 
   return (
-    <canvas className="Layer"
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

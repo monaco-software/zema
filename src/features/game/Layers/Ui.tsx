@@ -6,12 +6,10 @@ import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
-import { BULLET_SPEED } from '../setup';
+import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
 import { getBulletState, getCurrentLevel } from '../selectors';
 import levels from '../levels';
-
-import '../assets/styles/Layer.css';
 
 export const UiLayer: FC = () => {
   const dispatch = useDispatch();
@@ -26,7 +24,7 @@ export const UiLayer: FC = () => {
     // рассчитываем путь
     const path: number[][] = [];
     const shotAngle = angle.current - Math.PI / 2;
-    for (let i = FROG_RADIUS + BULLET_SPEED; i < FRAME.WIDTH; i += BULLET_SPEED) {
+    for (let i = FROG_RADIUS + BULLET_TICK_DISTANCE; i < FRAME.WIDTH; i += BULLET_TICK_DISTANCE) {
       const x = Math.round(levels[level].frogPosition.x + i * Math.cos(shotAngle));
       const y = Math.round(levels[level].frogPosition.y + i * Math.sin(shotAngle));
       if (x >= 0 && x <= FRAME.WIDTH && y >= 0 && y <= FRAME.HEIGHT) {
@@ -38,8 +36,8 @@ export const UiLayer: FC = () => {
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const y = levels[level].frogPosition.x - e.pageY + rect.top;
     const x = e.pageX - rect.left - levels[level].frogPosition.y;
+    const y = levels[level].frogPosition.x - e.pageY + rect.top;
     angle.current = Math.atan2(x, y);
     dispatch(gameActions.setAngle(angle.current));
   };
@@ -68,9 +66,11 @@ export const UiLayer: FC = () => {
   }, []);
 
   return (
-    <canvas className="Layer"
+    <canvas
+      style={{ position: 'absolute' }}
       ref={canvasRef}
       onMouseMove={mouseMove}
-      onClick={mouseClick} />
+      onClick={mouseClick}
+    />
   );
 };

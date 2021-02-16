@@ -79,6 +79,7 @@ export const Game: FC = () => {
       dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
       dispatch(gameActions.setGamePhase(GAME_PHASE.LOADING));
       dispatch(gameActions.setShotPath([]));
+      dispatch(gameActions.setGameResult(GAME_RESULT.WIN));
     };
   }, []);
 

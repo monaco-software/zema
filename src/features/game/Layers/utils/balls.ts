@@ -1,35 +1,41 @@
 import Ball from '../../lib/ball';
 import { random } from '../../lib/utils';
-import { BALL_RADIUS } from '../../constants';
+import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 import levels from '../../levels';
 import { Physics } from '../../types';
 
 // возвращает массив индексов одинаковых шаров рядом с заданным
-export const findSame = (balls: Ball[], index: number): number[] => {
-  const res = [];
+export const findSame = (balls: Ball[], index: number, both = false): number[] => {
+  const left = [];
+  const right = [];
   if (!balls || !balls[index]) {
     return [];
   }
   const color = balls[index].color;
-  // проверяем следующие
+  // проверяем слева
   let fail = false;
-  for (let f = index; f < balls.length && !fail; f += 1) {
-    if (balls[f].color === color) {
-      res.push(f);
-    } else {
-      fail = true;
-    }
-  }
-  // проверяем предыдущие
-  fail = false;
   for (let b = index; b >= 0 && !fail; b -= 1) {
     if (balls[b].color === color) {
-      res.push(b);
+      left.push(b);
     } else {
       fail = true;
     }
   }
-  return [...new Set(res.sort((n1, n2) => n1 - n2))];
+  // проверяем справа
+  fail = false;
+  for (let f = index; f < balls.length && !fail; f += 1) {
+    if (balls[f].color === color) {
+      right.push(f);
+    } else {
+      fail = true;
+    }
+  }
+  const res = left.concat(right);
+  if (both && (left.length < 2 || right.length < 2)) {
+    return [index];
+  } else {
+    return [...new Set(res.sort((n1, n2) => n1 - n2))];
+  }
 };
 
 // высчитыват оставшиеся на поле цвета
@@ -43,7 +49,7 @@ export const calculateRemainColors = (b: Ball[], i: number): number[] => {
   while (sameBalls.length >= 3) {
     index = sameBalls[0];
     balls.splice(index, sameBalls.length);
-    sameBalls = findSame(balls, index);
+    sameBalls = findSame(balls, index, true);
   }
   const remainColors: number[] = [];
   balls.forEach((ball) => {
@@ -56,13 +62,13 @@ export const calculateRemainColors = (b: Ball[], i: number): number[] => {
 
 export const createBalls = (level: number): Ball[] => {
   const levelData = levels[level];
-  const pusherPosition = -levelData.balls * BALL_RADIUS * 2;
+  const pusherPosition = -levelData.balls * BALL_DIAMETER;
   const balls = [];
 
   for (let i = 0; i < levelData.balls; i += 1) {
     const randomIndex = random(levelData.ballColors.length);
     const ball = new Ball(levelData.ballColors[randomIndex]);
-    ball.position = pusherPosition + i * BALL_RADIUS * 2;
+    ball.position = pusherPosition + i * BALL_DIAMETER;
     balls.push(ball);
   }
   return balls;
@@ -89,18 +95,18 @@ export const applyPhysic = (balls: Ball[], pusherPosition: number): Physics => {
       // признак того, что был вставлен шар
       const inserting = prevBallDistance < BALL_RADIUS;
       // сдвигаем шар до тех пор, пока он не перестанет наезжать на соседний
-      while (ball.position < prevBallPosition + BALL_RADIUS * 2 - 1) {
+      while (ball.position < prevBallPosition + BALL_DIAMETER - 1) {
         ball.position += 1;
         if (inserting) {
           // перемещаем не прокручивая
           ball.positionOffset -= 1;
         }
       }
-      if (prevBallDistance > BALL_RADIUS * 2) {
+      if (prevBallDistance > BALL_DIAMETER) {
         // разрыв. придаем шарам ускорение
         ball.acceleration += 1;
         for (let i = ballIndex; i < balls.length; i += 1) {
-          balls[i].position -= ball.acceleration > BALL_RADIUS * 2 ? BALL_RADIUS * 2 : ball.acceleration;
+          balls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
         }
       } else {
         // столкновение. чем сильнее разгон, тем дальше отлетают шары
