@@ -30,7 +30,7 @@ export const BlackoutLayer: FC = () => {
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     // затемнение в начале
-    if (gamePhase === GAME_PHASE.LOADED || gamePhase === GAME_PHASE.LOADING) {
+    if (gamePhase === GAME_PHASE.LOADED) {
       ctx.fillStyle = `#000000${decimalToHex(blackout)}`;
       ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
       if (blackout < BLACKOUT_INCREMENT) { return; }
@@ -62,6 +62,10 @@ export const BlackoutLayer: FC = () => {
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx) { return; }
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
   }, []);
 
   return (

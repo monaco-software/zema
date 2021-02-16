@@ -34,9 +34,11 @@ export interface Level {
   start: number[];
   curve: number[][];
   rollOut: number;
+  backgroundUrl: string;
 }
 
 export interface Physics {
   pusherOffset: number;
   impacts: number[];
 }
+

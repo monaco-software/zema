@@ -23,7 +23,8 @@ export const TitleLayer: FC = () => {
       ctx.fillStyle = '#FFFFFFDD';
       ctx.textBaseline = 'top';
       const lineHeight = TITLE_FONT_SIZE + 10;
-      ctx.font = `${TITLE_FONT_SIZE}px Bangers`;
+      ctx.font = `${TITLE_FONT_SIZE}px Bangers2`;
+      console.dir(ctx.font);
       const lines = title.split('\n');
       lines.forEach((line: string, index: number) => {
         const textWidth = ctx.measureText(line).width;
@@ -41,7 +42,7 @@ export const TitleLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Score canvas not found');
+      throw new Error('Effects canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;

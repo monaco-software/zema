@@ -29,7 +29,7 @@ export const ScoreLayer: FC = () => {
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 10;
       ctx.fillStyle = '#FFFF00D0';
-      ctx.font = `${scoreFontSize.current}px Bangers, "Courier New"`;
+      ctx.font = `${scoreFontSize.current}px Bangers2`;
       ctx.textBaseline = 'middle';
       const textWidth = ctx.measureText(tmpScore.current.toString()).width;
       ctx.fillText(tmpScore.current.toString(),
@@ -67,7 +67,7 @@ export const ScoreLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Score canvas not found');
+      throw new Error('Effects canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;

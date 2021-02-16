@@ -1,4 +1,3 @@
-import './game.css';
 import React, { FC, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +20,8 @@ import { UiLayer } from './Layers/Ui';
 import { ScoreLayer } from './Layers/Score';
 import { ComboLayer } from './Layers/Combo';
 import { BlackoutLayer } from './Layers/Blackout';
+
+import './game.css';
 
 const block = b_.lock('game');
 
@@ -64,15 +65,22 @@ export const Game: FC = () => {
   // init
   useEffect(() => {
     dispatch(gameActions.setRemainColors(levels[level].ballColors));
-    // дожидаемся загрузки шрифта
-    (document as any).fonts.ready.then(() => {
-      setTimeout(
-        () => {
-          console.log('font loaded');
-          dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
-        }, 500
-      );
+    const myFont = new FontFace('Bangers2', 'url(Bangers.ttf)');
+    myFont.load().then(function(font) {
+      document.fonts.add(font);
+      document.body.style.fontFamily = 'Bangers2, serif';
+      dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
+      console.log('FONT LOADED');
     });
+    // дожидаемся загрузки шрифта
+    // (document as any).fonts.ready.then(() => {
+    //   console.log('font loaded');
+    //   setTimeout(
+    //     () => {
+    //       dispatch(gameActions.setGamePhase(GAME_PHASE.LOADED));
+    //     }, 1000
+    //   );
+    // });
 
     return () => {
       dispatch(gameActions.resetScore());

@@ -38,6 +38,7 @@ America`,
     [394, 184, 448, 205, 470, 219],
     [512, 246, 543, 266, 562, 312],
   ],
+  backgroundUrl: '/images/level_1_back.png',
 }];
 
 export default Object.freeze(levels);

@@ -33,7 +33,7 @@ export const ComboLayer: FC = () => {
 
       let lineHeight = distort(COMBO_FONT_SIZE, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.75);
       lineHeight += combo * 4;
-      ctx.font = `${lineHeight}px Bangers, "Courier New"`;
+      ctx.font = `${lineHeight}px Bangers2`;
       let message = `x  ${combo}  combo`;
 
       let textWidth = ctx.measureText(message).width;
@@ -60,14 +60,10 @@ export const ComboLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Score canvas not found');
+      throw new Error('Effects canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      throw new Error('Score context not found');
-    }
   }, []);
 
   return (
