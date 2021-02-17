@@ -1,4 +1,4 @@
-import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
+import { LEADERBOARD_VALUE_FIELD_NAME } from '../pages/leaderboard/constants';
 
 export interface UserObject {
   id: number;

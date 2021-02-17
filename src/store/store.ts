@@ -1,8 +1,8 @@
 import { Action, combineReducers, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { appReducer } from './reducer';
-import { accountReducer } from '../features/account/reducer';
-import { gameReducer } from '../features/game/reducer';
-import { leaderboardReducer } from '../features/leaderboard/reducer';
+import { accountReducer } from '../pages/account/reducer';
+import { gameReducer } from '../pages/game/reducer';
+import { leaderboardReducer } from '../pages/leaderboard/reducer';
 
 const reducer = combineReducers({
   app: appReducer,
