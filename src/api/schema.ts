@@ -1,3 +1,5 @@
+import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
+
 export interface UserObject {
   id: number;
   first_name: string;
@@ -26,3 +28,28 @@ export interface SignUpParams extends SignInParams{
 export interface SignUpResponse {
   id: number;
 }
+
+export interface LeaderboardRecordObject {
+  // Ключевое поле с кол-вом набранных пользователем очков
+  [LEADERBOARD_VALUE_FIELD_NAME]: number;
+  user_id: number;
+  // Unix timestamp
+  timestamp: number;
+}
+
+export interface UpdateLeaderboardParams {
+  data: LeaderboardRecordObject;
+  ratingFieldName: typeof LEADERBOARD_VALUE_FIELD_NAME;
+}
+
+export type UpdateLeaderboardResponse = string;
+
+export interface GetLeaderboardParams {
+  ratingFieldName: typeof LEADERBOARD_VALUE_FIELD_NAME;
+  cursor: number;
+  limit: number;
+}
+
+export type GetLeaderboardResponse = Array<{
+  data: LeaderboardRecordObject;
+}>;

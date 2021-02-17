@@ -2,11 +2,13 @@ import { Action, combineReducers, configureStore, ThunkAction, ThunkDispatch } f
 import { appReducer } from './reducer';
 import { accountReducer } from '../features/account/reducer';
 import { gameReducer } from '../features/game/reducer';
+import { leaderboardReducer } from '../features/leaderboard/reducer';
 
 const reducer = combineReducers({
   app: appReducer,
   account: accountReducer,
   game: gameReducer,
+  leaderboard: leaderboardReducer,
 });
 
 export const store = configureStore({

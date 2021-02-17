@@ -33,6 +33,9 @@ const langPack = {
   game_over_to_home_button: 'На главную',
   game_over_to_game_button: 'Попробовать еще раз',
   game_over_to_levels_button: 'К списку уровней',
+  leaderboard_page_header: 'Рейтинг',
+  leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
+  leaderboard_table_placeholder_cta: 'Играть',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];
