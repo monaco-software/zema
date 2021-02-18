@@ -3,7 +3,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { ROUTES } from '../../common/constants';
 import { SignIn } from '../../pages/signin/SignIn';
-import { Forum } from '../../pages/forum/Forum';
+import { Forum } from '../../pages/forum/Forum/Forum';
+import { ForumTopic } from '../../pages/forum/ForumTopic/ForumTopic';
 import { SignUp } from '../../pages/signup/SignUp';
 import { Account } from '../../pages/account/Account';
 import { Leaderboard } from '../../pages/leaderboard/Leaderboard';
@@ -65,7 +66,9 @@ export const App: FC = () => {
 
             <Route path={ROUTES.LEADERBOARD} component={Leaderboard} />
 
-            <Route path={ROUTES.FORUM} component={Forum} />
+            <Route exact path={ROUTES.FORUM} component={Forum} />
+
+            <Route path={ROUTES.FORUM_TOPIC} component={ForumTopic} />
 
             <Route exact path={ROUTES.GAME} component={Game} />
 

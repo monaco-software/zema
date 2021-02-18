@@ -5,6 +5,7 @@ import { Grid, Heading } from 'grommet';
 import { Link } from 'react-router-dom';
 import { Topic } from '../../types';
 import { getText } from '../../../../common/langUtils';
+import { ROUTES } from '../../../../common/constants';
 
 const block = b_.lock('forum-topics-list');
 
@@ -38,7 +39,7 @@ export const ForumTopicsList: FC<Props> = ({ topics }) => {
   return (
     <Grid className={block()} gap="20px">
       {topics.map((topic) => {
-        const url = '/forum';
+        const url = ROUTES.FORUM_TOPIC.replace(':topicId', String(topic.id));
 
         return (
           <Topic

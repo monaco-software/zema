@@ -7,3 +7,12 @@ export const getForumTopics = createSelector(
   getForumState,
   (state) => state.topics,
 );
+
+export const getForumTopicById = (topicId: number) => createSelector(
+  getForumTopics,
+  (topics) => {
+    const topicIdNumber = Number(topicId);
+
+    return topics.find((topic) => topic.id === topicIdNumber);
+  },
+);

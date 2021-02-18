@@ -108,6 +108,7 @@ export const Navbar: FC = () => {
       />
 
       <NavbarItem
+        exact
         route={ROUTES.FORUM}
         IconComponent={Chat}
         text={getText('navbar_forum')}
