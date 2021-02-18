@@ -1,0 +1,16 @@
+.game-levels {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 96px;
+}
+
+.game-levels__box {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 640px;
+  margin: 30px auto;
+  justify-content: space-around;
+}

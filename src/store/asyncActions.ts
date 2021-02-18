@@ -14,6 +14,10 @@ import { getCurrentUser } from './selectors';
 import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
 import { leaderboardActions } from '../features/leaderboard/reducer';
 import { LeaderboardRecord } from '../features/leaderboard/types';
+import { LOCALSTORAGE_LEVEL } from '../features/gameLevels/constants';
+import { isJsonString } from '../common/utils';
+import { gameLevelsActions } from '../features/gameLevels/reducer';
+import levels from '../features/game/levels';
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {
@@ -106,6 +110,32 @@ export const asyncAppActions = {
     } catch (error) {
       throw error;
     }
+  },
+
+  // заглушка для микросервиса
+  // на данный момент берет данные из localStorage
+  fetchAllowedLevels: (): AppThunk<Promise<void>> => async (dispatch) => {
+    const localStorageAllowedLevels = localStorage.getItem(LOCALSTORAGE_LEVEL);
+    if (!localStorageAllowedLevels || !isJsonString(localStorageAllowedLevels)) {
+      localStorage.setItem(LOCALSTORAGE_LEVEL, JSON.stringify([0]));
+      dispatch(gameLevelsActions.addLevel(0));
+      return;
+    }
+    const allowedLevelsArray = JSON.parse(localStorageAllowedLevels) as number[];
+
+    const inLevels = (n: number) => n >= 0 && n < levels.length;
+
+    if (Array.isArray(allowedLevelsArray) && allowedLevelsArray.every(inLevels)) {
+      dispatch(gameLevelsActions.setLevels(Array.from(new Set(allowedLevelsArray))));
+      return;
+    }
+    throw new Error('Cant fetch allowedLevels');
+  },
+
+  // заглушка для микросервиса
+  // на данный момент лкадет данные в localStorage
+  sendAllowedLevels: (levels: number[]): AppThunk<Promise<void>> => async () => {
+    localStorage.setItem(LOCALSTORAGE_LEVEL, JSON.stringify(levels));
   },
 };
 

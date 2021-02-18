@@ -1,10 +1,16 @@
 import { Level } from './types';
 import { BALL_COLORS } from './constants';
+import level1Background from './assets/images/level_1_back.png';
+import level1Thumb from './assets/images/thumbnails/level_1_thumb.png';
+import level2Thumb from './assets/images/thumbnails/level_2_thumb.png';
+import level3Thumb from './assets/images/thumbnails/level_3_thumb.png';
+import level2Background from './assets/images/level_2_back.png';
+import level3Background from './assets/images/level_3_back.png';
 
 const levels: Level[] = [{
   title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   speed: 20, // fps и количество тиков pusher в секунду
-  balls: 50,
+  balls: 5,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -13,7 +19,7 @@ const levels: Level[] = [{
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 567, y: 362 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 20, // как далеко выкатывать в начале уровня
+  rollOut: 40, // как далеко выкатывать в начале уровня
   start: [421, 0], // начало кривой Безье
   curve: [ // контрольные точки
     [502, 36, 623, 113, 690, 195],
@@ -37,11 +43,12 @@ const levels: Level[] = [{
     [394, 184, 448, 205, 470, 219],
     [512, 246, 543, 266, 562, 312],
   ],
-  backgroundUrl: '/images/level_1_back.png',
+  background: level1Background,
+  thumbnail: level1Thumb,
 }, {
   title: 'Events are developing rapidly.\nNeed to do something.',
   speed: 23,
-  balls: 60,
+  balls: 6,
   ballColors: [
     BALL_COLORS.GREEN,
     BALL_COLORS.BLUE,
@@ -50,7 +57,7 @@ const levels: Level[] = [{
   frogPosition: { x: 419, y: 292 },
   skullPosition: { x: 158, y: 305 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 30,
+  rollOut: 50,
   start: [0, 163],
   curve: [
     [125, 91, 274, 58, 381, 52],
@@ -78,11 +85,12 @@ const levels: Level[] = [{
     [208, 445, 191, 434, 175, 414],
     [164, 400, 157, 391, 157, 358],
   ],
-  backgroundUrl: '/images/level_2_back.png',
+  background: level2Background,
+  thumbnail: level2Thumb,
 }, {
   title: 'Entangled tracks\nin desert',
   speed: 26,
-  balls: 70,
+  balls: 7,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -92,7 +100,7 @@ const levels: Level[] = [{
   frogPosition: { x: 341, y: 325 },
   skullPosition: { x: 455, y: 214 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 40,
+  rollOut: 60,
   start: [737, 599],
   curve: [
     [739, 539, 748, 334, 715, 200],
@@ -124,7 +132,8 @@ const levels: Level[] = [{
     [473, 111, 481, 115, 482, 123],
     [484, 136, 478, 157, 474, 171],
   ],
-  backgroundUrl: '/images/level_2_back.png',
+  background: level3Background,
+  thumbnail: level3Thumb,
 }];
 
 export default Object.freeze(levels);

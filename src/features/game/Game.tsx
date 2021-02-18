@@ -22,6 +22,10 @@ import { ComboLayer } from './Layers/Combo';
 import { BlackoutLayer } from './Layers/Blackout';
 
 import './game.css';
+import { gameLevelsActions } from '../gameLevels/reducer';
+import { useAsyncAction } from '../../hooks';
+import { asyncAppActions } from '../../store/asyncActions';
+import { getAllowedLevels } from '../gameLevels/selectors';
 
 const block = b_.lock('game');
 
@@ -30,15 +34,20 @@ export const Game: FC = () => {
   const history = useHistory();
 
   const level = useSelector(getCurrentLevel);
+
   const gamePhase = useSelector(getGamePhase);
   const gameResult = useSelector(getGameResult);
+
+  const allowedLevels = useSelector(getAllowedLevels);
+
+  const sendAllowedLevels = useAsyncAction(asyncAppActions.sendAllowedLevels);
 
   const ballsPath = useMemo(() => getPath(levels[level].start, levels[level].curve), []);
 
   useEffect(() => {
     switch (gamePhase) {
       case GAME_PHASE.LOADED:
-        dispatch(gameActions.setTitle( `Level ${level + 1}\n\n${levels[level].title})`));
+        dispatch(gameActions.setTitle( `Level ${level + 1}\n\n${levels[level].title}`));
         setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTING)), GAME_PHASE_TIMEOUTS.LOADED);
         break;
       case GAME_PHASE.STARTING:
@@ -55,7 +64,15 @@ export const Game: FC = () => {
         break;
       case GAME_PHASE.EXITING:
         if (gameResult === GAME_RESULT.WIN) {
-          history.push(ROUTES.GAME_LEVELS);
+          if (level + 1 < levels.length) {
+            dispatch(gameLevelsActions.addLevel(level + 1));
+            const al = allowedLevels.slice();
+            al.push(level + 1);
+            sendAllowedLevels(al)
+              .finally(() => {
+                history.push(ROUTES.GAME_LEVELS);
+              });
+          }
         } else {
           history.push(ROUTES.GAME_OVER);
         }

@@ -36,6 +36,7 @@ const langPack = {
   leaderboard_page_header: 'Рейтинг',
   leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
   leaderboard_table_placeholder_cta: 'Играть',
+  levels_page_header: 'Уровни игры',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

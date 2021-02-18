@@ -34,7 +34,8 @@ export interface Level {
   start: number[];
   curve: number[][];
   rollOut: number;
-  backgroundUrl: string;
+  background: string;
+  thumbnail: string;
 }
 
 export interface Physics {

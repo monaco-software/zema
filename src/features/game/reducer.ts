@@ -33,7 +33,7 @@ const initialGame: Game = {
     position: -1,
   },
   remainColors: [],
-  currentLevel: 2,
+  currentLevel: 0,
   openedLevel: 0,
   explosion: [],
   particle: -1,
@@ -67,6 +67,7 @@ const game = createSlice({
       state.remainColors = payload;
     },
     setCurrentLevel(state, { payload }: PayloadAction<Game['currentLevel']>) {
+      console.log(`SET CURRENT LEVEL TO ${payload}`);
       state.currentLevel = payload;
     },
     setOpenedLevel(state, { payload }: PayloadAction<Game['openedLevel']>) {
