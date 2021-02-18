@@ -41,6 +41,7 @@ const langPack = {
   forum_create_topic_modal_header: 'Создать тему',
   form_topic_name: 'Название',
   forum_create_topic_form_submit: 'Создать',
+  forum_topic_create_date: 'Создана:',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

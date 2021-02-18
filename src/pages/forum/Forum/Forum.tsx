@@ -1,11 +1,16 @@
 import './forum.css';
 import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAuth } from '../../hooks';
-import { ForumHead } from './Components/ForumHeader/ForumHead';
-import { ForumCreateTopicModal } from './Components/CreateTopicModal/ForumCreateTopicModal';
-import { CreateTopicFormFields } from './types';
+import { useAction, useAuth } from '../../../hooks';
+import { ForumHead } from '../Components/ForumHeader/ForumHead';
+import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
+import { CreateTopicFormFields } from '../types';
 import { FormExtendedEvent } from 'grommet';
+import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';
+import { useSelector } from 'react-redux';
+import { getForumTopics } from '../selectors';
+import { forumActions } from '../reducer';
+import { random } from '../../game/lib/utils';
 
 const block = b_.lock('forum');
 
@@ -15,6 +20,10 @@ const createTopicFormInitialValue: CreateTopicFormFields = {
 
 export const Forum: FC = () => {
   useAuth();
+
+  const topics = useSelector(getForumTopics);
+
+  const addTopic = useAction(forumActions.addTopic);
 
   const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false);
   const onTopicCreateClick = () => setIsCreateTopicModalOpen(true);
@@ -30,6 +39,12 @@ export const Forum: FC = () => {
     setIsCreateTopicFormLoading(true);
 
     setTimeout(() => {
+      addTopic({
+        id: random(10000),
+        name: value.topic_name,
+        createTimestamp: Date.now(),
+        messages: [],
+      });
       setIsCreateTopicFormLoading(false);
       setIsCreateTopicModalOpen(false);
       setCreateTopicFormFields(createTopicFormInitialValue);
@@ -39,6 +54,10 @@ export const Forum: FC = () => {
   return (
     <div className={block()}>
       <ForumHead onTopicCreateClick={onTopicCreateClick} />
+
+      <div className={block('topics-wrap')}>
+        <ForumTopicsList topics={topics} />
+      </div>
 
       {isCreateTopicModalOpen &&
         <ForumCreateTopicModal

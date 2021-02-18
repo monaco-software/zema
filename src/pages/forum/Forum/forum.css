@@ -6,3 +6,8 @@
   margin: 0 auto;
   padding: 48px 96px;
 }
+
+.forum__topics-wrap {
+  margin-top: 20px;
+  overflow: auto;
+}
