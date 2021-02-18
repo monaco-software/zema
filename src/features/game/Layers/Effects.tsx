@@ -4,7 +4,7 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT, SKULL_RADIUS } from '../constants';
 import { getCurrentLevel, getExplosion, getGamePhase, getGameResult, getShotPath, getShotPosition } from '../selectors';
 import Explosion from '../lib/explosion';
 import Particle from '../lib/paricle';
@@ -15,7 +15,7 @@ import { gameActions } from '../reducer';
 
 import { traceShotPath } from './utils/effects';
 import { fps } from '../lib/utils';
-import { BULLET_SPEED } from '../setup';
+import { BULLET_SPEED, DEFAULT_FRAMERATE } from '../setup';
 
 interface Props {
   ballsPath: number[][];
@@ -55,7 +55,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
       }
     });
     // рисуем череп
-    ctx.drawImage(skull.current.image, levels[level].skullPosition.x, levels[level].skullPosition.y);
+    ctx.drawImage(skull.current.image, levels[level].skullPosition.x - SKULL_RADIUS, levels[level].skullPosition.y - SKULL_RADIUS);
     // рисуем пулю
     if (shotPath.length) {
       traceShotPath(ctx, shotPath);
@@ -89,7 +89,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
         () => effects.current.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
         Math.floor(i / 2));
     }
-    setTimeout(() => drawEffects(), 1);
+    setTimeout(() => drawEffects(), fps(DEFAULT_FRAMERATE));
   };
 
   useEffect(() => {

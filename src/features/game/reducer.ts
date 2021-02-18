@@ -33,7 +33,7 @@ const initialGame: Game = {
     position: -1,
   },
   remainColors: [],
-  currentLevel: 0,
+  currentLevel: 2,
   openedLevel: 0,
   explosion: [],
   particle: -1,

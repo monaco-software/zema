@@ -48,7 +48,7 @@ export const FrogLayer: FC = () => {
     if (!ctx) { return; }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.translate(levels[level].frogPosition.x, levels[level].frogPosition.y);
-    ctx.rotate(angle);
+    ctx.rotate(angle + Math.PI / 2);
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
 
     ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);

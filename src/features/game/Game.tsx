@@ -38,7 +38,7 @@ export const Game: FC = () => {
   useEffect(() => {
     switch (gamePhase) {
       case GAME_PHASE.LOADED:
-        dispatch(gameActions.setTitle(levels[level].title));
+        dispatch(gameActions.setTitle( `Level ${level + 1}\n\n${levels[level].title})`));
         setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTING)), GAME_PHASE_TIMEOUTS.LOADED);
         break;
       case GAME_PHASE.STARTING:

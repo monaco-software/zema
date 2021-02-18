@@ -35,28 +35,29 @@ export function getBezierAngle(
 
 // Принимает стартовую точку и массив контрольных точек кривых Безье
 // возвращает массив точек через промежутки >= quantum
-export function getPath(start: number[], curve: number[][], quantum = 1, quantize = 3000) {
+export function getPath(start: number[], curve: number[][], quantum = 1, frequency = 5000): number[][] {
+  const res: number[][] = [];
   let last = start.slice();
-  let dirtyPath: number[][] = [];
   curve.forEach((c) => {
-    for (let i = 0; i < quantize; i += 1) {
-      const coordinates = getBezierXY(i / quantize, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]);
-      coordinates.push(getBezierAngle(i / quantize, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]));
-      dirtyPath.push(coordinates);
+    for (let i = 0; i < 1; i += 1 / frequency) {
+      const point = getBezierXY(i, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]);
+      point.push(getBezierAngle(i, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]));
+      if (i === 0) {
+        res.push(point);
+      } else {
+        const distance = getLineLen(
+          res[res.length - 1][0],
+          res[res.length - 1][1],
+          point[0],
+          point[1]);
+        if (distance >= quantum) {
+          res.push(point);
+        }
+      }
     }
     last = [c[4], c[5]];
   });
-  return dirtyPath.reduce((memo, current) => {
-    if (memo.length === 0) {
-      return [current];
-    }
-    const lastMemo = memo[memo.length - 1];
-    const len = getLineLen(lastMemo[0], lastMemo[1], current[0], current[1]);
-    if (len >= quantum) {
-      return [...memo, current];
-    }
-    return memo;
-  }, [dirtyPath[0]]);
+  return res;
 }
 
 // Принимает 2 массива координат
