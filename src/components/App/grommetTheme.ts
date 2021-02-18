@@ -59,4 +59,22 @@ export const grommetTheme: ThemeType = deepMerge(grommet, {
     },
     round: '3px',
   },
+  tab: {
+    active: {
+      color: 'brand',
+    },
+    color: '#444444',
+    border: {
+      color: 'black',
+      active: {
+        color: 'brand',
+      },
+      hover: {
+        color: 'brand',
+      },
+    },
+    hover: {
+      color: 'brand',
+    },
+  },
 });
