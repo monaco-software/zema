@@ -11,9 +11,9 @@ import {
 import { appActions } from './reducer';
 import { GetLeaderboardParams, SignInParams, SignUpParams, UpdateLeaderboardParams } from '../api/schema';
 import { getCurrentUser } from './selectors';
-import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
-import { leaderboardActions } from '../features/leaderboard/reducer';
-import { LeaderboardRecord } from '../features/leaderboard/types';
+import { LEADERBOARD_VALUE_FIELD_NAME } from '../pages/leaderboard/constants';
+import { leaderboardActions } from '../pages/leaderboard/reducer';
+import { LeaderboardRecord } from '../pages/leaderboard/types';
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {

@@ -80,7 +80,7 @@ module.exports = {
     new StylelintPlugin(),
     new CopyWebpackPlugin({
       patterns: [
-        {from: './src/features/game/assets/fonts/Bangers.ttf'},
+        { from: './src/pages/game/assets/fonts/Bangers.ttf' },
       ],
     }),
   ],
