@@ -47,6 +47,7 @@ const langPack = {
   forum_topic_input_markdown_support: 'С поддержкой',
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
+  forum_topic_send_message_button: 'Написать сообщение',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

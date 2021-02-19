@@ -1,0 +1,7 @@
+.forum-topic-header__name {
+  word-break: break-word;
+}
+
+.forum-topic-header__send-message-button {
+  flex-shrink: 0;
+}
