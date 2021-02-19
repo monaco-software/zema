@@ -11,6 +11,7 @@ import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
 import { forumActions } from '../reducer';
 import { getCurrentUser } from '../../../store/selectors';
 import { random } from '../../game/lib/utils';
+import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
 
 const block = b_.lock('forum-topic');
 
@@ -27,6 +28,7 @@ export const ForumTopic: FC = () => {
   const topic = useSelector(getForumTopicById(Number(topicId)));
   const topicName = topic?.name ?? '';
   const topicIdNumber = topic?.id ?? -1;
+  const topicMessages = topic?.messages ?? [];
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,6 +76,13 @@ export const ForumTopic: FC = () => {
         topicName={topicName}
         onMessageAddClick={onModalOpen}
       />
+
+      <div className={block('messages-list-wrap')}>
+        <ForumTopicMessageList
+          messages={topicMessages}
+          currentUserId={currentUser.id}
+        />
+      </div>
 
       {showInputModal &&
         <ForumTopicMessageInputModal

@@ -1,0 +1,30 @@
+.forum-topic-message-list {
+  padding: 10px 20px;
+}
+
+.forum-topic-message-list__message {
+  border: 2px solid var(--brand);
+  border-radius: 8px;
+  padding: 20px;
+  word-break: break-word;
+}
+
+.forum-topic-message-list__message_current-user {
+  background-color: #f3eeff;
+}
+
+.forum-topic-message-list__message-author-name {
+  margin-left: 10px;
+  font-weight: 700;
+}
+
+.forum-topic-message-list__message-date {
+  margin-left: 10px;
+  font-size: 12px;
+  line-height: 13px;
+  color: var(--dark-6);
+}
+
+.forum-topic-message-list__message-text {
+  margin: 10px 0 0 46px;
+}
