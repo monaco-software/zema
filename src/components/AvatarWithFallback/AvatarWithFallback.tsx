@@ -27,7 +27,7 @@ export const AvatarWithFallback: FC<Props> = ({
   }
 
   return (
-    <Avatar size={avatarSize} {...restProps}>
+    <Avatar size={avatarSize} background="brand" {...restProps}>
       {placeholderNode ?? <User color="light-1" size={iconSize} />}
     </Avatar>
   );
