@@ -1,9 +1,10 @@
 import './forum-topic-message-input-modal.css';
 import React, { ChangeEvent, MouseEvent, FC } from 'react';
-import { Layer, Tabs, Tab, TextArea, Markdown, Box } from 'grommet';
+import { Layer, Tabs, Tab, TextArea, Box } from 'grommet';
 import b_ from 'b_';
 import { getText } from '../../../../common/langUtils';
 import { ButtonWithLoading } from '../../../../components/ButtonWithProgress/ButtonWithLoading';
+import { MarkdownSafe } from '../../../../components/MarkdownSafe/MarkdownSafe';
 
 const block = b_.lock('forum-topic-message-input-modal');
 
@@ -50,9 +51,9 @@ export const ForumTopicMessageInputModal: FC<Props> = ({ value, isLoading, onCha
 
         <Tab title={getText('forum_topic_input_preview_tab')}>
           <div className={block('preview')}>
-            <Markdown>
+            <MarkdownSafe>
               {value}
-            </Markdown>
+            </MarkdownSafe>
           </div>
         </Tab>
       </Tabs>
