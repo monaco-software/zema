@@ -18,7 +18,7 @@ interface Props {
 
 export const ForumTopicMessageInputModal: FC<Props> = ({ value, isLoading, onChange, onSend, onClose }) => {
   return (
-    <Layer className={block()} position="bottom" onClickOutside={onClose} onEsc={onClose}>
+    <Layer className={block()} style={{ maxWidth: 1000 }} position="bottom" onClickOutside={onClose} onEsc={onClose}>
       <Tabs className={block('tabs')} alignControls="start" flex>
         <Tab title={getText('forum_topic_input_message_tab')}>
           <Box className={block('textarea-wrap')}>
