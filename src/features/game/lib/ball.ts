@@ -17,7 +17,7 @@ export default class Ball extends Sprite {
   // чем больше тем заметнее углы на поворотах,
   // но меньше кэш и больше его эффективность
   // При 2 глазом почти незаметно
-  static readonly divider = 3;
+  static readonly divider = 2;
 
   static bufferCanvas: HTMLCanvasElement;
   static index = [...Array(360 )].map(() => Array(360 / Ball.divider).fill(0));
