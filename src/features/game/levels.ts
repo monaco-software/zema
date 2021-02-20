@@ -1,16 +1,17 @@
 import { Level } from './types';
 import { BALL_COLORS } from './constants';
-import level1Background from './assets/images/level_1_back.png';
 import level1Thumb from './assets/images/thumbnails/level_1_thumb.png';
 import level2Thumb from './assets/images/thumbnails/level_2_thumb.png';
 import level3Thumb from './assets/images/thumbnails/level_3_thumb.png';
-import level2Background from './assets/images/level_2_back.png';
-import level3Background from './assets/images/level_3_back.png';
+
+import level1Background from './assets/images/backgrounds/level_1_back.png';
+import level2Background from './assets/images/backgrounds/level_2_back.png';
+import level3Background from './assets/images/backgrounds/level_3_back.png';
 
 const levels: Level[] = [{
   title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   speed: 20, // fps и количество тиков pusher в секунду
-  balls: 5,
+  balls: 60,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -19,7 +20,7 @@ const levels: Level[] = [{
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 567, y: 362 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 40, // как далеко выкатывать в начале уровня
+  rollOut: 50, // как далеко выкатывать в начале уровня
   start: [421, 0], // начало кривой Безье
   curve: [ // контрольные точки
     [502, 36, 623, 113, 690, 195],
@@ -48,7 +49,7 @@ const levels: Level[] = [{
 }, {
   title: 'Events are developing rapidly.\nNeed to do something.',
   speed: 23,
-  balls: 6,
+  balls: 70,
   ballColors: [
     BALL_COLORS.GREEN,
     BALL_COLORS.BLUE,
@@ -88,9 +89,9 @@ const levels: Level[] = [{
   background: level2Background,
   thumbnail: level2Thumb,
 }, {
-  title: 'Entangled tracks\nin desert',
+  title: 'Untangle\nentangled tracks\nin the desert',
   speed: 26,
-  balls: 7,
+  balls: 80,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -100,7 +101,7 @@ const levels: Level[] = [{
   frogPosition: { x: 341, y: 325 },
   skullPosition: { x: 455, y: 214 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 60,
+  rollOut: 50,
   start: [737, 599],
   curve: [
     [739, 539, 748, 334, 715, 200],

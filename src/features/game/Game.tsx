@@ -7,25 +7,28 @@ import b_ from 'b_';
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
 import { ROUTES } from '../../common/constants';
+
+import { asyncAppActions } from '../../store/asyncActions';
+import { useAsyncAction } from '../../hooks';
+import { gameActions } from './reducer';
+import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
+import { getAllowedLevels } from '../gameLevels/selectors';
+
+import levels from './levels';
+import { getPath } from './lib/geometry';
 import { BallsLayer } from './Layers/Balls';
 import { TitleLayer } from './Layers/Title';
 import { BackLayer } from './Layers/Back';
 import { EffectsLayer } from './Layers/Effects';
 import { FrogLayer } from './Layers/Frog';
-import { getPath } from './lib/geometry';
-import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
-import levels from './levels';
-import { gameActions } from './reducer';
 import { UiLayer } from './Layers/Ui';
 import { ScoreLayer } from './Layers/Score';
 import { ComboLayer } from './Layers/Combo';
 import { BlackoutLayer } from './Layers/Blackout';
+import { SkullLayer } from './Layers/Skull';
+import { BulletLayer } from './Layers/Bullet';
 
 import './game.css';
-import { gameLevelsActions } from '../gameLevels/reducer';
-import { useAsyncAction } from '../../hooks';
-import { asyncAppActions } from '../../store/asyncActions';
-import { getAllowedLevels } from '../gameLevels/selectors';
 
 const block = b_.lock('game');
 
@@ -44,18 +47,29 @@ export const Game: FC = () => {
 
   const ballsPath = useMemo(() => getPath(levels[level].start, levels[level].curve), []);
 
+  const timeoutRef = React.useRef<number>();
+
   useEffect(() => {
     switch (gamePhase) {
       case GAME_PHASE.LOADED:
         dispatch(gameActions.setTitle( `Level ${level + 1}\n\n${levels[level].title}`));
-        setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTING)), GAME_PHASE_TIMEOUTS.LOADED);
+        timeoutRef.current = window.setTimeout(
+          () => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTING)),
+          GAME_PHASE_TIMEOUTS.LOADED
+        );
         break;
       case GAME_PHASE.STARTING:
         dispatch(gameActions.setTitle(''));
-        setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTED)), GAME_PHASE_TIMEOUTS.STARTING);
+        timeoutRef.current = window.setTimeout(
+          () => dispatch(gameActions.setGamePhase(GAME_PHASE.STARTED)),
+          GAME_PHASE_TIMEOUTS.STARTING
+        );
         break;
       case GAME_PHASE.ENDED:
-        setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.EXITING)), GAME_PHASE_TIMEOUTS.ENDED);
+        timeoutRef.current = window.setTimeout(
+          () => dispatch(gameActions.setGamePhase(GAME_PHASE.EXITING)),
+          GAME_PHASE_TIMEOUTS.ENDED
+        );
         if (gameResult === GAME_RESULT.WIN) {
           dispatch(gameActions.setTitle(MESSAGES.WIN));
         } else {
@@ -65,22 +79,32 @@ export const Game: FC = () => {
       case GAME_PHASE.EXITING:
         if (gameResult === GAME_RESULT.WIN) {
           if (level + 1 < levels.length) {
-            dispatch(gameLevelsActions.addLevel(level + 1));
-            const al = allowedLevels.slice();
-            al.push(level + 1);
-            sendAllowedLevels(al)
+            const allowedLevelsCopy = allowedLevels.slice();
+            allowedLevelsCopy.push(level + 1);
+            sendAllowedLevels(allowedLevelsCopy)
               .finally(() => {
                 history.push(ROUTES.GAME_LEVELS);
               });
+            break;
           }
-        } else {
-          history.push(ROUTES.GAME_OVER);
+          // если уровень - последний
+          history.push(ROUTES.LEADERBOARD);
+          break;
         }
+        // если проиграл
+        history.push(ROUTES.GAME_OVER);
     }
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
   }, [gamePhase]);
 
   // init
   useEffect(() => {
+    if (!allowedLevels.length) {
+      history.push(ROUTES.GAME_LEVELS);
+      return;
+    }
     dispatch(gameActions.setRemainColors(levels[level].ballColors));
     const myFont = new FontFace('Bangers2', 'url(Bangers.ttf)');
     myFont.load().then(function(font) {
@@ -104,6 +128,8 @@ export const Game: FC = () => {
         <BackLayer />
         <BallsLayer ballsPath={ballsPath} />
         <EffectsLayer ballsPath={ballsPath} />
+        <SkullLayer />
+        <BulletLayer />
         <FrogLayer />
         <ComboLayer />
         <ScoreLayer />

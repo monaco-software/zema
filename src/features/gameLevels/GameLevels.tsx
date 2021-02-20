@@ -33,7 +33,6 @@ export const GameLevels: FC = () => {
 
   useEffect(() => {
     if (!allowedLevels.length) {
-      console.log(`GameLevel: ${allowedLevels}`);
       fetchAllowedLevels(undefined)
         .finally(() => setIsLoading(false));
     } else {
@@ -44,8 +43,7 @@ export const GameLevels: FC = () => {
   return (
     <LoadingOverlay isLoading={isLoading}>
       <div className={block()}>
-        <Heading textAlign="center"
-          level="2">
+        <Heading textAlign="center" level="2">
           {getText('levels_page_header')}
         </Heading>
         <div className={block('box')}>

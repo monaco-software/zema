@@ -67,7 +67,6 @@ const game = createSlice({
       state.remainColors = payload;
     },
     setCurrentLevel(state, { payload }: PayloadAction<Game['currentLevel']>) {
-      console.log(`SET CURRENT LEVEL TO ${payload}`);
       state.currentLevel = payload;
     },
     setOpenedLevel(state, { payload }: PayloadAction<Game['openedLevel']>) {

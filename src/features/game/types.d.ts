@@ -43,3 +43,10 @@ export interface Physics {
   impacts: number[];
 }
 
+declare global {
+  interface Window {
+    debugBallsAmount: number;
+    debugPusherPosition: number;
+  }
+}
+

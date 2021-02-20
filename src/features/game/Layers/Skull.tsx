@@ -1,17 +1,17 @@
-// Модуль отображает задник
+// Модуль отображает череп
 
 import { useSelector } from 'react-redux';
 import React, { FC, useEffect, useRef } from 'react';
 
-import { FRAME } from '../constants';
-import levels from '../levels';
+import { FRAME, SKULL_RADIUS } from '../constants';
 import { getCurrentLevel } from '../selectors';
+import Skull from '../lib/skull';
+import levels from '../levels';
 
-export const BackLayer: FC = () => {
+export const SkullLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const requestRef = useRef<number>();
-  const backImage = useRef<HTMLImageElement>(new Image());
+  const skull = useRef(new Skull());
+  const requestRef = React.useRef<number>();
 
   const level = useSelector(getCurrentLevel);
 
@@ -20,32 +20,27 @@ export const BackLayer: FC = () => {
     if (!ctx) {
       return;
     }
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 15;
+
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    ctx.drawImage(backImage.current, 0, 0);
+    // рисуем череп
+    ctx.drawImage(skull.current.image, levels[level].skullPosition.x - SKULL_RADIUS, levels[level].skullPosition.y - SKULL_RADIUS);
   };
-
-  const setBack = (src: string) => {
-    backImage.current.src = src;
-  };
-
-  useEffect(() => {
-    setBack(levels[level].background);
-    requestRef.current = window.requestAnimationFrame(draw);
-  }, [level]);
 
   // init
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Back canvas not found');
+      throw new Error('Skull canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+    requestRef.current = window.requestAnimationFrame(draw);
 
-    backImage.current.onload = () => {
+    skull.current.image.onload = () => {
       requestRef.current = window.requestAnimationFrame(draw);
     };
-    setBack(levels[level].background);
 
     return () => {
       if (requestRef.current) {

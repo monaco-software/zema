@@ -11,6 +11,7 @@ import { getTitle } from '../selectors';
 export const TitleLayer: FC = () => {
   const title = useSelector(getTitle);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const requestRef = React.useRef<number>();
 
   const draw = () => {
     if (!canvasRef.current) { return; }
@@ -34,17 +35,23 @@ export const TitleLayer: FC = () => {
   };
 
   useEffect(() => {
-    draw();
+    requestRef.current = window.requestAnimationFrame(draw);
   }, [title]);
 
   // init
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Effects canvas not found');
+      throw new Error('Title canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (

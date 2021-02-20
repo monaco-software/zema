@@ -14,7 +14,7 @@ import { getCurrentUser } from './selectors';
 import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
 import { leaderboardActions } from '../features/leaderboard/reducer';
 import { LeaderboardRecord } from '../features/leaderboard/types';
-import { LOCALSTORAGE_LEVEL } from '../features/gameLevels/constants';
+import { LOCALSTORAGE_LEVELS } from '../features/gameLevels/constants';
 import { isJsonString } from '../common/utils';
 import { gameLevelsActions } from '../features/gameLevels/reducer';
 import levels from '../features/game/levels';
@@ -115,10 +115,11 @@ export const asyncAppActions = {
   // заглушка для микросервиса
   // на данный момент берет данные из localStorage
   fetchAllowedLevels: (): AppThunk<Promise<void>> => async (dispatch) => {
-    const localStorageAllowedLevels = localStorage.getItem(LOCALSTORAGE_LEVEL);
+    const localStorageAllowedLevels = atob(localStorage.getItem(LOCALSTORAGE_LEVELS) || '');
+
     if (!localStorageAllowedLevels || !isJsonString(localStorageAllowedLevels)) {
-      localStorage.setItem(LOCALSTORAGE_LEVEL, JSON.stringify([0]));
-      dispatch(gameLevelsActions.addLevel(0));
+      localStorage.setItem(LOCALSTORAGE_LEVELS, btoa(JSON.stringify([0])));
+      dispatch(gameLevelsActions.setLevels([0]));
       return;
     }
     const allowedLevelsArray = JSON.parse(localStorageAllowedLevels) as number[];
@@ -134,8 +135,12 @@ export const asyncAppActions = {
 
   // заглушка для микросервиса
   // на данный момент лкадет данные в localStorage
-  sendAllowedLevels: (levels: number[]): AppThunk<Promise<void>> => async () => {
-    localStorage.setItem(LOCALSTORAGE_LEVEL, JSON.stringify(levels));
+  sendAllowedLevels: (levels: number[]): AppThunk<Promise<void>> => async (dispatch) => {
+    const inLevels = (n: number) => n >= 0 && n < levels.length;
+    if (!levels.every(inLevels)) { throw new Error(`Cant store levels ${levels}`); }
+    localStorage.setItem(LOCALSTORAGE_LEVELS, btoa(JSON.stringify(levels)));
+    dispatch(gameLevelsActions.setLevels(levels));
+    console.log(`${levels} dispatched`);
   },
 };
 

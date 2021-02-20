@@ -16,6 +16,9 @@ export const ScoreLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scoreFontSize = useRef(SCORE_FONT_SIZE);
   const tmpScore = useRef(0);
+  const timeoutRef = React.useRef<number>();
+  const requestRef = React.useRef<number>();
+
   const grow = 10;
 
   const draw = () => {
@@ -50,8 +53,8 @@ export const ScoreLayer: FC = () => {
     }
     // если еще нужно что-то анимировать
     if (tmpScore.current < score || scoreFontSize.current > SCORE_FONT_SIZE ) {
-      setTimeout(() => {
-        window.requestAnimationFrame(draw);
+      timeoutRef.current = window.setTimeout(() => {
+        requestRef.current = window.requestAnimationFrame(draw);
       }, fps(32));
     }
   };
@@ -59,7 +62,7 @@ export const ScoreLayer: FC = () => {
   useEffect(() => {
     if (score !== 0 ) {
       scoreFontSize.current = SCORE_FONT_SIZE + grow;
-      draw();
+      requestRef.current = window.requestAnimationFrame(draw);
     }
   }, [score]);
 
@@ -67,10 +70,17 @@ export const ScoreLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Effects canvas not found');
+      throw new Error('Score canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (

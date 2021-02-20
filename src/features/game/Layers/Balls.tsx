@@ -40,6 +40,8 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const inserting = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pusherIncrement = useRef(0);
+  const timeoutRef = React.useRef<number>();
+  const requestRef = React.useRef<number>();
 
   const pusherStartPosition = -levels[level].balls * BALL_DIAMETER;
 
@@ -59,7 +61,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       }
       ballsRemain += 1;
       ball.update(ball.position + ball.positionOffset, ballsPath[ball.position][2]);
-      ctx.shadowColor = 'black';
+      ctx.shadowColor = '#000000';
       ctx.shadowBlur = 10;
       ctx.drawImage(ball.canvas,
         ballsPath[ball.position][0] - BALL_RADIUS,
@@ -85,7 +87,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       score *= combo + 1;
       dispatch(gameActions.increaseScore(score));
       dispatch(gameActions.increaseCombo());
-      setTimeout(() => explode(sameBalls), timeout);
+      timeoutRef.current = window.setTimeout(() => explode(sameBalls), timeout);
     }
   };
 
@@ -99,7 +101,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     if (!balls.length && gamePhase === GAME_PHASE.STARTED) {
       dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
       dispatch(gameActions.setGamePhase(GAME_PHASE.ENDING));
-      setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.ENDED)), GAME_PHASE_TIMEOUTS.ENDING);
+      timeoutRef.current = window.setTimeout(() => dispatch(gameActions.setGamePhase(GAME_PHASE.ENDED)), GAME_PHASE_TIMEOUTS.ENDING);
       window.requestAnimationFrame(() => draw());
       return;
     }
@@ -125,7 +127,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     window.requestAnimationFrame(() => draw());
 
     if (gamePhase !== GAME_PHASE.ENDED && gamePhase !== GAME_PHASE.EXITING) {
-      setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         setPusher(pusher + pusherIncrement.current + result.pusherOffset);
       }, fps(levels[level].speed));
     }
@@ -175,7 +177,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
         const remainColors = calculateRemainColors(balls, insertedIndex);
         dispatch(gameActions.setRemainColors(remainColors));
 
-        setTimeout(() => {
+        timeoutRef.current = window.setTimeout(() => {
           dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
           inserting.current = false;
         }, 100);
@@ -194,6 +196,10 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     setPusher(pusher + pusherIncrement.current);
     return () => {
       setPusher(pusherStartPosition);
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
     };
   }, []);
 

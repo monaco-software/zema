@@ -28,8 +28,6 @@ import bullet from '../lib/bullet';
 import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
 
-import { BULLET_SPEED } from '../setup';
-
 export const FrogLayer: FC = () => {
   const dispatch = useDispatch();
 
@@ -41,6 +39,9 @@ export const FrogLayer: FC = () => {
   const angle = useSelector(getAngle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const timeoutRef = React.useRef<number>();
+  const requestRef = React.useRef<number>();
+
   const frog = useMemo(() => new Frog(), []);
 
   const drawFrog = () => {
@@ -68,18 +69,29 @@ export const FrogLayer: FC = () => {
       if (bulletPosition < BULLET_ARMED_POSITION) {
         setTimeout(() => {
           dispatch(gameActions.setBulletPosition(bulletPosition + 1));
-        }, fps(BULLET_SPEED));
+        }, fps(levels[level].speed));
       } else {
         dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
       }
     }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, [bulletPosition]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) { return; }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame( drawFrog);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, [angle]);
 
   useEffect(() => {
@@ -93,7 +105,12 @@ export const FrogLayer: FC = () => {
     if (bulletState === BULLET_STATE.IDLE) {
       bullet.position = BULLET_START_POSITION;
     }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, [bulletState]);
 
   useEffect(() => {
@@ -103,7 +120,12 @@ export const FrogLayer: FC = () => {
     if (gamePhase === GAME_PHASE.STARTED) {
       dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
     }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, [gamePhase]);
 
   // init
@@ -116,7 +138,12 @@ export const FrogLayer: FC = () => {
     canvas.height = FRAME.HEIGHT;
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) { return; }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (
