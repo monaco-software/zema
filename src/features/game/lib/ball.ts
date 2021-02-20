@@ -17,7 +17,7 @@ export default class Ball extends Sprite {
   // чем больше тем заметнее углы на поворотах,
   // но меньше кэш и больше его эффективность
   // При 2 глазом почти незаметно
-  static readonly divider = 2;
+  static readonly divider = 3;
 
   static bufferCanvas: HTMLCanvasElement;
   static index = [...Array(360 )].map(() => Array(360 / Ball.divider).fill(0));
@@ -69,8 +69,12 @@ export default class Ball extends Sprite {
     const statIndexY = offset;
     const x = BALL_DIAMETER * statIndexX;
     const y = BALL_DIAMETER * statIndexY;
+
     // если уже закэшировано - читаем
-    if (Ball.index[statIndexX][statIndexY] > 0) {
+    // иногда творится непонятная хрень
+    // некоторые ячейки пустые при непустом индексе
+    // пришлось выставить порог в 1
+    if (Ball.index[statIndexX][statIndexY] > 1) {
       this.ctx.clearRect(0, 0, this.width, this.height);
       this.ctx.drawImage(
         Ball.bufferCanvas,
