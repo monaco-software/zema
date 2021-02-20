@@ -1,4 +1,3 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает сообщения комбо
 
 import React, { FC, useEffect, useRef } from 'react';

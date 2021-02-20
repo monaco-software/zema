@@ -1,4 +1,3 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает рейтинг и сообщения
 
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -7,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { BLACKOUT_INCREMENT, FRAME, GAME_PHASE } from '../constants';
 import { getGamePhase } from '../selectors';
 import { decimalToHex, fps } from '../lib/utils';
+import { DEFAULT_FRAMERATE } from '../setup';
 
 export const BlackoutLayer: FC = () => {
   const gamePhase = useSelector(getGamePhase);
@@ -22,7 +22,7 @@ export const BlackoutLayer: FC = () => {
       reverse ?
         setBlackout(blackout - BLACKOUT_INCREMENT) :
         setBlackout(blackout + BLACKOUT_INCREMENT);
-    }, fps(24));
+    }, fps(DEFAULT_FRAMERATE));
   };
 
   const draw = () => {

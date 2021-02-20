@@ -1,12 +1,14 @@
 import './game-levels.css';
+
 import React, { FC, useEffect, useState } from 'react';
 import b_ from 'b_';
-import { useAsyncAction, useAuth } from '../../hooks';
 import { Heading } from 'grommet';
+import { useSelector } from 'react-redux';
+
+import { useAsyncAction, useAuth } from '../../hooks';
 import { getText } from '../../common/langUtils';
 import levels from '../game/levels';
 import { GameLevel } from './Components/GameLevel';
-import { useSelector } from 'react-redux';
 import { getAllowedLevels } from './selectors';
 import { getCurrentLevel } from '../game/selectors';
 import { asyncAppActions } from '../../store/asyncActions';
@@ -16,6 +18,7 @@ const block = b_.lock('game-levels');
 
 export const GameLevels: FC = () => {
   useAuth();
+
   const fetchAllowedLevels = useAsyncAction(asyncAppActions.fetchAllowedLevels);
 
   const [isLoading, setIsLoading] = useState(true);

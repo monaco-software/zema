@@ -29,6 +29,7 @@ import { SkullLayer } from './Layers/Skull';
 import { BulletLayer } from './Layers/Bullet';
 
 import './game.css';
+import { InfoLayer } from './Layers/Info';
 
 const block = b_.lock('game');
 
@@ -135,6 +136,7 @@ export const Game: FC = () => {
         <ScoreLayer />
         <BlackoutLayer />
         <TitleLayer />
+        <InfoLayer />
         <UiLayer />
       </Main>
     </div>

@@ -16,7 +16,7 @@ interface Game {
   particle: number;
   pusher: number;
   shotPath: number[][];
-  shotPosition: number[];
+  shotPosition: number;
   angle: number;
   gameResult: number;
   title: string;
@@ -39,7 +39,7 @@ const initialGame: Game = {
   particle: -1,
   pusher: Number.MIN_SAFE_INTEGER,
   shotPath: [],
-  shotPosition: [0, 0],
+  shotPosition: 0,
   angle: 0,
   gameResult: GAME_RESULT.WIN,
   title: '',

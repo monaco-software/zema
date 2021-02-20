@@ -92,3 +92,11 @@ export function getCloserPoint(a: number[][], x: number, y: number): number {
   return res;
 }
 
+export const toRadians = (degrees: number) => {
+  return degrees * Math.PI / 180;
+};
+
+export const toDegrees = function(radians: number) {
+  return radians * 180 / Math.PI;
+};
+

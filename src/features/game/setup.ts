@@ -1,4 +1,5 @@
 export const BULLET_SPEED = 40;
+export const BULLET_ARMING_SPEED = 30;
 export const BULLET_TICK_DISTANCE = 15;
 export const ALLOWANCE = 7;
 export const SCORE_FONT_SIZE = 35;

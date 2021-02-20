@@ -1,25 +1,16 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает шары
 
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  BALL_DIAMETER,
-  BALL_RADIUS,
-  BULLET_STATE,
-  FRAME,
-  GAME_PHASE,
-  GAME_RESULT,
-} from '../constants';
+import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 import { ALLOWANCE, BALL_EXPLODE_TIMEOUT, GAME_PHASE_TIMEOUTS } from '../setup';
-import { getCombo, getCurrentLevel, getGamePhase, getShotPosition } from '../selectors';
+import { getBulletColor, getCombo, getCurrentLevel, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 import { gameActions } from '../reducer';
 import { applyPhysic, calculateRemainColors, createBalls, findSame } from './utils/balls';
 import Ball from '../lib/ball';
 import levels from '../levels';
 import { getCloserPoint, getLineLen } from '../lib/geometry';
-import bulletObject from '../lib/bullet';
 import { fps } from '../lib/utils';
 
 interface Props {
@@ -33,10 +24,13 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const level = useSelector(getCurrentLevel);
   const shotPosition = useSelector(getShotPosition);
   const combo = useSelector(getCombo);
+  const bulletColor = useSelector(getBulletColor);
+  const shotPath = useSelector(getShotPath);
 
-  const balls = useMemo<Ball[]>(() => createBalls(level), []);
+  const balls = useMemo<Ball[]>(() => {
+    return createBalls(level);
+  }, []);
 
-  const bullet = useRef(bulletObject);
   const inserting = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pusherIncrement = useRef(0);
@@ -60,7 +54,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
         return;
       }
       ballsRemain += 1;
-      ball.update(ball.position + ball.positionOffset, ballsPath[ball.position][2]);
+      ball.update(ball.position + ball.rotationOffset, ballsPath[ball.position][2]);
       ctx.shadowColor = '#000000';
       ctx.shadowBlur = 10;
       ctx.drawImage(ball.canvas,
@@ -110,7 +104,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     }
 
     // рассчитываем положение шаров
-    const result = applyPhysic(balls, pusher);
+    const result = applyPhysic(pusher);
 
     // если передний шар добрался до черепа
     if (gamePhase === GAME_PHASE.STARTED && balls[balls.length - 1].position >= ballsPath.length - 1) {
@@ -146,12 +140,15 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
   // полет пули. Проверятся дистанция до каждого шара
   useEffect(() => {
+    if (!shotPath.length || shotPosition >= shotPath.length) { return; }
+    const x = shotPath[shotPosition][0];
+    const y = shotPath[shotPosition][1];
     balls.forEach((ball, index) => {
       if (ball.position < 0 || ball.position >= ballsPath.length || inserting.current) {
         return;
       }
       const distance = getLineLen(
-        shotPosition[0], shotPosition[1],
+        x, y,
         ballsPath[ball.position][0], ballsPath[ball.position][1]
       );
       // проверка на попадание c допуском
@@ -162,14 +159,13 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
         dispatch(gameActions.setBulletState(BULLET_STATE.INSERTING));
 
         // рассчитываем, всталять перед шаром, в который попали или после
-        const closerPoint = getCloserPoint(ballsPath, shotPosition[0], shotPosition[1]);
+        const closerPoint = getCloserPoint(ballsPath, x, y);
         const insertedIndex = closerPoint > ball.position ? index + 1 : index;
         // вставляем
-        balls.splice(insertedIndex, 0, new Ball(bullet.current.color));
+        balls.splice(insertedIndex, 0, new Ball(bulletColor));
         balls[insertedIndex].position = closerPoint;
 
         // убираем с глаз пулю и обнуляем путь выстрела
-        dispatch(gameActions.setShotPosition([-BALL_RADIUS, -BALL_RADIUS]));
         dispatch(gameActions.setShotPath([]));
 
         explodeSameBalls(balls, insertedIndex, BALL_EXPLODE_TIMEOUT);
@@ -191,9 +187,11 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     if (!canvas) {
       throw new Error('Balls canvas not found');
     }
+
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
     setPusher(pusher + pusherIncrement.current);
+
     return () => {
       setPusher(pusherStartPosition);
       clearTimeout(timeoutRef.current);

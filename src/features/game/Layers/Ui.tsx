@@ -1,14 +1,13 @@
-/** eslint prefer-const: "error" */
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
 import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
+import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
-import { getBulletState, getCurrentLevel } from '../selectors';
+import { getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
 import levels from '../levels';
 
 export const UiLayer: FC = () => {
@@ -16,6 +15,7 @@ export const UiLayer: FC = () => {
 
   const bulletState = useSelector(getBulletState);
   const level = useSelector(getCurrentLevel);
+  const gamePhase = useSelector(getGamePhase);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const angle = useRef(0);
@@ -35,11 +35,14 @@ export const UiLayer: FC = () => {
   };
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    if (gamePhase === GAME_PHASE.LOADING || gamePhase === GAME_PHASE.EXITING) {
+      return;
+    }
     const rect = (e.target as HTMLElement).getBoundingClientRect();
     const x = e.pageX - rect.left - levels[level].frogPosition.x;
     const y = e.pageY - rect.top - levels[level].frogPosition.y;
-
     angle.current = Math.atan2(y, x);
+
     dispatch(gameActions.setAngle(angle.current));
   };
 

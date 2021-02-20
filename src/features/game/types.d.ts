@@ -1,3 +1,5 @@
+import Ball from './lib/ball';
+
 export interface spriteOptions {
   image: HTMLImageElement;
   frameIndex: number;
@@ -47,6 +49,7 @@ declare global {
   interface Window {
     debugBallsAmount: number;
     debugPusherPosition: number;
+    staticBall: Ball;
   }
 }
 

@@ -1,17 +1,17 @@
-/** eslint prefer-const: "error" */
-// Модуль отображает взрывы, частицы и летящую пулю
+// Модуль отображает летящую пулю
 
 import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BALL_RADIUS, BULLET_STATE, FRAME } from '../constants';
-import { getShotPath, getShotPosition } from '../selectors';
-import bulletObject from '../lib/bullet';
+import { getBulletColor, getShotPath, getShotPosition } from '../selectors';
 import { gameActions } from '../reducer';
 
 import { traceShotPath } from './utils/effects';
+import { getBallsRemainColors } from './utils/balls';
 import { fps } from '../lib/utils';
 import { BULLET_SPEED } from '../setup';
+import Ball from '../lib/ball';
 
 export const BulletLayer: FC = () => {
   const dispatch = useDispatch();
@@ -19,47 +19,57 @@ export const BulletLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const shotPath = useSelector(getShotPath);
   const shotPosition = useSelector(getShotPosition);
+  const bulletColor = useSelector(getBulletColor);
 
-  const bullet = useRef(bulletObject);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const bullet = useRef(new Ball());
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
+  const mishit = useRef(false);
 
-  const drawEffects = () => {
+  const draw = () => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) {
       return;
     }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    // рисуем пулю
-    if (shotPath.length) {
-      traceShotPath(ctx, shotPath);
+    if (!shotPath.length || shotPosition >= shotPath.length) { return; }
 
-      if (bullet.current.position >= shotPath.length) { // промахнулись
-        dispatch(gameActions.setShotPath([]));
-        dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
-      } else {
-        const x = shotPath[bullet.current.position][0];
-        const y = shotPath[bullet.current.position][1];
-        bullet.current.update(
-          bullet.current.position * 3 + bullet.current.positionOffset,
-          shotPath[bullet.current.position][2]);
-        ctx.drawImage(bullet.current.canvas, x - BALL_RADIUS, y - BALL_RADIUS,
-        );
-        bullet.current.position += 1;
-        dispatch(gameActions.setShotPosition([x, y]));
-      }
-    }
+    traceShotPath(ctx, shotPath);
+
+    const x = shotPath[shotPosition][0];
+    const y = shotPath[shotPosition][1];
+    bullet.current.update(
+      shotPosition * 3 + bullet.current.rotationOffset,
+      shotPath[shotPosition][2]);
+    ctx.drawImage(bullet.current.canvas, x - BALL_RADIUS, y - BALL_RADIUS,
+    );
   };
 
   useEffect(() => {
     if (shotPath.length) {
-      bullet.current.position = 0;
+      bullet.current.color = bulletColor;
+      mishit.current = false;
+      dispatch(gameActions.setShotPosition(1));
     }
-    requestRef.current = requestAnimationFrame(drawEffects);
   }, [shotPath]);
 
   useEffect(() => {
-    timeoutRef.current = window.setTimeout(() => drawEffects(), fps(BULLET_SPEED));
+    if (shotPosition >= shotPath.length) { // промахнулись
+      if (!mishit.current) {
+        // ставим флаг от следующей итерации
+        mishit.current = true;
+        dispatch(gameActions.setShotPath([]));
+        dispatch(gameActions.setShotPosition(0));
+        dispatch(gameActions.setRemainColors(getBallsRemainColors()));
+        dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+        requestRef.current = requestAnimationFrame(draw);
+      }
+      return;
+    }
+    requestRef.current = requestAnimationFrame(draw);
+    timeoutRef.current = window.setTimeout(() => {
+      dispatch(gameActions.setShotPosition(shotPosition + 1));
+    }, fps(BULLET_SPEED));
   }, [shotPosition]);
 
   // init

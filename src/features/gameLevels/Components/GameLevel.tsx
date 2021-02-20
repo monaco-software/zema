@@ -1,12 +1,14 @@
 import './game-level.css';
+
 import React, { FC } from 'react';
 import { Card, CardBody, CardFooter, CardHeader, Image } from 'grommet';
 import { Lock, Star } from 'grommet-icons';
-import b_ from 'b_';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import b_ from 'b_';
+
 import { gameActions } from '../../game/reducer';
 import { ROUTES } from '../../../common/constants';
-import { useHistory } from 'react-router-dom';
 import { Level } from '../../game/types';
 
 const block = b_.lock('game-level');

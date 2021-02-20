@@ -24,9 +24,10 @@ import {
 import { gameActions } from '../reducer';
 import levels from '../levels';
 import Frog from '../lib/frog';
-import bullet from '../lib/bullet';
 import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
+import Ball from '../lib/ball';
+import { BULLET_ARMING_SPEED } from '../setup';
 
 export const FrogLayer: FC = () => {
   const dispatch = useDispatch();
@@ -43,18 +44,23 @@ export const FrogLayer: FC = () => {
   const requestRef = React.useRef<number>();
 
   const frog = useMemo(() => new Frog(), []);
+  const bullet = useMemo(() => new Ball(), []);
 
   const drawFrog = () => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.translate(levels[level].frogPosition.x, levels[level].frogPosition.y);
     ctx.rotate(angle + Math.PI / 2);
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
-
     ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
+
     if (bulletState === BULLET_STATE.ARMING || bulletState === BULLET_STATE.ARMED) {
-      bullet.update(bulletPosition + bullet.positionOffset, Math.PI * 1.5);
+      if (bulletState === BULLET_STATE.ARMING) {
+        bullet.update(bulletPosition + bullet.rotationOffset, Math.PI * 1.5);
+      }
       coverWithLip(bullet.ctx, BALL_RADIUS, bulletPosition - 35, 40);
       ctx.drawImage(bullet.canvas, 35, -bulletPosition + 25);
     }
@@ -63,54 +69,47 @@ export const FrogLayer: FC = () => {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     if (bulletState === BULLET_STATE.ARMING) {
       // выкатываем шар из брюха
       if (bulletPosition < BULLET_ARMED_POSITION) {
-        setTimeout(() => {
+        timeoutRef.current = window.setTimeout(() => {
           dispatch(gameActions.setBulletPosition(bulletPosition + 1));
-        }, fps(levels[level].speed));
+        }, fps(BULLET_ARMING_SPEED));
       } else {
         dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
       }
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);
-    return () => {
-      clearTimeout(timeoutRef.current);
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
   }, [bulletPosition]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
-    requestRef.current = window.requestAnimationFrame( drawFrog);
-    return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
+    if (!ctx) {
+      return;
+    }
+    requestRef.current = window.requestAnimationFrame(drawFrog);
   }, [angle]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     if (bulletState === BULLET_STATE.ARMING) {
       bullet.color = remainColors[random(remainColors.length)];
-      bullet.positionOffset = random(bullet.numberOfFrames);
+      bullet.rotationOffset = random(bullet.numberOfFrames);
+      dispatch(gameActions.setBulletColor(bullet.color));
+      dispatch(gameActions.setBulletPosition(BULLET_START_POSITION + 1));
+    }
+    if (bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
       dispatch(gameActions.setBulletPosition(BULLET_START_POSITION));
     }
-    if (bulletState === BULLET_STATE.IDLE) {
-      bullet.position = BULLET_START_POSITION;
+    if (gamePhase === GAME_PHASE.STARTED) {
+      requestRef.current = window.requestAnimationFrame(drawFrog);
     }
-    requestRef.current = window.requestAnimationFrame(drawFrog);
-    return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
   }, [bulletState]);
 
   useEffect(() => {
@@ -121,6 +120,7 @@ export const FrogLayer: FC = () => {
       dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);
+
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
@@ -137,7 +137,9 @@ export const FrogLayer: FC = () => {
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     requestRef.current = window.requestAnimationFrame(drawFrog);
     return () => {
       if (requestRef.current) {
@@ -147,9 +149,7 @@ export const FrogLayer: FC = () => {
   }, []);
 
   return (
-    <canvas
-      style={{ position: 'absolute' }}
-      ref={canvasRef}
-    />
+    <canvas style={{ position: 'absolute' }}
+      ref={canvasRef} />
   );
 };

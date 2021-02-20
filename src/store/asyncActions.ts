@@ -140,7 +140,6 @@ export const asyncAppActions = {
     if (!levels.every(inLevels)) { throw new Error(`Cant store levels ${levels}`); }
     localStorage.setItem(LOCALSTORAGE_LEVELS, btoa(JSON.stringify(levels)));
     dispatch(gameLevelsActions.setLevels(levels));
-    console.log(`${levels} dispatched`);
   },
 };
 

@@ -4,6 +4,8 @@ import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 import levels from '../../levels';
 import { Physics } from '../../types';
 
+export const gameBalls: Ball[] = [];
+
 // возвращает массив индексов одинаковых шаров рядом с заданным
 export const findSame = (balls: Ball[], index: number, both = false): number[] => {
   const left = [];
@@ -38,6 +40,17 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
   }
 };
 
+export const getBallsRemainColors = (): number[] => {
+  return gameBalls.reduce((memo: number[], ball) =>
+    memo.includes(ball.color) ? memo : [...memo, ball.color],
+  []);
+};
+
+export const getRandomColorFromRemains = () => {
+  const colors = getBallsRemainColors();
+  return colors[random(colors.length)];
+};
+
 // высчитыват оставшиеся на поле цвета
 // после попадания и всех столкновений
 // принимает массив шаров и индекс вставки
@@ -65,7 +78,8 @@ export const createBalls = (level: number): Ball[] => {
   const pusherPosition = window.debugBallsAmount ?
     -window.debugBallsAmount * BALL_DIAMETER :
     -levelData.balls * BALL_DIAMETER;
-  const balls = [];
+
+  gameBalls.length = 0;
 
   const ballsAmount = window.debugBallsAmount || levelData.balls;
 
@@ -73,17 +87,17 @@ export const createBalls = (level: number): Ball[] => {
     const randomIndex = random(levelData.ballColors.length);
     const ball = new Ball(levelData.ballColors[randomIndex]);
     ball.position = pusherPosition + i * BALL_DIAMETER;
-    balls.push(ball);
+    gameBalls.push(ball);
   }
-  return balls;
+  return gameBalls;
 };
 
 // рассчитывает положение шаров исходя из позиции
 // толкателя, текущих промежутков и ускорения
-export const applyPhysic = (balls: Ball[], pusherPosition: number): Physics => {
+export const applyPhysic = (pusherPosition: number): Physics => {
   const impacts: number[] = [];
   let pusherOffset = 0;
-  balls.forEach((ball, ballIndex) => {
+  gameBalls.forEach((ball, ballIndex) => {
     if (ballIndex === 0) {
       if (ball.position <= pusherPosition) {
         ball.position = pusherPosition;
@@ -94,7 +108,7 @@ export const applyPhysic = (balls: Ball[], pusherPosition: number): Physics => {
         pusherOffset = pusherDistance > 4 ? pusherDistance - 3 : 0;
       }
     } else {
-      const prevBallPosition = balls[ballIndex - 1].position;
+      const prevBallPosition = gameBalls[ballIndex - 1].position;
       const prevBallDistance = ball.position - prevBallPosition;
       // признак того, что был вставлен шар
       const inserting = prevBallDistance < BALL_RADIUS;
@@ -103,22 +117,22 @@ export const applyPhysic = (balls: Ball[], pusherPosition: number): Physics => {
         ball.position += 1;
         if (inserting) {
           // перемещаем не прокручивая
-          ball.positionOffset -= 1;
+          ball.rotationOffset -= 1;
         }
       }
       if (prevBallDistance > BALL_DIAMETER) {
         // разрыв. придаем шарам ускорение
         ball.acceleration += 1;
-        for (let i = ballIndex; i < balls.length; i += 1) {
-          balls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
+        for (let i = ballIndex; i < gameBalls.length; i += 1) {
+          gameBalls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
         }
       } else {
         // столкновение. чем сильнее разгон, тем дальше отлетают шары
         const moveDistance = Math.floor(Math.pow(ball.acceleration - 9, 2));
         if (ball.acceleration && moveDistance > 0) {
-          for (let i = 0; i < balls.length; i += 1) {
-            balls[i].position -= moveDistance;
-            balls[i].positionOffset -= 1;
+          for (let i = 0; i < gameBalls.length; i += 1) {
+            gameBalls[i].position -= moveDistance;
+            gameBalls[i].rotationOffset -= 1;
           }
           // толькатель отлетает дальше
           pusherOffset -= moveDistance + 4;

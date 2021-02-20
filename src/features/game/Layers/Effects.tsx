@@ -1,5 +1,4 @@
-/** eslint prefer-const: "error" */
-// Модуль отображает взрывы, частицы и летящую пулю
+// Модуль отображает взрывы и частицы
 
 import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
