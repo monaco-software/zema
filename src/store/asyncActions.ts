@@ -11,13 +11,13 @@ import {
 import { appActions } from './reducer';
 import { GetLeaderboardParams, SignInParams, SignUpParams, UpdateLeaderboardParams } from '../api/schema';
 import { getCurrentUser } from './selectors';
-import { LEADERBOARD_VALUE_FIELD_NAME } from '../features/leaderboard/constants';
-import { leaderboardActions } from '../features/leaderboard/reducer';
-import { LeaderboardRecord } from '../features/leaderboard/types';
-import { LOCALSTORAGE_LEVELS } from '../features/gameLevels/constants';
+import { LEADERBOARD_VALUE_FIELD_NAME } from '../pages/leaderboard/constants';
+import { leaderboardActions } from '../pages/leaderboard/reducer';
+import { LeaderboardRecord } from '../pages/leaderboard/types';
+import { LOCALSTORAGE_LEVELS } from '../pages/gameLevels/constants';
 import { isJsonString } from '../common/utils';
-import { gameLevelsActions } from '../features/gameLevels/reducer';
-import levels from '../features/game/levels';
+import { gameLevelsActions } from '../pages/gameLevels/reducer';
+import levels from '../pages/game/levels';
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {

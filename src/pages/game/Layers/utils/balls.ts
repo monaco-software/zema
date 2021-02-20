@@ -35,9 +35,9 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
   const res = left.concat(right);
   if (both && (left.length < 2 || right.length < 2)) {
     return [index];
-  } else {
-    return [...new Set(res.sort((n1, n2) => n1 - n2))];
   }
+
+  return [...new Set(res.sort((n1, n2) => n1 - n2))];
 };
 
 export const getBallsRemainColors = (): number[] => {

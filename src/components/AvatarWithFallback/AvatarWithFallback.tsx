@@ -24,11 +24,11 @@ export const AvatarWithFallback: FC<Props> = ({
     return (
       <Avatar src={url} size={avatarSize} {...restProps} />
     );
-  } else {
-    return (
-      <Avatar size={avatarSize} {...restProps}>
-        {placeholderNode ?? <User color="light-1" size={iconSize} />}
-      </Avatar>
-    );
   }
+
+  return (
+    <Avatar size={avatarSize} {...restProps}>
+      {placeholderNode ?? <User color="light-1" size={iconSize} />}
+    </Avatar>
+  );
 };
