@@ -4,7 +4,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { COMBO_DISPLAY_PHASES, FRAME } from '../constants';
-import { COMBO_FONT_SIZE } from '../setup';
+import { COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
 import { getCombo, getCurrentLevel } from '../selectors';
 import { decimalToHex, distort, fps } from '../lib/utils';
 import levels from '../levels';
@@ -15,8 +15,8 @@ export const ComboLayer: FC = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const comboDisplayPhase = useRef(0);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
   const draw = () => {
     if (!canvasRef.current) { return; }
@@ -46,7 +46,7 @@ export const ComboLayer: FC = () => {
       comboDisplayPhase.current += 1;
       timeoutRef.current = window.setTimeout(() => {
         requestRef.current = window.requestAnimationFrame(draw);
-      }, fps(32));
+      }, fps(COMBO_MESSAGE_SPEED));
     }
   };
 

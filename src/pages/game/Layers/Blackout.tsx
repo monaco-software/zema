@@ -12,8 +12,8 @@ export const BlackoutLayer: FC = () => {
   const gamePhase = useSelector(getGamePhase);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
   const [blackout, setBlackout] = useState(255);
 
@@ -49,12 +49,9 @@ export const BlackoutLayer: FC = () => {
   };
 
   useEffect(() => {
+    if (gamePhase < GAME_PHASE.LOADED) { return; }
     requestRef.current = window.requestAnimationFrame(draw);
-  }, [blackout]);
-
-  useEffect(() => {
-    requestRef.current = window.requestAnimationFrame(draw);
-  }, [gamePhase]);
+  }, [gamePhase, blackout]);
 
   // init
   useEffect(() => {

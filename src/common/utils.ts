@@ -7,3 +7,7 @@ export function isJsonString(str: unknown): boolean {
   }
   return true;
 }
+
+export function uniqAndSort(array: number[]) {
+  return [...new Set(array.sort((n1, n2) => n1 - n2))];
+}

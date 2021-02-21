@@ -26,6 +26,8 @@ export default class Ball extends Sprite {
   static updates = 0;
   static hits = 0;
   static writes = 0;
+  static readTime = 0;
+  static writeTime = 0;
 
   position = 0;
   acceleration = 0;
@@ -50,11 +52,14 @@ export default class Ball extends Sprite {
     this._color = color;
     this.rotationOffset = positionOffset;
     this.image = new Image();
+    this.image.onload = () => {
+      this.update(random(this.numberOfFrames), 0);
+    };
     this.image.src = ballSprite;
-    this.update(random(this.numberOfFrames), toRadians(random(360)));
   }
 
   update(index = 0, angle = 0) {
+    if (!this.image.width) { return; }
     Ball.updates += 1;
     let frame = index % this.numberOfFrames;
     if (frame < 0) {
@@ -70,11 +75,9 @@ export default class Ball extends Sprite {
     const x = BALL_DIAMETER * statIndexX;
     const y = BALL_DIAMETER * statIndexY;
 
+    const start = performance.now();
     // если уже закэшировано - читаем
-    // иногда творится непонятная хрень
-    // некоторые ячейки пустые при непустом индексе
-    // пришлось выставить порог в 1
-    if (Ball.index[statIndexX][statIndexY] > 1) {
+    if (Ball.index[statIndexX][statIndexY] > 0) {
       this.ctx.clearRect(0, 0, this.width, this.height);
       this.ctx.drawImage(
         Ball.bufferCanvas,
@@ -86,6 +89,7 @@ export default class Ball extends Sprite {
         this.height
       );
       Ball.hits += 1;
+      Ball.readTime += performance.now() - start;
     } else {
       // если нет - рендерим и пишем в кэш
       super.update(index, toRadians(offset * Ball.divider));
@@ -99,6 +103,7 @@ export default class Ball extends Sprite {
         this.height
       );
       Ball.writes += 1;
+      Ball.writeTime += performance.now() - start;
     }
     // увеличиваем ячейку индексатора
     Ball.index[statIndexX][statIndexY] += 1;

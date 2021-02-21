@@ -11,7 +11,7 @@ import levels from '../levels';
 export const SkullLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const skull = useRef(new Skull());
-  const requestRef = React.useRef<number>();
+  const requestRef = useRef<number>();
 
   const level = useSelector(getCurrentLevel);
 
@@ -24,7 +24,6 @@ export const SkullLayer: FC = () => {
     ctx.shadowBlur = 15;
 
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    // рисуем череп
     ctx.drawImage(skull.current.image, levels[level].skullPosition.x - SKULL_RADIUS, levels[level].skullPosition.y - SKULL_RADIUS);
   };
 
@@ -36,8 +35,6 @@ export const SkullLayer: FC = () => {
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    requestRef.current = window.requestAnimationFrame(draw);
-
     skull.current.image.onload = () => {
       requestRef.current = window.requestAnimationFrame(draw);
     };

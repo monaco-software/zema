@@ -10,7 +10,7 @@ import { getTitle } from '../selectors';
 export const TitleLayer: FC = () => {
   const title = useSelector(getTitle);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const requestRef = React.useRef<number>();
+  const requestRef = useRef<number>();
 
   const draw = () => {
     if (!canvasRef.current) { return; }

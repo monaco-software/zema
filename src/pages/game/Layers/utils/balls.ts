@@ -3,6 +3,7 @@ import { random } from '../../lib/utils';
 import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 import levels from '../../levels';
 import { Physics } from '../../types';
+import { uniqAndSort } from '../../../../common/utils';
 
 export const gameBalls: Ball[] = [];
 
@@ -32,12 +33,11 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
       fail = true;
     }
   }
-  const res = left.concat(right);
-  if (both && (left.length < 2 || right.length < 2)) {
+  if (both && (left.length < 2 || right.length < 1)) {
     return [index];
   }
-
-  return [...new Set(res.sort((n1, n2) => n1 - n2))];
+  const res = left.concat(right);
+  return uniqAndSort(res);
 };
 
 export const getBallsRemainColors = (): number[] => {
@@ -66,11 +66,9 @@ export const calculateRemainColors = (b: Ball[], i: number): number[] => {
   }
   const remainColors: number[] = [];
   balls.forEach((ball) => {
-    if (!remainColors.includes(ball.color)) {
-      remainColors.push(ball.color);
-    }
+    remainColors.push(ball.color);
   });
-  return remainColors.sort((n1, n2) => n1 - n2);
+  return uniqAndSort(remainColors);
 };
 
 export const createBalls = (level: number): Ball[] => {

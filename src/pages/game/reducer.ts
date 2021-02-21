@@ -102,7 +102,7 @@ const game = createSlice({
     increaseScore(state, { payload }: PayloadAction<Game['score']>) {
       state.score += payload;
     },
-    increaseCombo(state) {
+    incrementCombo(state) {
       state.combo += 1;
     },
     resetCombo(state) {

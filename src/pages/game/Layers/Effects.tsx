@@ -7,7 +7,7 @@ import { BALL_DIAMETER, BALL_RADIUS, FRAME, GAME_PHASE, GAME_RESULT } from '../c
 import { getExplosion, getGamePhase, getGameResult } from '../selectors';
 import Explosion from '../lib/explosion';
 import Particle from '../lib/paricle';
-import { fps } from '../lib/utils';
+import { fps, random } from '../lib/utils';
 import { DEFAULT_FRAMERATE } from '../setup';
 
 interface Props {
@@ -23,10 +23,11 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   const drawn = useRef(false);
 
   const explosion = useSelector(getExplosion);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const effectTimeoutRef = useRef<number>();
+  const drawTimeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
-  const drawEffects = () => {
+  const draw = () => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) {
       return;
@@ -40,6 +41,8 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
       if (effect.phase < effect.numberOfFrames) {
         effect.update(effect.phase);
         effect.phase += 1;
+        ctx.shadowOffsetX = effect instanceof Explosion ? random(15) : 0;
+        ctx.shadowOffsetY = effect instanceof Explosion ? random(15) : 0;
         ctx.drawImage(effect.canvas, effect.x - BALL_RADIUS, effect.y - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
       } else {
         effects.current.splice(index, 1);
@@ -47,7 +50,8 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     });
     if (effects.current.length) {
       drawn.current = true;
-      window.setTimeout(() => window.requestAnimationFrame(drawEffects), fps(24));
+      window.setTimeout(() =>
+        requestRef.current = window.requestAnimationFrame(draw), fps(24));
     } else {
       drawn.current = false;
     }
@@ -55,11 +59,13 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
 
   const runParticles = () => {
     for (let i = 0; i < ballsPath.length; i += BALL_DIAMETER) {
-      timeoutRef.current = window.setTimeout(
+      effectTimeoutRef.current = window.setTimeout(
         () => effects.current.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
         Math.floor(i / 2));
     }
-    timeoutRef.current = window.setTimeout(() => drawEffects(), fps(DEFAULT_FRAMERATE));
+    drawTimeoutRef.current = window.setTimeout(() => {
+      requestRef.current = window.requestAnimationFrame(draw), fps(DEFAULT_FRAMERATE);
+    });
   };
 
   useEffect(() => {
@@ -71,14 +77,16 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
       if (exp < 0 || exp >= ballsPath.length) {
         return;
       }
-      timeoutRef.current = window.setTimeout(
+      effectTimeoutRef.current = window.setTimeout(
         () => effects.current.push(
           new Explosion(ballsPath[exp][0], ballsPath[exp][1])
         ),
         index * 25);
     });
     if (!drawn.current) {
-      timeoutRef.current = window.setTimeout(() => drawEffects(), 1);
+      drawTimeoutRef.current = window.setTimeout(() =>
+        requestRef.current = window.requestAnimationFrame(draw),
+      fps(DEFAULT_FRAMERATE));
     }
   }, [explosion]);
 
@@ -103,7 +111,8 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     canvas.height = FRAME.HEIGHT;
 
     return () => {
-      clearTimeout(timeoutRef.current);
+      clearTimeout(drawTimeoutRef.current);
+      clearTimeout(effectTimeoutRef.current);
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }

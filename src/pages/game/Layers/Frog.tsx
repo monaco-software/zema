@@ -1,8 +1,7 @@
-/* eslint prefer-const: "warn" */
 // Модуль отображает лягушку
 
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   BALL_RADIUS,
@@ -28,9 +27,12 @@ import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
 import Ball from '../lib/ball';
 import { BULLET_ARMING_SPEED } from '../setup';
+import { useAction } from '../../../hooks';
 
 export const FrogLayer: FC = () => {
-  const dispatch = useDispatch();
+  const setBulletPosition = useAction(gameActions.setBulletPosition);
+  const setBulletState = useAction(gameActions.setBulletState);
+  const setBulletColor = useAction(gameActions.setBulletColor);
 
   const bulletState = useSelector(getBulletState);
   const gamePhase = useSelector(getGamePhase);
@@ -40,8 +42,8 @@ export const FrogLayer: FC = () => {
   const angle = useSelector(getAngle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
   const frog = useMemo(() => new Frog(), []);
   const bullet = useMemo(() => new Ball(), []);
@@ -76,10 +78,10 @@ export const FrogLayer: FC = () => {
       // выкатываем шар из брюха
       if (bulletPosition < BULLET_ARMED_POSITION) {
         timeoutRef.current = window.setTimeout(() => {
-          dispatch(gameActions.setBulletPosition(bulletPosition + 1));
+          setBulletPosition(bulletPosition + 1);
         }, fps(BULLET_ARMING_SPEED));
       } else {
-        dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
+        setBulletState(BULLET_STATE.ARMED);
       }
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);
@@ -101,11 +103,11 @@ export const FrogLayer: FC = () => {
     if (bulletState === BULLET_STATE.ARMING) {
       bullet.color = remainColors[random(remainColors.length)];
       bullet.rotationOffset = random(bullet.numberOfFrames);
-      dispatch(gameActions.setBulletColor(bullet.color));
-      dispatch(gameActions.setBulletPosition(BULLET_START_POSITION + 1));
+      setBulletColor(bullet.color);
+      setBulletPosition(BULLET_START_POSITION + 1);
     }
-    if (bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
-      dispatch(gameActions.setBulletPosition(BULLET_START_POSITION));
+    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
+      setBulletPosition(BULLET_START_POSITION);
     }
     if (gamePhase === GAME_PHASE.STARTED) {
       requestRef.current = window.requestAnimationFrame(drawFrog);
@@ -114,10 +116,10 @@ export const FrogLayer: FC = () => {
 
   useEffect(() => {
     if (gamePhase === GAME_PHASE.ENDING) {
-      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+      setBulletState(BULLET_STATE.IDLE);
     }
     if (gamePhase === GAME_PHASE.STARTED) {
-      dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+      setBulletState(BULLET_STATE.ARMING);
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);
 
@@ -142,6 +144,7 @@ export const FrogLayer: FC = () => {
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);
     return () => {
+      clearTimeout(timeoutRef.current);
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
@@ -149,7 +152,9 @@ export const FrogLayer: FC = () => {
   }, []);
 
   return (
-    <canvas style={{ position: 'absolute' }}
-      ref={canvasRef} />
+    <canvas
+      style={{ position: 'absolute' }}
+      ref={canvasRef}
+    />
   );
 };

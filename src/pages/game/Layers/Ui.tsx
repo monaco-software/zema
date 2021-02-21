@@ -2,16 +2,21 @@
 // слушает мышь и рассчитывает путь пули
 
 import React, { FC, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
 import { getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
 import levels from '../levels';
+import { useOperation, useAction } from '../../../hooks';
 
 export const UiLayer: FC = () => {
-  const dispatch = useDispatch();
+  const resetCombo = useOperation(gameActions.resetCombo);
+
+  const setBulletState = useAction(gameActions.setBulletState);
+  const setAngle = useAction(gameActions.setAngle);
+  const setShotPath = useAction(gameActions.setShotPath);
 
   const bulletState = useSelector(getBulletState);
   const level = useSelector(getCurrentLevel);
@@ -31,7 +36,7 @@ export const UiLayer: FC = () => {
         path.push([x, y, shotAngle]);
       }
     }
-    dispatch(gameActions.setShotPath(path));
+    setShotPath(path);
   };
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -43,7 +48,7 @@ export const UiLayer: FC = () => {
     const y = e.pageY - rect.top - levels[level].frogPosition.y;
     angle.current = Math.atan2(y, x);
 
-    dispatch(gameActions.setAngle(angle.current));
+    setAngle(angle.current);
   };
 
   const mouseClick = () => {
@@ -51,8 +56,8 @@ export const UiLayer: FC = () => {
       return;
     }
     calculateShotPath();
-    dispatch(gameActions.resetCombo());
-    dispatch(gameActions.setBulletState(BULLET_STATE.SHOT));
+    resetCombo();
+    setBulletState(BULLET_STATE.SHOT);
   };
 
   // init
@@ -70,9 +75,11 @@ export const UiLayer: FC = () => {
   }, []);
 
   return (
-    <canvas style={{ position: 'absolute' }}
+    <canvas
+      style={{ position: 'absolute' }}
       ref={canvasRef}
       onMouseMove={mouseMove}
-      onClick={mouseClick} />
+      onClick={mouseClick}
+    />
   );
 };

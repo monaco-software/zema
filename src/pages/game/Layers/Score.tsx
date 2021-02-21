@@ -4,7 +4,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { FRAME } from '../constants';
-import { SCORE_FONT_SIZE } from '../setup';
+import { SCORE_FONT_SIZE, SCORE_ROLLING_SPEED } from '../setup';
 import { getCurrentLevel, getScore } from '../selectors';
 import levels from '../levels';
 import { fps } from '../lib/utils';
@@ -16,8 +16,8 @@ export const ScoreLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scoreFontSize = useRef(SCORE_FONT_SIZE);
   const tmpScore = useRef(0);
-  const timeoutRef = React.useRef<number>();
-  const requestRef = React.useRef<number>();
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
   const grow = 10;
 
@@ -55,7 +55,7 @@ export const ScoreLayer: FC = () => {
     if (tmpScore.current < score || scoreFontSize.current > SCORE_FONT_SIZE ) {
       timeoutRef.current = window.setTimeout(() => {
         requestRef.current = window.requestAnimationFrame(draw);
-      }, fps(32));
+      }, fps(SCORE_ROLLING_SPEED));
     }
   };
 

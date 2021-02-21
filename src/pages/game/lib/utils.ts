@@ -1,5 +1,3 @@
-import Ball from './ball';
-
 export function padWithSpaces(text: string, size: number): string {
   if (text.length >= size) { return text; }
   const diff = size - text.length;
@@ -31,11 +29,11 @@ export function fps(frames: number): number {
   return 1000 * (1 / frames);
 }
 
-export function bufferDownloader() {
-  const link = document.createElement('a');
-  if (!link) { return; }
-  link.setAttribute('download', 'HugePaper.png');
-  link.setAttribute('href', Ball.bufferCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
-  link.click();
-}
+// export function bufferDownloader() {
+//   const link = document.createElement('a');
+//   if (!link) { return; }
+//   link.setAttribute('download', 'HugePaper.png');
+//   link.setAttribute('href', Ball.bufferCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
+//   link.click();
+// }
 

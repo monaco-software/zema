@@ -49,7 +49,7 @@ const levels: Level[] = [{
 }, {
   title: 'Events are developing rapidly.\nNeed to do something.',
   speed: 23,
-  balls: 70,
+  balls: 80,
   ballColors: [
     BALL_COLORS.GREEN,
     BALL_COLORS.BLUE,
@@ -91,7 +91,7 @@ const levels: Level[] = [{
 }, {
   title: 'Untangle\nentangled tracks\nin the desert',
   speed: 26,
-  balls: 80,
+  balls: 100,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -101,7 +101,7 @@ const levels: Level[] = [{
   frogPosition: { x: 341, y: 325 },
   skullPosition: { x: 455, y: 214 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 50,
+  rollOut: 55,
   start: [737, 599],
   curve: [
     [739, 539, 748, 334, 715, 200],

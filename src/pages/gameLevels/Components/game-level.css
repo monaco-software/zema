@@ -10,10 +10,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.game-level_selected {
-
-}
-
 .game-level_disallowed {
   filter: grayscale(1);
   cursor: default;

@@ -9,7 +9,7 @@ import { padWithSpaces } from '../lib/utils';
 
 export const InfoLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const intervalRef = React.useRef<number>();
+  const intervalRef = useRef<number>();
   const requestRef = useRef<number>();
 
   const draw = () => {
@@ -24,8 +24,6 @@ export const InfoLayer: FC = () => {
     ctx.fillStyle = '#00000050';
     ctx.fillRect(0, FRAME.HEIGHT - 15, FRAME.WIDTH, FRAME.HEIGHT);
 
-    const elapsed = Math.ceil(performance.now());
-
     const divider = padWithSpaces('divider: ' + Ball.divider.toString(), 15);
 
     const updates = padWithSpaces('updates: ' + Ball.updates.toString(), 18);
@@ -38,7 +36,7 @@ export const InfoLayer: FC = () => {
       padWithSpaces('hits rate: ' + (Ball.hits / Ball.writes).toFixed(2).toString(), 20);
 
     const updatesPerSecond =
-      padWithSpaces('updates/sec: ' + (Ball.updates / elapsed * 1000).toFixed(2).toString(), 20);
+      padWithSpaces('updates/sec:' + (Ball.updates / (Ball.writeTime + Ball.readTime) * 1000).toFixed(2).toString(), 16);
 
     const message =
       divider +
@@ -68,7 +66,7 @@ export const InfoLayer: FC = () => {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) {
       intervalRef.current = window.setInterval(() =>
-        requestRef.current = requestAnimationFrame(draw), 100);
+        requestRef.current = requestAnimationFrame(draw), 200);
     }
 
     return () => {

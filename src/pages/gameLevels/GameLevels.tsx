@@ -11,7 +11,7 @@ import levels from '../game/levels';
 import { GameLevel } from './Components/GameLevel';
 import { getAllowedLevels } from './selectors';
 import { getCurrentLevel } from '../game/selectors';
-import { asyncAppActions } from '../../store/asyncActions';
+import { asyncGameLevelActions } from './asyncActions';
 import { LoadingOverlay } from '../../components/LoadingOverlay/LoadingOverlay';
 
 const block = b_.lock('game-levels');
@@ -19,7 +19,7 @@ const block = b_.lock('game-levels');
 export const GameLevels: FC = () => {
   useAuth();
 
-  const fetchAllowedLevels = useAsyncAction(asyncAppActions.fetchAllowedLevels);
+  const fetchAllowedLevels = useAsyncAction(asyncGameLevelActions.fetchAllowedLevels);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,7 +46,10 @@ export const GameLevels: FC = () => {
   return (
     <LoadingOverlay isLoading={isLoading}>
       <div className={block()}>
-        <Heading textAlign="center" level="2">
+        <Heading
+          textAlign="center"
+          level="2"
+        >
           {getText('levels_page_header')}
         </Heading>
         <div className={block('box')}>

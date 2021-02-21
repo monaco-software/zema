@@ -1,20 +1,23 @@
 // Модуль отображает летящую пулю
 
 import React, { FC, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { BALL_RADIUS, BULLET_STATE, FRAME } from '../constants';
-import { getBulletColor, getShotPath, getShotPosition } from '../selectors';
+import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE } from '../constants';
+import { getBulletColor, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 import { gameActions } from '../reducer';
-
-import { traceShotPath } from './utils/effects';
 import { getBallsRemainColors } from './utils/balls';
 import { fps } from '../lib/utils';
 import { BULLET_SPEED } from '../setup';
 import Ball from '../lib/ball';
+import { useAction } from '../../../hooks';
 
 export const BulletLayer: FC = () => {
-  const dispatch = useDispatch();
+  const setShotPosition = useAction(gameActions.setShotPosition);
+  const setShotPath = useAction(gameActions.setShotPath);
+  const setRemainColors = useAction(gameActions.setRemainColors);
+  const setBulletState = useAction(gameActions.setBulletState);
+  const gamePhase = useSelector(getGamePhase);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const shotPath = useSelector(getShotPath);
@@ -34,8 +37,6 @@ export const BulletLayer: FC = () => {
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     if (!shotPath.length || shotPosition >= shotPath.length) { return; }
 
-    traceShotPath(ctx, shotPath);
-
     const x = shotPath[shotPosition][0];
     const y = shotPath[shotPosition][1];
     bullet.current.update(
@@ -46,29 +47,30 @@ export const BulletLayer: FC = () => {
   };
 
   useEffect(() => {
-    if (shotPath.length) {
+    if (gamePhase === GAME_PHASE.STARTED && shotPath.length) {
       bullet.current.color = bulletColor;
       mishit.current = false;
-      dispatch(gameActions.setShotPosition(1));
+      setShotPosition(1);
     }
   }, [shotPath]);
 
   useEffect(() => {
+    if (gamePhase !== GAME_PHASE.STARTED) { return; }
     if (shotPosition >= shotPath.length) { // промахнулись
       if (!mishit.current) {
         // ставим флаг от следующей итерации
         mishit.current = true;
-        dispatch(gameActions.setShotPath([]));
-        dispatch(gameActions.setShotPosition(0));
-        dispatch(gameActions.setRemainColors(getBallsRemainColors()));
-        dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+        setShotPath([]);
+        setShotPosition(0);
+        setRemainColors(getBallsRemainColors());
+        setBulletState(BULLET_STATE.ARMING);
         requestRef.current = requestAnimationFrame(draw);
       }
       return;
     }
     requestRef.current = requestAnimationFrame(draw);
     timeoutRef.current = window.setTimeout(() => {
-      dispatch(gameActions.setShotPosition(shotPosition + 1));
+      setShotPosition(shotPosition + 1);
     }, fps(BULLET_SPEED));
   }, [shotPosition]);
 

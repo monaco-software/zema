@@ -2,14 +2,15 @@ import './game-level.css';
 
 import React, { FC } from 'react';
 import { Card, CardBody, CardFooter, CardHeader, Image } from 'grommet';
-import { Lock, Star } from 'grommet-icons';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import b_ from 'b_';
 
 import { gameActions } from '../../game/reducer';
 import { ROUTES } from '../../../common/constants';
 import { Level } from '../../game/types';
+import { useAction } from '../../../hooks';
+import { Sign } from './Sign';
+import { getText } from '../../../common/langUtils';
 
 const block = b_.lock('game-level');
 
@@ -21,28 +22,20 @@ interface Props {
   isSelected: boolean;
 }
 
-const getSign = (isAllowed: boolean) => {
-  if (isAllowed) {
-    return (
-      <Star color="accent-4" />
-    );
-  }
-  return (
-    <Lock color="dark-4" />
-  );
-};
-
 export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSelected }) => {
-  const dispatch = useDispatch();
   const history = useHistory();
+  const setCurrentLevel = useAction(gameActions.setCurrentLevel);
 
   // возвращаем функцию, если можно перейти
   // и undefined - если нет.
+  // Надо для того, чтобы браузер не
+  // показывал pointer курсор
+  // над недоступным элементом
   const goToLevel = () => {
-    if (!isAllowed) { return; }
+    if (!isAllowed) { return undefined; }
     return () => {
-      dispatch(gameActions.setCurrentLevel(levelIndex));
-      setTimeout(() => history.push(ROUTES.GAME), 0);
+      setCurrentLevel(levelIndex);
+      history.push(ROUTES.GAME);
     };
   };
 
@@ -55,10 +48,10 @@ export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSel
     >
       <CardHeader className={block('header')} gap="none">
         <span className={block('header-status')}>
-          {getSign(isAllowed)}
+          <Sign isAllowed={isAllowed} />
         </span>
         <span className={block('header-level')}>
-          Уровень {levelIndex + 1}
+          {getText('levels_page_level_word')} {levelIndex + 1}
         </span>
       </CardHeader>
       <CardBody>

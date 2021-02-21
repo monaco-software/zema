@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { ActionCreatorWithPayload, bindActionCreators } from '@reduxjs/toolkit';
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, bindActionCreators } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsSignedInd } from './store/selectors';
 import { useHistory } from 'react-router-dom';
@@ -39,4 +39,10 @@ export const useAuth = (needAuth = true) => {
 
     history.replace(ROUTES.SIGNIN);
   }, [isSignedIn, needAuth]);
+};
+
+export const useOperation = (action: ActionCreatorWithoutPayload) => {
+  const dispatch = useDispatch();
+
+  return bindActionCreators(action, dispatch);
 };
