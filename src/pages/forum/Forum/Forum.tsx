@@ -14,7 +14,7 @@ import { random } from '../../game/lib/utils';
 
 const block = b_.lock('forum');
 
-const createTopicFormInitialValue: CreateTopicFormFields = {
+const createTopicFormInitValue: CreateTopicFormFields = {
   topic_name: '',
 };
 
@@ -31,7 +31,7 @@ export const Forum: FC = () => {
 
   const [isCreateTopicFormLoading, setIsCreateTopicFormLoading] = useState(false);
 
-  const [createTopicFormFields, setCreateTopicFormFields] = useState<CreateTopicFormFields>(createTopicFormInitialValue);
+  const [createTopicFormFields, setCreateTopicFormFields] = useState<CreateTopicFormFields>(createTopicFormInitValue);
   const onCreateTopicFormChange = (value: CreateTopicFormFields) => setCreateTopicFormFields(value);
   const onCreateTopicFormSubmit = ({ value }: FormExtendedEvent<CreateTopicFormFields>) => {
     // TODO: запрос в апи
@@ -47,7 +47,7 @@ export const Forum: FC = () => {
       });
       setIsCreateTopicFormLoading(false);
       setIsCreateTopicModalOpen(false);
-      setCreateTopicFormFields(createTopicFormInitialValue);
+      setCreateTopicFormFields(createTopicFormInitValue);
     }, 1000);
   };
 

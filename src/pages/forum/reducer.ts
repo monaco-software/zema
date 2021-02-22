@@ -16,7 +16,9 @@ const userMock: UserObject = {
 
 const messagesMock: TopicMessage[] = [
   { id: 0, text: 'Привет, как дела?', user: userMock, createTimestamp: Date.now() },
+  // eslint-disable-next-line max-len
   { id: 1, text: '* во-первых, я в другом городе\n* во-вторых, что ты мне сделаешь\n* в-третьих, я в другом городе', user: userMock, createTimestamp: Date.now() },
+  // eslint-disable-next-line max-len
   { id: 2, text: '### Отзыв по игре:\n\n **Она прекрасна! 😍**  \nХочу еще уровней', user: userMock, createTimestamp: Date.now() },
 ];
 

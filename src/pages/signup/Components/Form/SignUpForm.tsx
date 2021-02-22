@@ -140,7 +140,11 @@ export const SignUpForm: FC<Props> = ({
 
         <Grid gap="small" margin={{ top: 'medium' }}>
           <Button primary type="submit" label={getText('signup_form_submit_button')} />
-          <Anchor className={block('no-account-button')} onClick={goToSignIn} label={getText('signup_form_no_account_button')} />
+          <Anchor
+            className={block('no-account-button')}
+            onClick={goToSignIn}
+            label={getText('signup_form_no_account_button')}
+          />
         </Grid>
       </LoadingOverlay>
     </TypedForm>
