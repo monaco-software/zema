@@ -1,7 +1,7 @@
 import { UserObject } from '../../api/schema';
 
 export interface CreateTopicFormFields {
-  topic_name: string;
+  topicName: string;
 }
 
 export interface TopicMessage {

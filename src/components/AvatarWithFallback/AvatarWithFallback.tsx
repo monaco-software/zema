@@ -1,6 +1,7 @@
 import React, { ComponentProps, FC, ReactNode } from 'react';
 import { Avatar } from 'grommet';
 import { User } from 'grommet-icons';
+import { GROMMET_COLORS } from '../App/grommetTheme';
 
 type AvatarProps = ComponentProps<typeof Avatar>;
 type AvatarPropsWithoutSize = Omit<AvatarProps, 'size'>;
@@ -27,8 +28,8 @@ export const AvatarWithFallback: FC<Props> = ({
   }
 
   return (
-    <Avatar size={avatarSize} background="brand" {...restProps}>
-      {placeholderNode ?? <User color="light-1" size={iconSize} />}
+    <Avatar size={avatarSize} background={GROMMET_COLORS.BRAND} {...restProps}>
+      {placeholderNode ?? <User color={GROMMET_COLORS.LIGHT_1} size={iconSize} />}
     </Avatar>
   );
 };

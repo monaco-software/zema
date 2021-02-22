@@ -7,7 +7,7 @@ import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/Av
 import { getUserFullName } from '../../../../common/helpers';
 import { MarkdownSafe } from '../../../../components/MarkdownSafe/MarkdownSafe';
 
-const block = b_.lock('forum-topic-message-list');
+const messageBlock = b_.lock('forum-topic-message');
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   year: 'numeric',
@@ -27,22 +27,22 @@ const Message: FC<MessageProps> = ({ message, isCurrentUser }) => {
   const date = dateFormatter.format(message.createTimestamp);
 
   return (
-    <Box className={block('message', { 'current-user': isCurrentUser })}>
-      <Box className={block('message-author')} direction="row" align="center">
+    <Box className={messageBlock({ 'current-user': isCurrentUser })}>
+      <Box className={messageBlock('author')} direction="row" align="center">
         <AvatarWithFallback url={message.user.avatar} size={36} />
 
         <Box direction="row" align="center">
-          <div className={block('message-author-name')}>
+          <div className={messageBlock('author-name')}>
             {userName}
           </div>
 
-          <div className={block('message-date')}>
+          <div className={messageBlock('date')}>
             {date}
           </div>
         </Box>
       </Box>
 
-      <div className={block('message-text')}>
+      <div className={messageBlock('text')}>
         <MarkdownSafe>
           {message.text}
         </MarkdownSafe>
@@ -51,6 +51,8 @@ const Message: FC<MessageProps> = ({ message, isCurrentUser }) => {
   );
 };
 
+const listBlock = b_.lock('forum-topic-message-list');
+
 interface Props {
   messages: TopicMessage[];
   currentUserId: number;
@@ -58,7 +60,7 @@ interface Props {
 
 export const ForumTopicMessageList: FC<Props> = ({ messages, currentUserId }) => {
   return (
-    <Grid className={block()} gap="20px">
+    <Grid className={listBlock()} gap="20px">
       {messages.map((message) => {
         const isCurrentUser = message.user.id === currentUserId;
 

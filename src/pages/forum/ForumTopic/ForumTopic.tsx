@@ -6,12 +6,13 @@ import { RouteParams, ROUTES } from '../../../common/constants';
 import { useAction, useAuth } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import { getForumTopicById } from '../selectors';
-import { ForumTopicMessageInputModal } from '../Components/MessageInputModal/ForumTopicMessageInputModal';
+import { ForumTopicMessageModal } from '../Components/MessageModal/ForumTopicMessageModal';
 import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
 import { forumActions } from '../reducer';
 import { getCurrentUser } from '../../../store/selectors';
 import { random } from '../../game/lib/utils';
 import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
+import { DEFAULT_TOPIC_ID } from '../constants';
 
 const block = b_.lock('forum-topic');
 
@@ -19,16 +20,19 @@ export const ForumTopic: FC = () => {
   useAuth();
 
   const history = useHistory();
-  const { topicId } = useParams<RouteParams>();
+  const {
+    topicId: topicIdFromRoute,
+  } = useParams<RouteParams>();
 
   const addMessage = useAction(forumActions.addMessage);
 
   const currentUser = useSelector(getCurrentUser);
 
-  const topic = useSelector(getForumTopicById(Number(topicId)));
-  const topicName = topic?.name ?? '';
-  const topicIdNumber = topic?.id ?? -1;
-  const topicMessages = topic?.messages ?? [];
+  const {
+    id: topicId,
+    name: topicName,
+    messages: topicMessages,
+  } = useSelector(getForumTopicById(Number(topicIdFromRoute)));
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,17 +62,17 @@ export const ForumTopic: FC = () => {
         user: currentUser,
         createTimestamp: Date.now(),
       };
-      addMessage({ topicId: topicIdNumber, message });
+      addMessage({ topicId: topicId, message });
       setShowInputModal(false);
       setIsLoading(false);
     }, 1000);
   };
 
   useEffect(() => {
-    if (!topic) {
+    if (topicId === DEFAULT_TOPIC_ID) {
       history.replace(ROUTES.FORUM);
     }
-  }, [topic]);
+  }, [topicId]);
 
   return (
     <div className={block()}>
@@ -85,7 +89,7 @@ export const ForumTopic: FC = () => {
       </div>
 
       {showInputModal &&
-        <ForumTopicMessageInputModal
+        <ForumTopicMessageModal
           value={messageText}
           isLoading={isLoading}
           onChange={onMessageTextChange}

@@ -36,10 +36,10 @@ export const ForumCreateTopicModal: FC<Props> = ({ onClose, formValue, onChange,
             <FormField
               label={getText('form_topic_name')}
               htmlFor="forum_create_topic_name"
-              name="topic_name"
+              name="topicName"
               required
             >
-              <TextInput id="forum_create_topic_name" name="topic_name" maxLength={140} autoFocus />
+              <TextInput id="forum_create_topic_name" name="topicName" maxLength={140} autoFocus />
             </FormField>
 
             <Button

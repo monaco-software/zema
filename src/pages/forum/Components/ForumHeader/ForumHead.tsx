@@ -8,6 +8,8 @@ interface Props {
 }
 
 export const ForumHead: FC<Props> = ({ onTopicCreateClick }) => {
+  const addIcon = <Add size="16px" />;
+
   return (
     <Box direction="row" justify="between" align="center">
       <Heading level={3}>
@@ -15,7 +17,7 @@ export const ForumHead: FC<Props> = ({ onTopicCreateClick }) => {
       </Heading>
 
       <Button
-        icon={<Add size="16px" />}
+        icon={addIcon}
         primary
         size="small"
         label={getText('forum_create_topic_button')}

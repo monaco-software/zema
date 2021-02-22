@@ -5,6 +5,7 @@ import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtend
 import { getText } from '../../../../common/langUtils';
 import { SignInFormFields } from '../../types';
 import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
+import { GROMMET_COLORS } from '../../../../components/App/grommetTheme';
 
 const block = b_.lock('sign-in-form');
 
@@ -45,7 +46,7 @@ export const SignInForm: FC<Props> = ({
 
         {errorMessage && (
           <Box pad={{ horizontal: 'small' }}>
-            <Text color="status-error">{errorMessage}</Text>
+            <Text color={GROMMET_COLORS.STATUS_ERROR}>{errorMessage}</Text>
           </Box>
         )}
 

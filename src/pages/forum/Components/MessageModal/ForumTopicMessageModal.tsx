@@ -1,12 +1,12 @@
-import './forum-topic-message-input-modal.css';
+import './forum-topic-message-modal.css';
 import React, { ChangeEvent, MouseEvent, FC } from 'react';
-import { Layer, Tabs, Tab, TextArea, Box } from 'grommet';
+import { Layer, Tabs, Tab, TextArea, Box, Text } from 'grommet';
 import b_ from 'b_';
 import { getText } from '../../../../common/langUtils';
 import { ButtonWithLoading } from '../../../../components/ButtonWithProgress/ButtonWithLoading';
 import { MarkdownSafe } from '../../../../components/MarkdownSafe/MarkdownSafe';
 
-const block = b_.lock('forum-topic-message-input-modal');
+const block = b_.lock('forum-topic-message-modal');
 
 interface Props {
   value: string;
@@ -16,7 +16,7 @@ interface Props {
   onClose: VoidFunction;
 }
 
-export const ForumTopicMessageInputModal: FC<Props> = ({ value, isLoading, onChange, onSend, onClose }) => {
+export const ForumTopicMessageModal: FC<Props> = ({ value, isLoading, onChange, onSend, onClose }) => {
   return (
     <Layer
       className={block()}
@@ -27,7 +27,7 @@ export const ForumTopicMessageInputModal: FC<Props> = ({ value, isLoading, onCha
     >
       <Tabs className={block('tabs')} alignControls="start" flex>
         <Tab title={getText('forum_topic_input_message_tab')}>
-          <Box className={block('textarea-wrap')}>
+          <Box className={block('textarea-with-controls')}>
             <TextArea
               className={block('textarea')}
               resize={false}
@@ -40,7 +40,9 @@ export const ForumTopicMessageInputModal: FC<Props> = ({ value, isLoading, onCha
               <div className={block('markdown-hint')}>
                 {getText('forum_topic_input_markdown_support')}
                 &nbsp;
-                <span className={block('markdown-hint-highlight')}>{getText('forum_topic_input_markdown')}</span>
+                <Text as="span" weight="bold" size="inherit">
+                  {getText('forum_topic_input_markdown')}
+                </Text>
               </div>
 
               <ButtonWithLoading

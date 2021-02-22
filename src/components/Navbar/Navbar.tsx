@@ -8,6 +8,7 @@ import { ROUTES } from '../../common/constants';
 import { Gamepad } from 'grommet-icons/es6';
 import { Icon } from 'grommet-icons/icons';
 import { getText } from '../../common/langUtils';
+import { GROMMET_COLORS } from '../App/grommetTheme';
 
 const block = b_.lock('navbar');
 
@@ -27,7 +28,7 @@ const NavbarItem: FC<NavbarItemProps> = ({ route, exact, IconComponent, text }) 
   return (
     <NavLink exact={exact} to={route} className={block('link')} activeClassName={block('link', { active: true })}>
       <div className={block('link-icon-wrap')}>
-        <IconComponent color="light-1" size="18" className={block('link-icon')} />
+        <IconComponent color={GROMMET_COLORS.LIGHT_1} size="18" className={block('link-icon')} />
       </div>
       <div className={block('link-text')}>
         {text}

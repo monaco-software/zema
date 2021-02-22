@@ -26,6 +26,7 @@ import {
   phoneValidate,
 } from '../../../../common/validations';
 import { phoneMask } from '../../../../common/masks';
+import { GROMMET_COLORS } from '../../../../components/App/grommetTheme';
 
 const TypedForm = Form as TypedForm<SignUpFormFields>;
 
@@ -134,7 +135,7 @@ export const SignUpForm: FC<Props> = ({
 
         {errorMessage && (
           <Box pad={{ horizontal: 'small' }}>
-            <Text color="status-error">{errorMessage}</Text>
+            <Text color={GROMMET_COLORS.STATUS_ERROR}>{errorMessage}</Text>
           </Box>
         )}
 

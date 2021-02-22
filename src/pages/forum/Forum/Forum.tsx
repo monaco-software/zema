@@ -15,7 +15,7 @@ import { random } from '../../game/lib/utils';
 const block = b_.lock('forum');
 
 const createTopicFormInitValue: CreateTopicFormFields = {
-  topic_name: '',
+  topicName: '',
 };
 
 export const Forum: FC = () => {
@@ -25,29 +25,29 @@ export const Forum: FC = () => {
 
   const addTopic = useAction(forumActions.addTopic);
 
-  const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false);
-  const onTopicCreateClick = () => setIsCreateTopicModalOpen(true);
-  const onCreateTopicModalClose = () => setIsCreateTopicModalOpen(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const onTopicCreateClick = () => setIsModalOpen(true);
+  const onCreateTopicModalClose = () => setIsModalOpen(false);
 
-  const [isCreateTopicFormLoading, setIsCreateTopicFormLoading] = useState(false);
+  const [isFormLoading, setIsFormLoading] = useState(false);
 
-  const [createTopicFormFields, setCreateTopicFormFields] = useState<CreateTopicFormFields>(createTopicFormInitValue);
-  const onCreateTopicFormChange = (value: CreateTopicFormFields) => setCreateTopicFormFields(value);
+  const [formFields, setFormFields] = useState<CreateTopicFormFields>(createTopicFormInitValue);
+  const onCreateTopicFormChange = (value: CreateTopicFormFields) => setFormFields(value);
   const onCreateTopicFormSubmit = ({ value }: FormExtendedEvent<CreateTopicFormFields>) => {
     // TODO: запрос в апи
     console.log(value);
-    setIsCreateTopicFormLoading(true);
+    setIsFormLoading(true);
 
     setTimeout(() => {
       addTopic({
         id: random(10000),
-        name: value.topic_name,
+        name: value.topicName,
         createTimestamp: Date.now(),
         messages: [],
       });
-      setIsCreateTopicFormLoading(false);
-      setIsCreateTopicModalOpen(false);
-      setCreateTopicFormFields(createTopicFormInitValue);
+      setIsFormLoading(false);
+      setIsModalOpen(false);
+      setFormFields(createTopicFormInitValue);
     }, 1000);
   };
 
@@ -59,13 +59,13 @@ export const Forum: FC = () => {
         <ForumTopicsList topics={topics} />
       </div>
 
-      {isCreateTopicModalOpen &&
+      {isModalOpen &&
         <ForumCreateTopicModal
-          formValue={createTopicFormFields}
+          formValue={formFields}
           onClose={onCreateTopicModalClose}
           onChange={onCreateTopicFormChange}
           onSubmit={onCreateTopicFormSubmit}
-          isLoading={isCreateTopicFormLoading}
+          isLoading={isFormLoading}
         />
       }
     </div>

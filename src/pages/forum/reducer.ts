@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ForumState, Topic, TopicMessage } from './types';
+import { ForumState, TopicMessage } from './types';
 import { UserObject } from '../../api/schema';
 
 // TODO: удалить, когда появится АПИ
@@ -37,6 +37,11 @@ const initialState: ForumState = {
   topics: topicsMock,
 };
 
+interface AddMessagePayload {
+  topicId: number;
+  message: TopicMessage;
+}
+
 const forum = createSlice({
   name: 'forum',
   initialState,
@@ -44,16 +49,16 @@ const forum = createSlice({
     setTopics(state, { payload }: PayloadAction<ForumState['topics']>) {
       state.topics = payload;
     },
-    addTopic(state, { payload }: PayloadAction<Topic>) {
+    addTopic(state, { payload }: PayloadAction<ForumState['topics'][number]>) {
       state.topics.unshift(payload);
     },
-    addMessage(state, { payload }: PayloadAction<{ topicId: number; message: TopicMessage }>) {
-      const topicIndex = state.topics.findIndex((item) => item.id === payload.topicId);
-      if (topicIndex === -1) {
+    addMessage(state, { payload }: PayloadAction<AddMessagePayload>) {
+      const topic = state.topics.find((item) => item.id === payload.topicId);
+      if (!topic) {
         return;
       }
 
-      state.topics[topicIndex].messages.push(payload.message);
+      topic.messages.push(payload.message);
     },
   },
 });

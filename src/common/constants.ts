@@ -11,6 +11,6 @@ export enum ROUTES {
   GAME_OVER = '/game/over',
 }
 
-export type RouteParams = Partial<{
-  topicId: string;
-}>;
+export interface RouteParams {
+  topicId?: string;
+}

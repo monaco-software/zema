@@ -66,13 +66,13 @@ export const App: FC = () => {
 
             <Route path={ROUTES.LEADERBOARD} component={Leaderboard} />
 
-            <Route exact path={ROUTES.FORUM} component={Forum} />
-
             <Route path={ROUTES.FORUM_TOPIC} component={ForumTopic} />
 
-            <Route exact path={ROUTES.GAME} component={Game} />
+            <Route path={ROUTES.FORUM} component={Forum} />
 
             <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
+
+            <Route path={ROUTES.GAME} component={Game} />
 
             <Route path={ROUTES.GAME_OVER} component={GameOver} />
           </Switch>
