@@ -13,6 +13,7 @@ import { asyncAppActions } from '../../store/asyncActions';
 import { getLeaderboardRecords } from './selectors';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { LeaderboardTablePlaceholder } from './Components/TablePlaceholder/LeaderboardTablePlaceholder';
+import { Container } from '../../components/Container/Container';
 
 const block = b_.lock('leaderboard');
 
@@ -40,7 +41,7 @@ export const Leaderboard: FC = () => {
   }, []);
 
   return (
-    <div className={block()}>
+    <Container className={block()}>
       <Heading textAlign="center" level="2">
         {getText('leaderboard_page_header')}
       </Heading>
@@ -73,6 +74,6 @@ export const Leaderboard: FC = () => {
           {!needTable && <LeaderboardTablePlaceholder />}
         </>
       }
-    </div>
+    </Container>
   );
 };

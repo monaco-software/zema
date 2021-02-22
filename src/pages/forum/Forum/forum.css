@@ -1,12 +1,3 @@
-.forum {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 48px 96px;
-}
-
 .forum__topics-wrap {
   margin-top: 20px;
   overflow: auto;

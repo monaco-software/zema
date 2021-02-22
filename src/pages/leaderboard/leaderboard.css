@@ -1,12 +1,3 @@
-.leaderboard {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 48px 96px;
-}
-
 .leaderboard__table-wrap {
   margin-top: 20px;
   overflow: auto;

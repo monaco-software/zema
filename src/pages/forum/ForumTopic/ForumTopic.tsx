@@ -13,6 +13,7 @@ import { getCurrentUser } from '../../../store/selectors';
 import { random } from '../../game/lib/utils';
 import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
 import { DEFAULT_TOPIC_ID } from '../constants';
+import { Container } from '../../../components/Container/Container';
 
 const block = b_.lock('forum-topic');
 
@@ -75,7 +76,7 @@ export const ForumTopic: FC = () => {
   }, [topicId]);
 
   return (
-    <div className={block()}>
+    <Container className={block()}>
       <ForumTopicHeader
         topicName={topicName}
         onMessageAddClick={onModalOpen}
@@ -97,7 +98,7 @@ export const ForumTopic: FC = () => {
           onClose={onModalClose}
         />
       }
-    </div>
+    </Container>
   );
 };
 

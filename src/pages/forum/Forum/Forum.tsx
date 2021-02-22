@@ -4,6 +4,7 @@ import b_ from 'b_';
 import { useAction, useAuth } from '../../../hooks';
 import { ForumHead } from '../Components/ForumHeader/ForumHead';
 import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
+import { Container } from '../../../components/Container/Container';
 import { CreateTopicFormFields } from '../types';
 import { FormExtendedEvent } from 'grommet';
 import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';
@@ -52,7 +53,7 @@ export const Forum: FC = () => {
   };
 
   return (
-    <div className={block()}>
+    <Container className={block()}>
       <ForumHead onTopicCreateClick={onTopicCreateClick} />
 
       <div className={block('topics-wrap')}>
@@ -68,6 +69,6 @@ export const Forum: FC = () => {
           isLoading={isFormLoading}
         />
       }
-    </div>
+    </Container>
   );
 };
