@@ -50,15 +50,15 @@
 }
 
 .leaderboard-top__user:nth-child(1) .leaderboard-top__user-place {
-  background-color: #f9de7c;
+  background-color: var(--gold);
 }
 
 .leaderboard-top__user:nth-child(2) .leaderboard-top__user-place {
-  background-color: #e0e3e6;
+  background-color: var(--silver);
 }
 
 .leaderboard-top__user:nth-child(3)  .leaderboard-top__user-place {
-  background-color: #e8c19b;
+  background-color: var(--bronze);
 }
 
 .leaderboard-top__user-avatar {

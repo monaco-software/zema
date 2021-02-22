@@ -13,12 +13,12 @@
 .leaderboard-table__cell {
   height: var(--leaderboard-table-cell-height);
   padding: 5px var(--leaderboard-table-cell-horizontal-padding);
-  background-color: #e0d6f4;
+  background-color: var(--brand-light-2);
   font-weight: 500;
 }
 
 .leaderboard-table__row_current-user .leaderboard-table__cell {
-  background-color: #ffeac1;
+  background-color: var(--yellow-light-1);
 }
 
 .leaderboard-table__cell:first-child {

@@ -15,7 +15,7 @@
 }
 
 .forum-topics-list__topic-name {
-  color: #444444;
+  color: var(--black);
   border-left: 3px solid var(--brand);
   padding: 5px 0 5px 15px;
   word-break: break-word;

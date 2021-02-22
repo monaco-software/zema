@@ -12,7 +12,7 @@
 }
 
 .forum-topic-message_current-user {
-  background-color: #f3eeff;
+  background-color: var(--brand-light-3);
 }
 
 .forum-topic-message__author-name,
