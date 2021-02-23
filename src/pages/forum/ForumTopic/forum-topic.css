@@ -1,0 +1,4 @@
+.forum-topic__messages-list-wrap {
+  margin-top: 20px;
+  overflow-y: auto;
+}

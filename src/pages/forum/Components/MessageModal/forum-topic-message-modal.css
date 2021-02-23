@@ -1,0 +1,29 @@
+.forum-topic-message-modal {
+  width: 100%;
+  height: 40vh;
+  padding: 20px;
+}
+
+.forum-topic-message-modal__textarea-with-controls {
+  padding-top: 10px;
+  height: 100%;
+}
+
+.forum-topic-message-modal__textarea {
+  flex-grow: 1;
+}
+
+.forum-topic-message-modal__controls {
+  margin-top: 10px;
+}
+
+.forum-topic-message-modal__markdown-hint {
+  font-size: 12px;
+}
+
+.forum-topic-message-modal__preview {
+  padding: 10px;
+  height: 100%;
+  overflow-y: auto;
+  word-break: break-word;
+}
