@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { getCurrentUser } from '../../store/selectors';
 import { LeaderboardTable } from './Components/Table/LeaderboardTable';
 import { TOP_USERS_COUNT } from './constants';
-import { asyncAppActions } from '../../store/asyncActions';
+import { asyncLeaderboardActions } from './asyncActions';
 import { getLeaderboardRecords } from './selectors';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { LeaderboardTablePlaceholder } from './Components/TablePlaceholder/LeaderboardTablePlaceholder';
@@ -20,7 +20,7 @@ const block = b_.lock('leaderboard');
 export const Leaderboard: FC = () => {
   useAuth();
 
-  const getLeaderboard = useAsyncAction(asyncAppActions.getLeaderboard);
+  const getLeaderboard = useAsyncAction(asyncLeaderboardActions.getLeaderboard);
 
   const currentUser = useSelector(getCurrentUser);
   const records = useSelector(getLeaderboardRecords);

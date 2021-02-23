@@ -1,4 +1,3 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает сообщения на весь экран
 
 import React, { FC, useEffect, useRef } from 'react';
@@ -10,8 +9,8 @@ import { getTitle } from '../selectors';
 
 export const TitleLayer: FC = () => {
   const title = useSelector(getTitle);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const requestRef = useRef<number>();
 
   const draw = () => {
     if (!canvasRef.current) { return; }
@@ -23,7 +22,8 @@ export const TitleLayer: FC = () => {
       ctx.fillStyle = '#FFFFFFDD';
       ctx.textBaseline = 'top';
       const lineHeight = TITLE_FONT_SIZE + 10;
-      ctx.font = `${TITLE_FONT_SIZE}px Bangers2`;
+      ctx.font = `${TITLE_FONT_SIZE}px Bangers2, Arial`;
+
       const lines = title.split('\n');
       lines.forEach((line: string, index: number) => {
         const textWidth = ctx.measureText(line).width;
@@ -34,17 +34,23 @@ export const TitleLayer: FC = () => {
   };
 
   useEffect(() => {
-    draw();
+    requestRef.current = window.requestAnimationFrame(draw);
   }, [title]);
 
   // init
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Effects canvas not found');
+      throw new Error('Title canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (

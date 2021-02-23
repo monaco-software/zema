@@ -1,11 +1,10 @@
-/** eslint prefer-const: "error" */
 // Модуль отображает сообщения комбо
 
 import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { COMBO_DISPLAY_PHASES, FRAME } from '../constants';
-import { COMBO_FONT_SIZE } from '../setup';
+import { COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
 import { getCombo, getCurrentLevel } from '../selectors';
 import { decimalToHex, distort, fps } from '../lib/utils';
 import levels from '../levels';
@@ -16,6 +15,8 @@ export const ComboLayer: FC = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const comboDisplayPhase = useRef(0);
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
 
   const draw = () => {
     if (!canvasRef.current) { return; }
@@ -32,7 +33,7 @@ export const ComboLayer: FC = () => {
       ctx.fillStyle = `#FFFF00${decimalToHex(opacity)}`;
 
       let lineHeight = distort(COMBO_FONT_SIZE, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.75);
-      lineHeight += combo * 4;
+      lineHeight += combo * 5;
       ctx.font = `${lineHeight}px Bangers2`;
       let message = `x  ${combo}  combo`;
 
@@ -43,9 +44,9 @@ export const ComboLayer: FC = () => {
 
     if (comboDisplayPhase.current <= COMBO_DISPLAY_PHASES) {
       comboDisplayPhase.current += 1;
-      setTimeout(() => {
-        window.requestAnimationFrame(draw);
-      }, fps(32));
+      timeoutRef.current = window.setTimeout(() => {
+        requestRef.current = window.requestAnimationFrame(draw);
+      }, fps(COMBO_MESSAGE_SPEED));
     }
   };
 
@@ -60,10 +61,16 @@ export const ComboLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Effects canvas not found');
+      throw new Error('Combo canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (
