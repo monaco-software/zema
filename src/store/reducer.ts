@@ -13,6 +13,7 @@ const initialState: AppState = {
     phone: '',
   },
   isSignedIn: false,
+  notification: null,
 };
 
 const app = createSlice({

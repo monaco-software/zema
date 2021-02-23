@@ -14,7 +14,7 @@ export const AppNotification: FC = ({}) => {
 
   const onClose = () => {
     clearTimeout(timeoutRef.current);
-    setNotification(undefined);
+    setNotification(null);
   };
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const AppNotification: FC = ({}) => {
     }
 
     timeoutRef.current = window.setTimeout(() => {
-      setNotification(undefined);
+      setNotification(null);
     }, 4000);
 
     return () => {

@@ -5,8 +5,8 @@ import { ReactNode } from 'react';
 export interface AppState {
   user: UserObject;
   isSignedIn: boolean;
-  notification?: {
+  notification: {
     status: NotificationStatus;
     message: ReactNode;
-  };
+  } | null;
 }
