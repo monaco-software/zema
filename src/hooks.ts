@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { ROUTES } from './common/constants';
 import { AppThunk, Dispatch } from './store/store';
 
-export const useAction = <P>(action: ActionCreatorWithPayload<P>) => {
+export const useAction = <P>(action: undefined extends P ? ActionCreatorWithoutPayload : ActionCreatorWithPayload<P>) => {
   const dispatch = useDispatch();
 
   return bindActionCreators(action, dispatch);
@@ -39,10 +39,4 @@ export const useAuth = (needAuth = true) => {
 
     history.replace(ROUTES.SIGNIN);
   }, [isSignedIn, needAuth]);
-};
-
-export const useOperation = (action: ActionCreatorWithoutPayload) => {
-  const dispatch = useDispatch();
-
-  return bindActionCreators(action, dispatch);
 };

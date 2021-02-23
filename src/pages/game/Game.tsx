@@ -9,7 +9,7 @@ import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
 import { ROUTES } from '../../common/constants';
 
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
-import { useOperation, useAction, useAsyncAction } from '../../hooks';
+import { useAction, useAsyncAction } from '../../hooks';
 import { gameActions } from './reducer';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 import { getAllowedLevels } from '../gameLevels/selectors';
@@ -35,8 +35,7 @@ import { uniqAndSort } from '../../common/utils';
 const block = b_.lock('game');
 
 export const Game: FC = () => {
-  const resetScore = useOperation(gameActions.resetScore);
-
+  const resetScore = useAction(gameActions.resetScore);
   const setTitle = useAction(gameActions.setTitle);
   const setRemainColors = useAction(gameActions.setRemainColors);
   const setShotPath = useAction(gameActions.setShotPath);

@@ -12,15 +12,14 @@ import Ball from '../lib/ball';
 import levels from '../levels';
 import { getCloserPoint, getLineLen } from '../lib/geometry';
 import { fps } from '../lib/utils';
-import { useAction, useOperation } from '../../../hooks';
+import { useAction } from '../../../hooks';
 
 interface Props {
   ballsPath: number[][];
 }
 
 export const BallsLayer: FC<Props> = ({ ballsPath }) => {
-  const incrementCombo = useOperation(gameActions.incrementCombo);
-
+  const incrementCombo = useAction(gameActions.incrementCombo);
   const increaseScore = useAction(gameActions.increaseScore);
   const setExplosion = useAction(gameActions.setExplosion);
   const setBulletState = useAction(gameActions.setBulletState);

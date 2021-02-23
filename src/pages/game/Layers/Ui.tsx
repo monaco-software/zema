@@ -9,11 +9,10 @@ import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
 import { getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
 import levels from '../levels';
-import { useOperation, useAction } from '../../../hooks';
+import { useAction } from '../../../hooks';
 
 export const UiLayer: FC = () => {
-  const resetCombo = useOperation(gameActions.resetCombo);
-
+  const resetCombo = useAction(gameActions.resetCombo);
   const setBulletState = useAction(gameActions.setBulletState);
   const setAngle = useAction(gameActions.setAngle);
   const setShotPath = useAction(gameActions.setShotPath);
