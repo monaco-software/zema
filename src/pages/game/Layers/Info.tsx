@@ -24,8 +24,8 @@ export const InfoLayer: FC = () => {
     ctx.fillStyle = '#00000050';
     ctx.fillRect(0, FRAME.HEIGHT - 15, FRAME.WIDTH, FRAME.HEIGHT);
 
-    const render = padWithSpaces('render: ' + ((Ball.writeTime + Ball.readTime) / Ball.updates * 1000).toFixed(2).toString(), 15);
-    // const divider = padWithSpaces('divider: ' + Ball.divider.toString(), 15);
+    const renderValue = (Ball.writeTime + Ball.readTime) / Ball.updates * 1000;
+    const render = padWithSpaces('render: ' + renderValue.toFixed(2).toString(), 15);
 
     const updates = padWithSpaces('updates: ' + Ball.updates.toString(), 18);
 
@@ -36,8 +36,8 @@ export const InfoLayer: FC = () => {
     const hitRate =
       padWithSpaces('hits rate: ' + (Ball.hits / Ball.writes).toFixed(2).toString(), 20);
 
-    const updatesPerSecond =
-      padWithSpaces('updates/sec:' + (Ball.updates / (Ball.writeTime + Ball.readTime) * 1000).toFixed(2).toString(), 16);
+    const updatesValue = Ball.updates / (Ball.writeTime + Ball.readTime) * 1000;
+    const updatesPerSecond = padWithSpaces('upd/sec:' + updatesValue.toFixed(2).toString(), 15);
 
     const message =
       render +

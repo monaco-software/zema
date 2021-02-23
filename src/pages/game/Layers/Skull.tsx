@@ -24,7 +24,11 @@ export const SkullLayer: FC = () => {
     ctx.shadowBlur = 15;
 
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    ctx.drawImage(skull.current.image, levels[level].skullPosition.x - SKULL_RADIUS, levels[level].skullPosition.y - SKULL_RADIUS);
+    ctx.drawImage(
+      skull.current.image,
+      levels[level].skullPosition.x - SKULL_RADIUS,
+      levels[level].skullPosition.y - SKULL_RADIUS
+    );
   };
 
   // init
