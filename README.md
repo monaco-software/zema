@@ -31,18 +31,18 @@
 
 <details><summary>Библиотеки и технологии</summary>
 
-- TypeScript,
-- React,
-- Redux,
-- Canvas,
-- CSS,
-- Webpack,
-- ESLint,
-- localStorage API
+- TypeScript
+- React
+- Redux
+- Canvas
+- CSS
+- Webpack
+- ESLint
 - Docker
-- Jest,
-- Web Workers,
+- Jest
+- Web Workers
 - Fullscreen API
+- LocalStorage API
 
 </details>
 
@@ -107,7 +107,7 @@ npm run dev
 ```
 запуск тестов
 ```
-npm run test 
+npm run test
 ```
 проверка типов
 ```shell script
@@ -137,7 +137,7 @@ npm run lint
 ___
 
 ## Лицензия
-Продукт распространяется по лицензии [Массачусетскго технологического института](https://opensource.org/licenses/MIT). Изменение, копирование, вырезание и вставка разрешены при соблюденни условий данной лицензии.
+Продукт распространяется по [лицензии Массачусетскго технологического института](https://opensource.org/licenses/MIT). Изменение, копирование, вырезание и вставка разрешены при соблюденни условий данной лицензии.
 
 ___
 
