@@ -6,7 +6,11 @@ import { Alert, FormClose, StatusGood, StatusInfo } from 'grommet-icons';
 
 const block = b_.lock('notification');
 
-export type NotificationStatus = 'info' | 'success' | 'error';
+export enum NotificationStatus {
+  INFO = 'info',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
 
 interface StatusIconProps {
   status: NotificationStatus;
@@ -16,11 +20,11 @@ const StatusIcon: FC<StatusIconProps> = ({ status }) => {
   const size = '20px';
 
   switch (status) {
-    case 'info':
+    case NotificationStatus.INFO:
       return <StatusInfo size={size} />;
-    case 'success':
+    case NotificationStatus.SUCCESS:
       return <StatusGood size={size} />;
-    case 'error':
+    case NotificationStatus.ERROR:
       return <Alert size={size} />;
     default:
       return null;
@@ -28,14 +32,18 @@ const StatusIcon: FC<StatusIconProps> = ({ status }) => {
 };
 
 interface Props {
-  status?: NotificationStatus;
-  message: ReactNode;
+  notification: {
+    status?: NotificationStatus;
+    message: ReactNode;
+  };
   onClose?: VoidFunction;
 }
 
 export const Notification: FC<Props> = ({
-  status = 'info',
-  message,
+  notification: {
+    status = NotificationStatus.INFO,
+    message,
+  },
   onClose,
 }) => {
   const closeIcon = <FormClose />;

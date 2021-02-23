@@ -37,7 +37,7 @@ export const AppNotification: FC = ({}) => {
 
   return (
     <Notification
-      {...notification}
+      notification={notification}
       onClose={onClose}
     />
   );

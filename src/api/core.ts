@@ -1,5 +1,6 @@
 import { AppThunk } from '../store/store';
 import { appActions } from '../store/reducer';
+import { NotificationStatus } from '../components/Notification/Notification';
 
 type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
 
@@ -41,7 +42,7 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
               : error.message || JSON.stringify(error);
 
             dispatch(appActions.setNotification({
-              status: 'error',
+              status: NotificationStatus.ERROR,
               message: errorString,
             }));
           }
