@@ -25,8 +25,8 @@ const app = createSlice({
     setIsSignedIn(state, { payload }: PayloadAction<AppState['isSignedIn']>) {
       state.isSignedIn = payload;
     },
-    setError(state, { payload }: PayloadAction<AppState['error']>) {
-      state.error = payload;
+    setNotification(state, { payload }: PayloadAction<AppState['notification']>) {
+      state.notification = payload;
     },
   },
 });
