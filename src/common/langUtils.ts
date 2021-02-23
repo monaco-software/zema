@@ -36,6 +36,18 @@ const langPack = {
   leaderboard_page_header: 'Рейтинг',
   leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
   leaderboard_table_placeholder_cta: 'Играть',
+  forum_page_header: 'Форум',
+  forum_create_topic_button: 'Создать тему',
+  forum_create_topic_modal_header: 'Создать тему',
+  form_topic_name: 'Название',
+  forum_create_topic_form_submit: 'Создать',
+  forum_topic_create_date: 'Создана:',
+  forum_topic_input_message_tab: 'Сообщение',
+  forum_topic_input_preview_tab: 'Предпросмотр',
+  forum_topic_input_markdown_support: 'С поддержкой',
+  forum_topic_input_markdown: 'Markdown',
+  forum_topic_input_submit: 'Отправить',
+  forum_topic_send_message_button: 'Написать сообщение',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

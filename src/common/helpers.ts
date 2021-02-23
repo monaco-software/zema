@@ -9,3 +9,11 @@ export const getUserWithFullAvatarUrl = (user: UserObject): UserObject => {
     avatar: user.avatar && getAvatarFullPath(user.avatar),
   };
 };
+
+export const getUserFullName = ({ display_name, first_name, second_name }: UserObject) => {
+  if (display_name) {
+    return display_name;
+  }
+
+  return `${first_name} ${second_name}`;
+};

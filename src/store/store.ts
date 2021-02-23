@@ -3,12 +3,14 @@ import { appReducer } from './reducer';
 import { accountReducer } from '../pages/account/reducer';
 import { gameReducer } from '../pages/game/reducer';
 import { leaderboardReducer } from '../pages/leaderboard/reducer';
+import { forumReducer } from '../pages/forum/reducer';
 
 const reducer = combineReducers({
   app: appReducer,
   account: accountReducer,
   game: gameReducer,
   leaderboard: leaderboardReducer,
+  forum: forumReducer,
 });
 
 export const store = configureStore({

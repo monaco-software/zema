@@ -30,6 +30,9 @@ module.exports = {
     "@typescript-eslint/no-unnecessary-type-arguments": "off",
     'linebreak-style': 0,
     "no-else-return": "error",
+    "max-len": ["error", {
+      code: 120,
+    }],
 
 
     // TODO: Удалить эти правила, когда в @vkontakte/eslint-config обновят @typescript-eslint/eslint-plugin и @typescript-eslint/parser

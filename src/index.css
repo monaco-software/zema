@@ -1,4 +1,4 @@
-/* stylelint-disable plugin/selector-bem-pattern, selector-max-id */
+/* stylelint-disable plugin/selector-bem-pattern, selector-max-id, selector-pseudo-class-blacklist, declaration-property-value-blacklist */
 
 *,
 *::after,
@@ -18,4 +18,16 @@ body {
 a {
   color: var(--brand);
   text-decoration: none;
+}
+
+:root {
+  --brand-light-1: #cfb6ee;
+  --brand-light-2: #e0d6f4;
+  --brand-light-3: #f3eeff;
+
+  --yellow-light-1: #ffeac1;
+
+  --gold: #f9de7c;
+  --silver: #e0e3e6;
+  --bronze: #e8c19b;
 }

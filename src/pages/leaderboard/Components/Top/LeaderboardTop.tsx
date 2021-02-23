@@ -4,6 +4,7 @@ import { Box } from 'grommet';
 import b_ from 'b_';
 import { LeaderboardRecord } from '../../types';
 import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/AvatarWithFallback';
+import { getUserFullName } from '../../../../common/helpers';
 
 const block = b_.lock('leaderboard-top');
 
@@ -14,7 +15,7 @@ interface LeaderboardTopUserProps {
 }
 
 const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, record, isCurrentUser }) => {
-  const name = record.display_name ?? `${record.first_name} ${record.second_name}`;
+  const name = getUserFullName(record);
 
   const points = record.points.toLocaleString();
 

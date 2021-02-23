@@ -1,0 +1,37 @@
+.forum-topic-message-list {
+  padding: 10px 20px;
+}
+
+/* @define forum-topic-message */
+
+.forum-topic-message {
+  border: 2px solid var(--brand);
+  border-radius: 8px;
+  padding: 20px;
+  word-break: break-word;
+}
+
+.forum-topic-message_current-user {
+  background-color: var(--brand-light-3);
+}
+
+.forum-topic-message__author-name,
+.forum-topic-message__date {
+  margin-left: 10px;
+}
+
+.forum-topic-message__author-name {
+  font-weight: 700;
+}
+
+.forum-topic-message__date {
+  font-size: 12px;
+  line-height: 1.1;
+  color: var(--dark-6);
+}
+
+.forum-topic-message__text {
+  margin: 10px 0 0 46px;
+}
+
+/** @end */
