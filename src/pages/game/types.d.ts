@@ -1,3 +1,5 @@
+import Ball from './lib/ball';
+
 export interface spriteOptions {
   image: HTMLImageElement;
   frameIndex: number;
@@ -34,11 +36,20 @@ export interface Level {
   start: number[];
   curve: number[][];
   rollOut: number;
-  backgroundUrl: string;
+  background: string;
+  thumbnail: string;
 }
 
 export interface Physics {
   pusherOffset: number;
   impacts: number[];
+}
+
+declare global {
+  interface Window {
+    debugBallsAmount: number;
+    debugPusherPosition: number;
+    staticBall: Ball;
+  }
 }
 

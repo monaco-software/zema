@@ -4,7 +4,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { FRAME } from '../constants';
-import { SCORE_FONT_SIZE } from '../setup';
+import { SCORE_FONT_SIZE, SCORE_ROLLING_SPEED } from '../setup';
 import { getCurrentLevel, getScore } from '../selectors';
 import levels from '../levels';
 import { fps } from '../lib/utils';
@@ -16,6 +16,9 @@ export const ScoreLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scoreFontSize = useRef(SCORE_FONT_SIZE);
   const tmpScore = useRef(0);
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
+
   const grow = 10;
 
   const draw = () => {
@@ -50,16 +53,16 @@ export const ScoreLayer: FC = () => {
     }
     // если еще нужно что-то анимировать
     if (tmpScore.current < score || scoreFontSize.current > SCORE_FONT_SIZE ) {
-      setTimeout(() => {
-        window.requestAnimationFrame(draw);
-      }, fps(32));
+      timeoutRef.current = window.setTimeout(() => {
+        requestRef.current = window.requestAnimationFrame(draw);
+      }, fps(SCORE_ROLLING_SPEED));
     }
   };
 
   useEffect(() => {
     if (score !== 0 ) {
       scoreFontSize.current = SCORE_FONT_SIZE + grow;
-      draw();
+      requestRef.current = window.requestAnimationFrame(draw);
     }
   }, [score]);
 
@@ -67,10 +70,17 @@ export const ScoreLayer: FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      throw new Error('Effects canvas not found');
+      throw new Error('Score canvas not found');
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (

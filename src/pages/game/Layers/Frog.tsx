@@ -1,8 +1,7 @@
-/* eslint prefer-const: "warn" */
 // Модуль отображает лягушку
 
 import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   BALL_RADIUS,
@@ -24,14 +23,16 @@ import {
 import { gameActions } from '../reducer';
 import levels from '../levels';
 import Frog from '../lib/frog';
-import bullet from '../lib/bullet';
 import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
-
-import { BULLET_SPEED } from '../setup';
+import Ball from '../lib/ball';
+import { BULLET_ARMING_SPEED } from '../setup';
+import { useAction } from '../../../hooks';
 
 export const FrogLayer: FC = () => {
-  const dispatch = useDispatch();
+  const setBulletPosition = useAction(gameActions.setBulletPosition);
+  const setBulletState = useAction(gameActions.setBulletState);
+  const setBulletColor = useAction(gameActions.setBulletColor);
 
   const bulletState = useSelector(getBulletState);
   const gamePhase = useSelector(getGamePhase);
@@ -41,19 +42,27 @@ export const FrogLayer: FC = () => {
   const angle = useSelector(getAngle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const timeoutRef = useRef<number>();
+  const requestRef = useRef<number>();
+
   const frog = useMemo(() => new Frog(), []);
+  const bullet = useMemo(() => new Ball(), []);
 
   const drawFrog = () => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.translate(levels[level].frogPosition.x, levels[level].frogPosition.y);
-    ctx.rotate(angle);
+    ctx.rotate(angle + Math.PI / 2);
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
-
     ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
+
     if (bulletState === BULLET_STATE.ARMING || bulletState === BULLET_STATE.ARMED) {
-      bullet.update(bulletPosition + bullet.positionOffset, Math.PI * 1.5);
+      if (bulletState === BULLET_STATE.ARMING) {
+        bullet.update(bulletPosition + bullet.rotationOffset, Math.PI * 1.5);
+      }
       coverWithLip(bullet.ctx, BALL_RADIUS, bulletPosition - 35, 40);
       ctx.drawImage(bullet.canvas, 35, -bulletPosition + 25);
     }
@@ -62,48 +71,63 @@ export const FrogLayer: FC = () => {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     if (bulletState === BULLET_STATE.ARMING) {
       // выкатываем шар из брюха
       if (bulletPosition < BULLET_ARMED_POSITION) {
-        setTimeout(() => {
-          dispatch(gameActions.setBulletPosition(bulletPosition + 1));
-        }, fps(BULLET_SPEED));
+        timeoutRef.current = window.setTimeout(() => {
+          setBulletPosition(bulletPosition + 1);
+        }, fps(BULLET_ARMING_SPEED));
       } else {
-        dispatch(gameActions.setBulletState(BULLET_STATE.ARMED));
+        setBulletState(BULLET_STATE.ARMED);
       }
     }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
   }, [bulletPosition]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
-    drawFrog();
+    if (!ctx) {
+      return;
+    }
+    requestRef.current = window.requestAnimationFrame(drawFrog);
   }, [angle]);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     if (bulletState === BULLET_STATE.ARMING) {
       bullet.color = remainColors[random(remainColors.length)];
-      bullet.positionOffset = random(bullet.numberOfFrames);
-      dispatch(gameActions.setBulletPosition(BULLET_START_POSITION));
+      bullet.rotationOffset = random(bullet.numberOfFrames);
+      setBulletColor(bullet.color);
+      setBulletPosition(BULLET_START_POSITION + 1);
     }
-    if (bulletState === BULLET_STATE.IDLE) {
-      bullet.position = BULLET_START_POSITION;
+    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
+      setBulletPosition(BULLET_START_POSITION);
     }
-    drawFrog();
+    if (gamePhase === GAME_PHASE.STARTED) {
+      requestRef.current = window.requestAnimationFrame(drawFrog);
+    }
   }, [bulletState]);
 
   useEffect(() => {
     if (gamePhase === GAME_PHASE.ENDING) {
-      dispatch(gameActions.setBulletState(BULLET_STATE.IDLE));
+      setBulletState(BULLET_STATE.IDLE);
     }
     if (gamePhase === GAME_PHASE.STARTED) {
-      dispatch(gameActions.setBulletState(BULLET_STATE.ARMING));
+      setBulletState(BULLET_STATE.ARMING);
     }
-    drawFrog();
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, [gamePhase]);
 
   // init
@@ -115,8 +139,16 @@ export const FrogLayer: FC = () => {
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
-    drawFrog();
+    if (!ctx) {
+      return;
+    }
+    requestRef.current = window.requestAnimationFrame(drawFrog);
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return (

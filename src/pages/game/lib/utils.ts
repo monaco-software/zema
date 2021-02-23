@@ -1,3 +1,8 @@
+export function padWithSpaces(text: string, size: number): string {
+  if (text.length >= size) { return text; }
+  const diff = size - text.length;
+  return text + ' '.repeat(diff);
+}
 
 export function random(number: number): number {
   return Math.floor(Math.random() * number);
@@ -23,4 +28,12 @@ export function distort(max: number, phases: number, phase: number, gain = 0.5) 
 export function fps(frames: number): number {
   return 1000 * (1 / frames);
 }
+
+// export function bufferDownloader() {
+//   const link = document.createElement('a');
+//   if (!link) { return; }
+//   link.setAttribute('download', 'HugePaper.png');
+//   link.setAttribute('href', Ball.bufferCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
+//   link.click();
+// }
 

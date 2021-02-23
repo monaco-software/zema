@@ -1,20 +1,26 @@
 import { Level } from './types';
 import { BALL_COLORS } from './constants';
+import level1Thumb from './assets/images/thumbnails/level_1_thumb.png';
+import level2Thumb from './assets/images/thumbnails/level_2_thumb.png';
+import level3Thumb from './assets/images/thumbnails/level_3_thumb.png';
+
+import level1Background from './assets/images/backgrounds/level_1_back.png';
+import level2Background from './assets/images/backgrounds/level_2_back.png';
+import level3Background from './assets/images/backgrounds/level_3_back.png';
 
 const levels: Level[] = [{
-  title: `Level 1
-
-A long, long time ago
-somewhere in
-south, south
-America`,
-  speed: 25, // fps и количество тиков pusher в секунду
+  title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  speed: 20, // fps и количество тиков pusher в секунду
   balls: 60,
-  ballColors: [BALL_COLORS.YELLOW, BALL_COLORS.PINK],
+  ballColors: [
+    BALL_COLORS.RED,
+    BALL_COLORS.GREEN,
+    BALL_COLORS.BLUE,
+  ],
   frogPosition: { x: 303, y: 310 },
-  skullPosition: { x: 515, y: 310 },
+  skullPosition: { x: 567, y: 362 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 60, // как далеко выкатывать в начале уровня
+  rollOut: 50, // как далеко выкатывать в начале уровня
   start: [421, 0], // начало кривой Безье
   curve: [ // контрольные точки
     [502, 36, 623, 113, 690, 195],
@@ -38,7 +44,97 @@ America`,
     [394, 184, 448, 205, 470, 219],
     [512, 246, 543, 266, 562, 312],
   ],
-  backgroundUrl: '/images/level_1_back.png',
+  background: level1Background,
+  thumbnail: level1Thumb,
+}, {
+  title: 'Events are developing rapidly.\nNeed to do something.',
+  speed: 23,
+  balls: 80,
+  ballColors: [
+    BALL_COLORS.GREEN,
+    BALL_COLORS.BLUE,
+    BALL_COLORS.YELLOW,
+  ],
+  frogPosition: { x: 419, y: 292 },
+  skullPosition: { x: 158, y: 305 },
+  scorePosition: { x: 90, y: 50 },
+  rollOut: 50,
+  start: [0, 163],
+  curve: [
+    [125, 91, 274, 58, 381, 52],
+    [449, 48, 561, 37, 680, 139],
+    [721, 174, 760, 237, 757, 287],
+    [755, 316, 741, 327, 727, 336],
+    [710, 347, 689, 345, 676, 335],
+    [646, 312, 640, 288, 618, 241],
+    [597, 195, 578, 170, 532, 143],
+    [489, 118, 434, 118, 389, 124],
+    [339, 131, 187, 155, 104, 224],
+    [68, 254, 37, 284, 37, 351],
+    [37, 427, 65, 476, 87, 498],
+    [115, 526, 149, 534, 196, 543],
+    [249, 553, 377, 554, 427, 550],
+    [484, 545, 558, 531, 605, 513],
+    [658, 493, 677, 479, 698, 458],
+    [706, 450, 710, 437, 709, 424],
+    [708, 410, 698, 403, 688, 395],
+    [678, 387, 652, 375, 635, 374],
+    [607, 373, 586, 388, 544, 419],
+    [504, 449, 483, 462, 448, 473],
+    [400, 488, 356, 488, 323, 481],
+    [274, 471, 253, 466, 225, 453],
+    [208, 445, 191, 434, 175, 414],
+    [164, 400, 157, 391, 157, 358],
+  ],
+  background: level2Background,
+  thumbnail: level2Thumb,
+}, {
+  title: 'Untangle\nentangled tracks\nin the desert',
+  speed: 26,
+  balls: 100,
+  ballColors: [
+    BALL_COLORS.RED,
+    BALL_COLORS.GREEN,
+    BALL_COLORS.YELLOW,
+    BALL_COLORS.PINK,
+  ],
+  frogPosition: { x: 341, y: 325 },
+  skullPosition: { x: 455, y: 214 },
+  scorePosition: { x: 90, y: 50 },
+  rollOut: 55,
+  start: [737, 599],
+  curve: [
+    [739, 539, 748, 334, 715, 200],
+    [706, 164, 682, 107, 639, 77],
+    [592, 44, 513, 34, 417, 63],
+    [323, 91, 222, 146, 135, 233],
+    [100, 268, 83, 289, 61, 334],
+    [48, 360, 42, 384, 46, 409],
+    [50, 436, 69, 458, 88, 474],
+    [120, 501, 167, 520, 218, 530],
+    [281, 542, 412, 542, 462, 537],
+    [500, 533, 570, 521, 610, 482],
+    [632, 461, 647, 440, 660, 392],
+    [672, 348, 664, 284, 657, 245],
+    [648, 197, 634, 165, 626, 152],
+    [614, 133, 600, 134, 595, 144],
+    [591, 152, 586, 178, 580, 199],
+    [568, 241, 534, 337, 516, 375],
+    [495, 420, 469, 441, 443, 456],
+    [399, 481, 338, 479, 284, 469],
+    [236, 460, 206, 446, 181, 426],
+    [166, 414, 152, 395, 151, 369],
+    [150, 341, 166, 312, 187, 290],
+    [202, 274, 241, 241, 262, 225],
+    [276, 214, 313, 185, 340, 168],
+    [356, 158, 379, 143, 400, 131],
+    [412, 124, 425, 117, 441, 113],
+    [452, 110, 455, 109, 465, 110],
+    [473, 111, 481, 115, 482, 123],
+    [484, 136, 478, 157, 474, 171],
+  ],
+  background: level3Background,
+  thumbnail: level3Thumb,
 }];
 
 export default Object.freeze(levels);

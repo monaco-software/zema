@@ -1,21 +1,25 @@
-/** eslint prefer-const: "error" */
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
 import React, { FC, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { BULLET_STATE, FRAME, FROG_RADIUS } from '../constants';
+import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
-import { getBulletState, getCurrentLevel } from '../selectors';
+import { getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
 import levels from '../levels';
+import { useAction } from '../../../hooks';
 
 export const UiLayer: FC = () => {
-  const dispatch = useDispatch();
+  const resetCombo = useAction(gameActions.resetCombo);
+  const setBulletState = useAction(gameActions.setBulletState);
+  const setAngle = useAction(gameActions.setAngle);
+  const setShotPath = useAction(gameActions.setShotPath);
 
   const bulletState = useSelector(getBulletState);
   const level = useSelector(getCurrentLevel);
+  const gamePhase = useSelector(getGamePhase);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const angle = useRef(0);
@@ -23,7 +27,7 @@ export const UiLayer: FC = () => {
   const calculateShotPath = () => {
     // рассчитываем путь
     const path: number[][] = [];
-    const shotAngle = angle.current - Math.PI / 2;
+    const shotAngle = angle.current;
     for (let i = FROG_RADIUS + BULLET_TICK_DISTANCE; i < FRAME.WIDTH; i += BULLET_TICK_DISTANCE) {
       const x = Math.round(levels[level].frogPosition.x + i * Math.cos(shotAngle));
       const y = Math.round(levels[level].frogPosition.y + i * Math.sin(shotAngle));
@@ -31,15 +35,19 @@ export const UiLayer: FC = () => {
         path.push([x, y, shotAngle]);
       }
     }
-    dispatch(gameActions.setShotPath(path));
+    setShotPath(path);
   };
 
   const mouseMove = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    if (gamePhase === GAME_PHASE.LOADING || gamePhase === GAME_PHASE.EXITING) {
+      return;
+    }
     const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = e.pageX - rect.left - levels[level].frogPosition.y;
-    const y = levels[level].frogPosition.x - e.pageY + rect.top;
-    angle.current = Math.atan2(x, y);
-    dispatch(gameActions.setAngle(angle.current));
+    const x = e.pageX - rect.left - levels[level].frogPosition.x;
+    const y = e.pageY - rect.top - levels[level].frogPosition.y;
+    angle.current = Math.atan2(y, x);
+
+    setAngle(angle.current);
   };
 
   const mouseClick = () => {
@@ -47,8 +55,8 @@ export const UiLayer: FC = () => {
       return;
     }
     calculateShotPath();
-    dispatch(gameActions.resetCombo());
-    dispatch(gameActions.setBulletState(BULLET_STATE.SHOT));
+    resetCombo();
+    setBulletState(BULLET_STATE.SHOT);
   };
 
   // init
