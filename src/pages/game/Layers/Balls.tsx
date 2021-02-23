@@ -45,7 +45,6 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const pusherIncrement = useRef(0);
   const explodeTimeoutRef = useRef<number>();
   const pusherTimeoutRef = useRef<number>();
-  const shotPositionTimeoutRef = useRef<number>();
   const requestRef = useRef<number>();
 
   const pusherStartPosition = -levels[level].balls * BALL_DIAMETER;
@@ -57,15 +56,13 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     if (!ctx || !balls) {
       return;
     }
-
+    ctx.shadowColor = '#000000';
+    ctx.shadowBlur = 10;
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     balls.forEach((ball) => {
       if (ball.position < 0 || ball.position >= ballsPath.length - 1) {
         return;
       }
-      ctx.shadowColor = '#000000';
-      ctx.shadowBlur = 10;
-
       ball.update(ball.position + ball.rotationOffset, ballsPath[ball.position][2]);
       ctx.drawImage(ball.canvas,
         ballsPath[ball.position][0] - BALL_RADIUS,
@@ -105,6 +102,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       requestRef.current = window.requestAnimationFrame(() => draw());
       return;
     }
+    // постепенно замедляем шары при начальном выкатывании
     if (gamePhase !== GAME_PHASE.ENDING && pusherIncrement.current > 1) {
       pusherIncrement.current -= 1;
     }
@@ -191,14 +189,16 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
         const remainColors = calculateRemainColors(balls, insertedIndex);
         setRemainColors(remainColors);
-
-        shotPositionTimeoutRef.current = window.setTimeout(() => {
-          setBulletState(BULLET_STATE.ARMING);
-          inserting.current = false;
-        }, 100);
       }
     });
   }, [shotPosition]);
+
+  useEffect(() => {
+    if (gamePhase === GAME_PHASE.STARTED && !shotPath.length) {
+      setBulletState(BULLET_STATE.ARMING);
+      inserting.current = false;
+    }
+  }, [shotPath]);
 
   // init
   useEffect(() => {
@@ -213,7 +213,6 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
     return () => {
       setPusher(pusherStartPosition);
-      clearTimeout(shotPositionTimeoutRef.current);
       clearTimeout(pusherTimeoutRef.current);
       clearTimeout(explodeTimeoutRef.current);
       if (requestRef.current) {
