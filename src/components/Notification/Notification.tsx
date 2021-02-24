@@ -36,7 +36,7 @@ interface Props {
     status?: NotificationStatus;
     message: ReactNode;
   };
-  onClose?: VoidFunction;
+  onClose: VoidFunction;
 }
 
 export const Notification: FC<Props> = ({
@@ -64,14 +64,12 @@ export const Notification: FC<Props> = ({
           {message}
         </div>
 
-        {onClose && (
-          <Button
-            icon={closeIcon}
-            onClick={onClose}
-            plain
-            margin={{ left: 'auto' }}
-          />
-        )}
+        <Button
+          icon={closeIcon}
+          onClick={onClose}
+          plain
+          margin={{ left: 'auto' }}
+        />
       </div>
     </Layer>
   );
