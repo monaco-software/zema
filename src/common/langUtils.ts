@@ -50,6 +50,8 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
+  global_error: 'Что-то пошло не так 😔️',
+  error_boundary_go_to_main_page: 'Вернуться на главную',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

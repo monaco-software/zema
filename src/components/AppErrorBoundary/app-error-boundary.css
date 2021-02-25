@@ -1,0 +1,31 @@
+.app-error-boundary {
+  font-family: Roboto, sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 96px;
+}
+
+.app-error-boundary__link {
+  background-color: var(--brand);
+  color: var(--white);
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.app-error-boundary__message {
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.app-error-boundary__message-header {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.app-error-boundary__message-trace {
+  white-space: pre-line;
+}
