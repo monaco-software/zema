@@ -18,6 +18,7 @@ import { Spinner } from '../Spinner/Spinner';
 import { grommetTheme } from './grommetTheme';
 import { asyncAppActions } from '../../store/asyncActions';
 import { useAsyncAction } from '../../hooks';
+import { AppNotification } from '../Notification/AppNotification';
 
 const block = b_.lock('app');
 
@@ -42,6 +43,8 @@ export const App: FC = () => {
       {!isLoading && (
         <>
           <Navbar />
+
+          <AppNotification />
 
           <Switch>
             {/* Главная страница */}
