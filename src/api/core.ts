@@ -1,5 +1,6 @@
 import { AppThunk } from '../store/store';
 import { appActions } from '../store/reducer';
+import { NotificationStatus } from '../components/Notification/Notification';
 
 type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
 
@@ -36,8 +37,14 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
         })
         .catch((error) => {
           if (defaultErrorHandling) {
-            const errorString = typeof error === 'string' ? error : JSON.stringify(error);
-            dispatch(appActions.setError(errorString));
+            const errorString = typeof error === 'string'
+              ? error
+              : error.message || JSON.stringify(error);
+
+            dispatch(appActions.setNotification({
+              status: NotificationStatus.ERROR,
+              message: errorString,
+            }));
           }
           console.error(error);
           throw error;
