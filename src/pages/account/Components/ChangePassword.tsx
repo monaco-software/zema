@@ -2,7 +2,6 @@ import './change-password.css';
 
 import { FormClose } from 'grommet-icons';
 import React, { FC } from 'react';
-import b_ from 'b_';
 import {
   Box,
   Button,
@@ -11,16 +10,18 @@ import {
   CardHeader,
   Form,
   FormExtendedEvent,
-  FormField, Grommet,
+  FormField,
+  Grommet,
   Layer,
-  Text,
   TextInput,
   TypedForm,
 } from 'grommet';
-import { PasswordFormFields } from '../../types';
-import { getText } from '../../../../common/langUtils';
-import { passwordConfirmValidate, passwordValidate } from '../../../../common/validations';
-import { GROMMET_COLORS, grommetTheme } from '../../../../components/App/grommetTheme';
+import b_ from 'b_';
+
+import { grommetTheme } from '../../../components/App/grommetTheme';
+import { PasswordFormFields } from '../types';
+import { getText } from '../../../common/langUtils';
+import { passwordConfirmValidate, passwordValidate } from '../../../common/validations';
 
 const TypedForm = Form as TypedForm<PasswordFormFields>;
 
@@ -34,25 +35,23 @@ interface Props {
   fields: PasswordFormFields;
   onSubmit: (event: FormExtendedEvent<PasswordFormFields>) => void;
   onChange: (value: PasswordFormFields) => void;
-  onClose: (value: boolean) => void;
-  errorMessage?: string;
+  setShowPasswordModal: (value: boolean) => void;
 }
 
 export const ChangePassword: FC<Props> = ({
   fields,
   onSubmit,
   onChange,
-  onClose,
-  errorMessage,
+  setShowPasswordModal,
 }) => {
   return (
     <Layer
       modal={true}
       position="center"
       background={{ color: '#0000' }}
-      animation={true}
+      onEsc={() => setShowPasswordModal(false)}
     >
-      {/* Grommet необходимо указать снова, без него Layer не видит тему */}
+      {/* в Grommet необходимо завернуть снова, без него в Layer не видно тему */}
       <Grommet background={{ color: '#0000' }} theme={grommetTheme} cssVars>
         <Card
           width="medium"
@@ -64,7 +63,7 @@ export const ChangePassword: FC<Props> = ({
               <FormClose
                 className={block('form-close')}
                 color="white"
-                onClick={() => onClose(false)}
+                onClick={() => setShowPasswordModal(false)}
               />
             </span>
             <span className={block('header-level')}>
@@ -107,12 +106,6 @@ export const ChangePassword: FC<Props> = ({
                   <TextInput id="change_password_confirm_password" name="confirmPassword" type="password" />
                 </FormField>
 
-                {errorMessage && (
-                  <Box pad={{ horizontal: 'small' }}>
-                    <Text color={GROMMET_COLORS.STATUS_ERROR}>{errorMessage}</Text>
-                  </Box>
-                )}
-
                 <Button
                   margin={{ top: 'medium' }}
                   primary
@@ -125,6 +118,5 @@ export const ChangePassword: FC<Props> = ({
         </Card>
       </Grommet>
     </Layer>
-
   );
 };

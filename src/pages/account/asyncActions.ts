@@ -23,12 +23,7 @@ export const asyncAccountActions = {
   },
 
   updatePassword: (params: UpdatePasswordParams): AppThunk<Promise<void>> => async (dispatch) => {
-    try {
-      await dispatch(apiUpdatePassword(params, false));
-    } catch (error) {
-      throw error;
-    }
+    await dispatch(apiUpdatePassword(params, false));
   },
-
 };
 

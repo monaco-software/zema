@@ -1,6 +1,7 @@
 import { AppThunk } from '../store/store';
 import { appActions } from '../store/reducer';
 import { NotificationStatus } from '../components/Notification/Notification';
+import { isJsonString } from '../common/utils';
 
 type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
 
@@ -26,25 +27,27 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
 
       return fetch(path, preparedOptions)
         .then((response) => {
+          // статус 200-299
           if (response.ok) {
-            return response.json();
+            return response.json().catch((error) => {
+              console.warn(error);
+            });
           }
           if (response.statusText) {
             throw new Error(
-              `Server returns status code ${response.status}: ${response.statusText}`
+              `${response.status}: ${response.statusText}`
             );
           }
+          // если нет statusText вытаскиваем сообщение из тела
           return response.text().then((responseText) => {
+            const hasReason = isJsonString(responseText) && JSON.parse(responseText).reason;
+            const errorMessage = hasReason ?
+              JSON.parse(responseText).reason :
+              responseText;
             throw new Error(
-              `Server returns status code ${response.status}: ${responseText}`
+              `${response.status}: ${errorMessage}`
             );
           });
-        })
-        .then((responseData) => {
-          if (responseData?.reason) {
-            throw new Error(responseData.reason);
-          }
-          return responseData;
         })
         .catch((error) => {
           if (defaultErrorHandling) {
@@ -57,7 +60,6 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
               message: errorString,
             }));
           }
-          console.warn(error);
           throw error;
         });
     };

@@ -15,11 +15,15 @@
   bottom: 0;
   right: 0;
   box-shadow: 0 0 3px #000a;
+  z-index: 10;
 }
 
 .avatar-form__button:hover {
   box-shadow: 0 0 5px #000a;
 }
 
-.avatar-form__wrapper {
+.avatar-form__avatar_dummy {
+  filter: grayscale(1);
+  mix-blend-mode: lighten;
+  z-index: 5;
 }

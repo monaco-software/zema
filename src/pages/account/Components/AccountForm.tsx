@@ -3,22 +3,20 @@ import './account-form.css';
 import React, { FC } from 'react';
 import b_ from 'b_';
 import {
-  Box,
   Button,
   Form,
   FormExtendedEvent,
   FormField,
   Grid,
   MaskedInput,
-  Text,
   TextInput,
   TypedForm,
 } from 'grommet';
-import { AccountFormFields } from '../../types';
-import { getText } from '../../../../common/langUtils';
-import { emailValidate, nameValidate, phoneValidate } from '../../../../common/validations';
-import { phoneMask } from '../../../../common/masks';
-import { GROMMET_COLORS } from '../../../../components/App/grommetTheme';
+
+import { AccountFormFields } from '../types';
+import { getText } from '../../../common/langUtils';
+import { emailValidate, nameValidate, phoneValidate } from '../../../common/validations';
+import { phoneMask } from '../../../common/masks';
 
 const TypedForm = Form as TypedForm<AccountFormFields>;
 
@@ -33,7 +31,6 @@ interface Props {
   onChange: (value: AccountFormFields) => void;
   onSubmit: (event: FormExtendedEvent<AccountFormFields>) => void;
   onReset: () => void;
-  errorMessage?: string;
 }
 
 export const AccountForm: FC<Props> = ({
@@ -41,7 +38,6 @@ export const AccountForm: FC<Props> = ({
   onChange,
   onSubmit,
   onReset,
-  errorMessage,
 }) => {
   return (
     <TypedForm
@@ -106,12 +102,6 @@ export const AccountForm: FC<Props> = ({
           mask={phoneMask}
         />
       </FormField>
-
-      {errorMessage && (
-        <Box pad={{ horizontal: 'small' }}>
-          <Text color={GROMMET_COLORS.STATUS_ERROR}>{errorMessage}</Text>
-        </Box>
-      )}
 
       <Grid gap="small" margin={{ top: 'medium' }}>
         <Button
