@@ -25,8 +25,19 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
 
       return fetch(path, preparedOptions)
         .then((response) => {
-          return response.json()
-            .catch(() => undefined);
+          if (response.ok) {
+            return response.json();
+          }
+          if (response.statusText) {
+            throw new Error(
+              `Server returns status code ${response.status}: ${response.statusText}`
+            );
+          }
+          return response.text().then((responseText) => {
+            throw new Error(
+              `Server returns status code ${response.status}: ${responseText}`
+            );
+          });
         })
         .then((responseData) => {
           if (responseData?.reason) {
@@ -39,7 +50,7 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
             const errorString = typeof error === 'string' ? error : JSON.stringify(error);
             dispatch(appActions.setError(errorString));
           }
-          console.error(error);
+          console.warn(error);
           throw error;
         });
     };
