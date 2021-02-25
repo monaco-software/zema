@@ -60,6 +60,7 @@ export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: 
               message: errorString,
             }));
           }
+          console.error(error);
           throw error;
         });
     };

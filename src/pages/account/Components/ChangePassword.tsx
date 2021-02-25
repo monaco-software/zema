@@ -44,12 +44,14 @@ export const ChangePassword: FC<Props> = ({
   onChange,
   setShowPasswordModal,
 }) => {
+  const closeModal = () => setShowPasswordModal(false);
+
   return (
     <Layer
       modal={true}
       position="center"
       background={{ color: '#0000' }}
-      onEsc={() => setShowPasswordModal(false)}
+      onEsc={closeModal}
     >
       {/* в Grommet необходимо завернуть снова, без него в Layer не видно тему */}
       <Grommet background={{ color: '#0000' }} theme={grommetTheme} cssVars>
@@ -63,7 +65,7 @@ export const ChangePassword: FC<Props> = ({
               <FormClose
                 className={block('form-close')}
                 color="white"
-                onClick={() => setShowPasswordModal(false)}
+                onClick={closeModal}
               />
             </span>
             <span className={block('header-level')}>

@@ -105,11 +105,11 @@ export const Account: FC = () => {
   };
 
   const onPasswordSubmit = ({ value }: FormExtendedEvent<PasswordFormFields>) =>{
-    setShowPasswordModal(false);
     setIsLoading(true);
     updatePassword(value)
       .then(() => {
         setIsLoading(false);
+        setShowPasswordModal(false);
         setNotification({
           status: NotificationStatus.SUCCESS,
           message: getText('password_form_success_notification'),
