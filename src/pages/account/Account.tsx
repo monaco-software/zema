@@ -148,6 +148,15 @@ export const Account: FC = () => {
     testImage.src = URL.createObjectURL(file);
   };
 
+  const openPasswordModal = () => {
+    setShowPasswordModal(true);
+  };
+
+  const closePasswordModal = () => {
+    setPasswordFormFields(initPasswordFormFields);
+    setShowPasswordModal(false);
+  };
+
   useEffect(() => {
     if (currentUser) {
       setIsLoading(false);
@@ -172,7 +181,7 @@ export const Account: FC = () => {
             <Button
               margin={{ vertical: 'small' }}
               label={getText('change_password_button')}
-              onClick={() => setShowPasswordModal(true)}
+              onClick={openPasswordModal}
             />
           </Box>
         </Main>
@@ -181,7 +190,7 @@ export const Account: FC = () => {
             fields={passwordFormFields}
             onSubmit={onPasswordSubmit}
             onChange={onPasswordFieldsChange}
-            setShowPasswordModal={setShowPasswordModal}
+            closeModal={closePasswordModal}
           />}
       </LoadingOverlay>
     </div>

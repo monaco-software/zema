@@ -35,17 +35,15 @@ interface Props {
   fields: PasswordFormFields;
   onSubmit: (event: FormExtendedEvent<PasswordFormFields>) => void;
   onChange: (value: PasswordFormFields) => void;
-  setShowPasswordModal: (value: boolean) => void;
+  closeModal: () => void;
 }
 
 export const ChangePassword: FC<Props> = ({
   fields,
   onSubmit,
   onChange,
-  setShowPasswordModal,
+  closeModal,
 }) => {
-  const closeModal = () => setShowPasswordModal(false);
-
   return (
     <Layer
       modal={true}
