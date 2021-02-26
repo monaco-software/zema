@@ -12,14 +12,7 @@ import {
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
-import {
-  getAngle,
-  getBulletPosition,
-  getBulletState,
-  getCurrentLevel,
-  getGamePhase,
-  getRemainColors,
-} from '../selectors';
+import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase, getRemainColors } from '../selectors';
 import { gameActions } from '../reducer';
 import levels from '../levels';
 import Frog from '../lib/frog';
@@ -29,7 +22,11 @@ import Ball from '../lib/ball';
 import { BULLET_ARMING_SPEED } from '../setup';
 import { useAction } from '../../../hooks';
 
-export const FrogLayer: FC = () => {
+interface Props {
+  angle: number;
+}
+
+export const FrogLayer: FC<Props> = ({ angle }) => {
   const setBulletPosition = useAction(gameActions.setBulletPosition);
   const setBulletState = useAction(gameActions.setBulletState);
   const setBulletColor = useAction(gameActions.setBulletColor);
@@ -39,7 +36,6 @@ export const FrogLayer: FC = () => {
   const bulletPosition = useSelector(getBulletPosition);
   const level = useSelector(getCurrentLevel);
   const remainColors = useSelector(getRemainColors);
-  const angle = useSelector(getAngle);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const timeoutRef = useRef<number>();
@@ -153,7 +149,7 @@ export const FrogLayer: FC = () => {
 
   return (
     <canvas
-      style={{ position: 'absolute' }}
+      style={{ position: 'absolute', height: '100%', width: '100%' }}
       ref={canvasRef}
     />
   );

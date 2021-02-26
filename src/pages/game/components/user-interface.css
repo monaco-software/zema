@@ -1,0 +1,6 @@
+.user-interface__box {
+  position: relative;
+  margin: auto;
+  width: 800px;
+  height: 600px;
+}

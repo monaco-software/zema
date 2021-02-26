@@ -222,7 +222,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
   return (
     <canvas
-      style={{ position: 'absolute' }}
+      style={{ position: 'absolute', height: '100%', width: '100%' }}
       ref={canvasRef}
     />
   );

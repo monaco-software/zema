@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Main } from 'grommet';
 import b_ from 'b_';
 
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
@@ -15,22 +14,10 @@ import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 import { getAllowedLevels } from '../gameLevels/selectors';
 
 import levels from './levels';
-import { getPath } from './lib/geometry';
-import { BallsLayer } from './Layers/Balls';
-import { TitleLayer } from './Layers/Title';
-import { BackLayer } from './Layers/Back';
-import { EffectsLayer } from './Layers/Effects';
-import { FrogLayer } from './Layers/Frog';
-import { UiLayer } from './Layers/Ui';
-import { ScoreLayer } from './Layers/Score';
-import { ComboLayer } from './Layers/Combo';
-import { BlackoutLayer } from './Layers/Blackout';
-import { SkullLayer } from './Layers/Skull';
-import { BulletLayer } from './Layers/Bullet';
 
 import './game.css';
-import { InfoLayer } from './Layers/Info';
 import { uniqAndSort } from '../../common/utils';
+import { UserInterface } from './components/UserInterface';
 
 const block = b_.lock('game');
 
@@ -53,8 +40,6 @@ export const Game: FC = () => {
   const allowedLevels = useSelector(getAllowedLevels);
 
   const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);
-
-  const ballsPath = useMemo(() => getPath(levels[level].start, levels[level].curve), []);
 
   const timeoutRef = useRef<number>();
 
@@ -141,20 +126,7 @@ export const Game: FC = () => {
 
   return (
     <div className={block()}>
-      <Main justify="center" align="center">
-        <BackLayer />
-        <BallsLayer ballsPath={ballsPath} />
-        <EffectsLayer ballsPath={ballsPath} />
-        <SkullLayer />
-        <BulletLayer />
-        <FrogLayer />
-        <ComboLayer />
-        <ScoreLayer />
-        <BlackoutLayer />
-        <TitleLayer />
-        <InfoLayer />
-        <UiLayer />
-      </Main>
+      <UserInterface />
     </div>
   );
 };
