@@ -2,7 +2,7 @@ import './navbar.css';
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import b_ from 'b_';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
 import { ROUTES } from '../../common/constants';
 import { Gamepad } from 'grommet-icons/es6';
@@ -41,6 +41,9 @@ export const Navbar: FC = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [withTransition, setWithTransition] = useState(false);
 
+  const location = useLocation();
+  console.log(location.pathname);
+
   const mouseLeaveTimeout = useRef<number>();
 
   const onMouseEnter = () => {
@@ -50,9 +53,12 @@ export const Navbar: FC = () => {
 
   const onMouseLeave = () => {
     clearTimeout(mouseLeaveTimeout.current);
-    mouseLeaveTimeout.current = setTimeout(() => {
-      setIsHidden(true);
-    }, 1000) as unknown as number;
+    if (location.pathname !== '/') {
+      mouseLeaveTimeout.current = setTimeout(() => {
+        setIsHidden(true);
+      }, 1000) as unknown as number;
+      return;
+    }
   };
 
   useEffect(() => {
@@ -61,10 +67,11 @@ export const Navbar: FC = () => {
     const setTransitionTimeout = setTimeout(() => {
       setWithTransition(true);
     }, 0);
-
-    mouseLeaveTimeout.current = setTimeout(() => {
-      setIsHidden(true);
-    }, 2000) as unknown as number;
+    if (location.pathname !== '/') {
+      mouseLeaveTimeout.current = setTimeout(() => {
+        setIsHidden(true);
+      }, 2000) as unknown as number;
+    }
 
     return () => {
       clearTimeout(setTransitionTimeout);

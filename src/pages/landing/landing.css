@@ -1,0 +1,30 @@
+.landing {
+  background: linear-gradient(80deg, var(--brand) 50%, #FFF 50.1%) no-repeat fixed;
+  filter: invert();
+  mix-blend-mode: difference;
+  align-items: center;
+}
+
+.landing__container {
+  color: #888;
+  background: linear-gradient(80deg, #FFF 50%, var(--brand) 50.1%) no-repeat fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  height: 100%;
+}
+
+.landing__footer {
+  background-color: #444;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  position: fixed;
+  padding: 10px;
+  bottom: 0;
+  height: 60px;
+  width: 100vw;
+}
+
+.landing__paper {
+  text-align: center;
+}
