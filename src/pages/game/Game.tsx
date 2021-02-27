@@ -1,3 +1,5 @@
+import './game.css';
+
 import React, { FC, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -12,12 +14,9 @@ import { useAction, useAsyncAction } from '../../hooks';
 import { gameActions } from './reducer';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 import { getAllowedLevels } from '../gameLevels/selectors';
-
-import levels from './levels';
-
-import './game.css';
 import { uniqAndSort } from '../../common/utils';
 import { UserInterface } from './components/UserInterface';
+import levels from './levels';
 
 const block = b_.lock('game');
 
