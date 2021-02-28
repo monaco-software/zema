@@ -17,35 +17,27 @@ export const InfoLayer: FC = () => {
       return;
     }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) {
+    if (!ctx || !Ball.updates) {
       return;
     }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.fillStyle = '#00000050';
     ctx.fillRect(0, FRAME.HEIGHT - 15, FRAME.WIDTH, FRAME.HEIGHT);
 
-    const renderValue = (Ball.writeTime + Ball.readTime) / Ball.updates * 1000;
-    const render = padWithSpaces('render: ' + renderValue.toFixed(2).toString(), 15);
+    const renderValue = Math.floor(Ball.updateTime / Ball.updates * 1000 );
 
-    const updates = padWithSpaces('updates: ' + Ball.updates.toString(), 18);
+    const render = padWithSpaces(
+      `one ball render:${renderValue} µs`, 30);
 
-    const writes = padWithSpaces('writes: ' + Ball.writes.toString(), 18);
+    const updates = padWithSpaces(`updates:${Ball.updates}`, 20);
 
-    const hits = padWithSpaces('hits: ' + Ball.hits.toString(), 16);
-
-    const hitRate =
-      padWithSpaces('hits rate: ' + (Ball.hits / Ball.writes).toFixed(2).toString(), 20);
-
-    const updatesValue = Ball.updates / (Ball.writeTime + Ball.readTime) * 1000;
-    const updatesPerSecond = padWithSpaces('upd/sec:' + updatesValue.toFixed(2).toString(), 15);
+    const cpusValue = Math.floor(Ball.updates / Ball.updateTime * 1000);
+    const cpus = padWithSpaces(`updates/CPU second:${cpusValue}`, 30);
 
     const message =
       render +
       updates +
-      writes +
-      hits +
-      hitRate +
-      updatesPerSecond;
+      cpus;
 
     print({
       ctx,

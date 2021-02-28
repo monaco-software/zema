@@ -73,13 +73,11 @@ export const calculateRemainColors = (b: Ball[], i: number): number[] => {
 
 export const createBalls = (level: number): Ball[] => {
   const levelData = levels[level];
-  const pusherPosition = window.debugBallsAmount ?
-    -window.debugBallsAmount * BALL_DIAMETER :
-    -levelData.balls * BALL_DIAMETER;
+  const pusherPosition = -levelData.balls * BALL_DIAMETER;
 
   gameBalls.length = 0;
 
-  const ballsAmount = window.debugBallsAmount || levelData.balls;
+  const ballsAmount = levelData.balls;
 
   for (let i = 0; i < ballsAmount; i += 1) {
     const randomIndex = random(levelData.ballColors.length);

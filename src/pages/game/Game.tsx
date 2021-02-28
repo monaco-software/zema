@@ -1,3 +1,5 @@
+import './game.css';
+
 import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -13,6 +15,7 @@ import { useAction, useAsyncAction } from '../../hooks';
 import { gameActions } from './reducer';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 import { getAllowedLevels } from '../gameLevels/selectors';
+import { uniqAndSort } from '../../common/utils';
 
 import levels from './levels';
 import { getPath } from './lib/geometry';
@@ -27,10 +30,7 @@ import { ComboLayer } from './Layers/Combo';
 import { BlackoutLayer } from './Layers/Blackout';
 import { SkullLayer } from './Layers/Skull';
 import { BulletLayer } from './Layers/Bullet';
-
-import './game.css';
 import { InfoLayer } from './Layers/Info';
-import { uniqAndSort } from '../../common/utils';
 
 const block = b_.lock('game');
 
@@ -46,10 +46,8 @@ export const Game: FC = () => {
   const history = useHistory();
 
   const level = useSelector(getCurrentLevel);
-
   const gamePhase = useSelector(getGamePhase);
   const gameResult = useSelector(getGameResult);
-
   const allowedLevels = useSelector(getAllowedLevels);
 
   const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);

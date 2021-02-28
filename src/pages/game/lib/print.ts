@@ -10,20 +10,10 @@ interface Print {
 
 type FontKey = keyof typeof font;
 
-const space = [
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-];
-
 export function print(param: Print) {
   param.ctx.fillStyle = param.color;
   param.text.split('').forEach((char, index) => {
-    const printChar = char === ' ' ? space : font[char as FontKey].pixels;
+    const printChar = font[char as FontKey].pixels;
     const offset = font[char as FontKey].offset;
 
     for (let y = 0; y < 7; y += 1) {
