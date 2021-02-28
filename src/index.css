@@ -37,3 +37,14 @@ a {
   --silver: #e0e3e6;
   --bronze: #e8c19b;
 }
+
+/* исправляют разъезжание разметки при
+появлении сообщения об ошибке в формах */
+.form-field_error_container {
+  position: relative;
+}
+
+.form-field_error_message {
+  position: absolute;
+  right: 0;
+}

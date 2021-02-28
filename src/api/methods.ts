@@ -4,9 +4,9 @@ import {
   SignInParams,
   SignInResponse,
   SignUpParams,
-  SignUpResponse,
+  SignUpResponse, UpdateAvatarParams, UpdateAvatarResponse,
   UpdateLeaderboardParams,
-  UpdateLeaderboardResponse,
+  UpdateLeaderboardResponse, UpdatePasswordParams, UpdatePasswordResponse, UpdateProfileParams, UpdateProfileResponse,
   UserObject,
 } from './schema';
 import { createApiMethod } from './core';
@@ -67,6 +67,36 @@ export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeader
   getFullPath('/leaderboard/all'),
   {
     method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
+export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfileResponse>(
+  getFullPath('/user/profile'),
+  {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
+export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarResponse>(
+  getFullPath('/user/profile/avatar'),
+  {
+    method: 'PUT',
+    credentials: 'include',
+  }
+);
+
+export const apiUpdatePassword = createApiMethod<UpdatePasswordParams, UpdatePasswordResponse>(
+  getFullPath('/user/password'),
+  {
+    method: 'PUT',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
