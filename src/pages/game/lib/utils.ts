@@ -26,14 +26,5 @@ export function distort(max: number, phases: number, phase: number, gain = 0.5) 
 }
 
 export function fps(frames: number): number {
-  return 1000 * (1 / frames);
+  return 1000 / frames;
 }
-
-// export function bufferDownloader() {
-//   const link = document.createElement('a');
-//   if (!link) { return; }
-//   link.setAttribute('download', 'HugePaper.png');
-//   link.setAttribute('href', Ball.bufferCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
-//   link.click();
-// }
-
