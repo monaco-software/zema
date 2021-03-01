@@ -13,10 +13,8 @@ export const SCORE_ROLLING_SPEED = 32;
 export enum GAME_PHASE_TIMEOUTS {
   LOADED = 3000,
   STARTING = 2000,
-  STARTED = 1000,
   ENDING = 2000,
   ENDED = 3000,
-  EXITING = 1000
 }
 
 export enum MESSAGES {

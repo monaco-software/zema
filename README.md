@@ -22,9 +22,9 @@
 <details><summary>Скриншоты</summary>
 
 <p align="center">
-<img src="https://github.com/monaco-software/zooma/blob/sdemidov/levelpage/src/pages/game/assets/images/thumbnails/level_1_thumb.png">
-<img src="https://github.com/monaco-software/zooma/blob/sdemidov/levelpage/src/pages/game/assets/images/thumbnails/level_2_thumb.png">
-<img src="https://github.com/monaco-software/zooma/blob/sdemidov/levelpage/src/pages/game/assets/images/thumbnails/level_3_thumb.png">
+<img src="/src/pages/game/assets/images/thumbnails/level_1_thumb.png">
+<img src="/src/pages/game/assets/images/thumbnails/level_2_thumb.png">
+<img src="/src/pages/game/assets/images/thumbnails/level_3_thumb.png">
 </p>
 
 </details>

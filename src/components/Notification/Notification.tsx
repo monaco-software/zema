@@ -50,26 +50,32 @@ export const Notification: FC<Props> = ({
 
   return (
     <Layer
-      className={block({ 'status': status })}
       modal={false}
       responsive={false}
       position="bottom-right"
+      background={{ color: '#0000' }}
     >
+
       <div
-        className={block('body')}
+        className={block({ 'status': status })}
       >
-        <StatusIcon status={status} />
 
-        <div className={block('message')}>
-          {message}
+        <div
+          className={block('body')}
+        >
+          <StatusIcon status={status} />
+
+          <div className={block('message')}>
+            {message}
+          </div>
+
+          <Button
+            icon={closeIcon}
+            onClick={onClose}
+            plain
+            margin={{ left: 'auto' }}
+          />
         </div>
-
-        <Button
-          icon={closeIcon}
-          onClick={onClose}
-          plain
-          margin={{ left: 'auto' }}
-        />
       </div>
     </Layer>
   );

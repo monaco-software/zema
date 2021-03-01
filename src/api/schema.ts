@@ -53,3 +53,18 @@ export interface GetLeaderboardParams {
 export type GetLeaderboardResponse = Array<{
   data: LeaderboardRecordObject;
 }>;
+
+export type UpdateProfileParams = NonNullable<Omit<UserObject, 'id' | 'avatar'>>;
+
+export type UpdateProfileResponse = string;
+
+export type UpdateAvatarParams = FormData;
+
+export type UpdateAvatarResponse = string;
+
+export interface UpdatePasswordParams {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export type UpdatePasswordResponse = string;

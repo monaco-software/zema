@@ -1,6 +1,6 @@
 import './app.css';
 import React, { FC, useEffect, useState } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { ROUTES } from '../../common/constants';
 import { SignIn } from '../../pages/signin/SignIn';
 import { Forum } from '../../pages/forum/Forum/Forum';
@@ -19,6 +19,7 @@ import { grommetTheme } from './grommetTheme';
 import { asyncAppActions } from '../../store/asyncActions';
 import { useAsyncAction } from '../../hooks';
 import { AppNotification } from '../Notification/AppNotification';
+import { Root } from '../../pages/root/Root';
 
 const block = b_.lock('app');
 
@@ -56,19 +57,7 @@ export const App: FC = () => {
           <AppNotification />
 
           <Switch>
-            {/* Главная страница */}
-            <Route exact path={ROUTES.ROOT}>
-              <ul style={{ margin: 0 }}>
-                <li><Link to={ROUTES.SIGNIN}>SignIn page</Link></li>
-                <li><Link to={ROUTES.SIGNUP}>SignUp page</Link></li>
-                <li><Link to={ROUTES.ACCOUNT}>Account page</Link></li>
-                <li><Link to={ROUTES.LEADERBOARD}>Leaderboard page</Link></li>
-                <li><Link to={ROUTES.FORUM}>Forum page</Link></li>
-                <li><Link to={ROUTES.GAME}>Game page</Link></li>
-                <li><Link to={ROUTES.GAME_LEVELS}>GameLevels page</Link></li>
-                <li><Link to={ROUTES.GAME_OVER}>GameOver page</Link></li>
-              </ul>
-            </Route>
+            <Route exact path={ROUTES.ROOT} component={Root} />
 
             <Route path={ROUTES.SIGNIN} component={SignIn} />
 
@@ -84,9 +73,10 @@ export const App: FC = () => {
 
             <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
 
+            <Route path={ROUTES.GAME_OVER} component={GameOver} />
+
             <Route path={ROUTES.GAME} component={Game} />
 
-            <Route path={ROUTES.GAME_OVER} component={GameOver} />
           </Switch>
         </>
       )}

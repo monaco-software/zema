@@ -70,6 +70,10 @@ export const grommetTheme: ThemeType = deepMerge(grommet, {
       margin: {
         start: 'none',
       },
+      container: {
+        className: 'form-field_error_container',
+      },
+      className: 'form-field_error_message',
     },
     help: {
       size: 'xsmall',

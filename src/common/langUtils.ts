@@ -50,6 +50,24 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
+
+  account_form_submit_button: 'Сохранить',
+  account_form_reset_button: 'Сбросить',
+  account_form_display_name_label: 'Ник',
+  avatar_form_success_notification: 'Аватар успешно сохранен',
+  avatar_form_fail_notification: 'Не удалось сохранить аватар',
+  avatar_form_image_error_notification: 'Выбери другую картинку',
+  password_form_success_notification: 'Пароль успешно сохранен',
+  password_form_fail_notification: 'Не удалось сохранить пароль',
+  profile_form_success_notification: 'Профиль успешено сохранен',
+  profile_form_fail_notification: 'Не удалось сохранить профиль',
+  form_old_password_label: 'Старый пароль',
+  form_new_password_label: 'Новый пароль',
+  form_new_password_again_label: 'Новый пароль еще раз',
+  change_password_modal_header: 'Поменять пароль',
+  change_password_button: 'Поменять пароль',
+  global_error: 'Что-то пошло не так 😔️',
+  error_boundary_go_to_main_page: 'Вернуться на главную',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];
