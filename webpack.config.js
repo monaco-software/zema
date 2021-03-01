@@ -5,6 +5,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -82,6 +83,11 @@ module.exports = {
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
       ],
+    }),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 10*1024*1024,
     }),
   ],
 }
