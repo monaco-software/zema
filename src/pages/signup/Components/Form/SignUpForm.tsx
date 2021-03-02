@@ -1,7 +1,11 @@
 import './sign-up-form.css';
-
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
+import { phoneMask } from '@common/masks';
+import { getText } from '@common/langUtils';
+import { SignUpFormFields } from '../../types';
+import { GROMMET_COLORS } from '@components/App/grommetTheme';
+import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
 import {
   Anchor,
   Box,
@@ -14,9 +18,6 @@ import {
   TextInput,
   TypedForm,
 } from 'grommet';
-import { SignUpFormFields } from '../../types';
-import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
-import { getText } from '@common/langUtils';
 import {
   emailValidate,
   loginValidate,
@@ -25,8 +26,6 @@ import {
   passwordValidate,
   phoneValidate,
 } from '@common/validations';
-import { phoneMask } from '@common/masks';
-import { GROMMET_COLORS } from '@components/App/grommetTheme';
 
 const TypedForm = Form as TypedForm<SignUpFormFields>;
 

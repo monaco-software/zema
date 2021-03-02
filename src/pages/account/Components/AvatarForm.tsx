@@ -1,6 +1,6 @@
 import './avatar-form.css';
-import React, { ChangeEvent, FC, useRef } from 'react';
 import b_ from 'b_';
+import React, { ChangeEvent, FC, useRef } from 'react';
 import { Box, Button } from 'grommet';
 import { Camera } from 'grommet-icons';
 import { AvatarWithFallback } from '@components/AvatarWithFallback/AvatarWithFallback';

@@ -1,11 +1,11 @@
 import './forum-topic-message-list.css';
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
 import { Box, Grid } from 'grommet';
 import { TopicMessage } from '../../types';
-import { AvatarWithFallback } from '@components/AvatarWithFallback/AvatarWithFallback';
 import { getUserFullName } from '@common/helpers';
 import { MarkdownSafe } from '@components/MarkdownSafe/MarkdownSafe';
+import { AvatarWithFallback } from '@components/AvatarWithFallback/AvatarWithFallback';
 
 const messageBlock = b_.lock('forum-topic-message');
 

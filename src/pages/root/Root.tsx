@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { Redirect } from 'react-router-dom';
 import { useAuth } from '@common/hooks';
 import { ROUTES } from '@common/constants';
+import { Redirect } from 'react-router-dom';
 
 export const Root: FC = ({}) => {
   useAuth();

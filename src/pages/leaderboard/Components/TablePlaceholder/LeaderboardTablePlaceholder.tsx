@@ -1,9 +1,9 @@
 import './leaderboard-table-placeholder.css';
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { getText } from '@common/langUtils';
 import { ROUTES } from '@common/constants';
+import { getText } from '@common/langUtils';
 
 const block = b_.lock('leaderboard-table-placeholder');
 

@@ -1,17 +1,17 @@
 import './forum.css';
-import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAction, useAuth } from '@common/hooks';
-import { ForumHead } from '../Components/ForumHeader/ForumHead';
-import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
-import { Container } from '@components/Container/Container';
-import { CreateTopicFormFields } from '../types';
-import { FormExtendedEvent } from 'grommet';
-import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';
+import React, { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getForumTopics } from '../selectors';
 import { forumActions } from '../reducer';
+import { FormExtendedEvent } from 'grommet';
+import { getForumTopics } from '../selectors';
 import { random } from '../../game/lib/utils';
+import { CreateTopicFormFields } from '../types';
+import { useAction, useAuth } from '@common/hooks';
+import { Container } from '@components/Container/Container';
+import { ForumHead } from '../Components/ForumHeader/ForumHead';
+import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';
+import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
 
 const block = b_.lock('forum');
 

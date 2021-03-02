@@ -22,7 +22,7 @@ module.exports = {
   },
   "plugins": ["pretty-imports"],
   "rules": {
-    "pretty-imports/sorted":  ["warn", "no-line-length-sort"],
+    "pretty-imports/sorted":  "warn",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/no-unnecessary-condition": "off",

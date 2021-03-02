@@ -1,12 +1,12 @@
 // Модуль отображает рейтинг
 
-import React, { FC, useEffect, useRef } from 'react';
 import levels from '../levels';
-import { useSelector } from 'react-redux';
-import { FRAME } from '../constants';
-import { SCORE_FONT_SIZE, SCORE_ROLLING_SPEED } from '../setup';
-import { getCurrentLevel, getScore } from '../selectors';
+import React, { FC, useEffect, useRef } from 'react';
 import { fps } from '../lib/utils';
+import { FRAME } from '../constants';
+import { useSelector } from 'react-redux';
+import { getCurrentLevel, getScore } from '../selectors';
+import { SCORE_FONT_SIZE, SCORE_ROLLING_SPEED } from '../setup';
 
 export const ScoreLayer: FC = () => {
   const level = useSelector(getCurrentLevel);

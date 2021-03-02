@@ -1,10 +1,10 @@
 import './forum-topic-message-modal.css';
-import React, { ChangeEvent, MouseEvent, FC } from 'react';
 import b_ from 'b_';
-import { Layer, Tabs, Tab, TextArea, Box, Text } from 'grommet';
+import React, { ChangeEvent, MouseEvent, FC } from 'react';
 import { getText } from '@common/langUtils';
-import { ButtonWithLoading } from '@components/ButtonWithProgress/ButtonWithLoading';
+import { Layer, Tabs, Tab, TextArea, Box, Text } from 'grommet';
 import { MarkdownSafe } from '@components/MarkdownSafe/MarkdownSafe';
+import { ButtonWithLoading } from '@components/ButtonWithProgress/ButtonWithLoading';
 
 const block = b_.lock('forum-topic-message-modal');
 

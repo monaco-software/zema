@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LeaderboardState } from './types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: LeaderboardState = {
   records: [],

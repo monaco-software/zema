@@ -1,7 +1,7 @@
 // Модуль отображает статистику красным
 
-import React, { FC, useEffect, useRef } from 'react';
 import Ball from '../lib/ball';
+import React, { FC, useEffect, useRef } from 'react';
 import { FRAME } from '../constants';
 import { print } from '../lib/print';
 import { padWithSpaces } from '../lib/utils';

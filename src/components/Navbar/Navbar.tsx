@@ -1,14 +1,13 @@
 import './navbar.css';
-
-import React, { FC, useEffect, useRef, useState } from 'react';
 import b_ from 'b_';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
 import { ROUTES } from '@common/constants';
-import { Gamepad } from 'grommet-icons/es6';
 import { Icon } from 'grommet-icons/icons';
+import { Gamepad } from 'grommet-icons/es6';
 import { getText } from '@common/langUtils';
 import { GROMMET_COLORS } from '../App/grommetTheme';
+import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
 
 const block = b_.lock('navbar');
 

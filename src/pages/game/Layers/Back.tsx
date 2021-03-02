@@ -1,9 +1,9 @@
 // Модуль отображает задник
 
-import React, { FC, useEffect, useRef } from 'react';
 import levels from '../levels';
-import { useSelector } from 'react-redux';
+import React, { FC, useEffect, useRef } from 'react';
 import { FRAME } from '../constants';
+import { useSelector } from 'react-redux';
 import { getCurrentLevel } from '../selectors';
 
 export const BackLayer: FC = () => {

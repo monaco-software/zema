@@ -1,5 +1,5 @@
-import { FormFieldProps } from 'grommet';
 import { getText } from './langUtils';
+import { FormFieldProps } from 'grommet';
 
 // eslint-disable-next-line max-len
 export const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

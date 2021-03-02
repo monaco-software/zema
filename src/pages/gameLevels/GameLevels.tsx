@@ -1,15 +1,15 @@
 import './game-levels.css';
-import React, { FC, useEffect, useState } from 'react';
 import b_ from 'b_';
 import levels from '../game/levels';
+import React, { FC, useEffect, useState } from 'react';
 import { Heading } from 'grommet';
 import { useSelector } from 'react-redux';
-import { useAsyncAction, useAuth } from '@common/hooks';
 import { getText } from '@common/langUtils';
-import { GameLevel } from './Components/GameLevel';
 import { getAllowedLevels } from './selectors';
+import { GameLevel } from './Components/GameLevel';
 import { getCurrentLevel } from '../game/selectors';
 import { asyncGameLevelActions } from './asyncActions';
+import { useAsyncAction, useAuth } from '@common/hooks';
 import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
 
 const block = b_.lock('game-levels');

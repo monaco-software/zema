@@ -1,20 +1,20 @@
 import './account.css';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import b_ from 'b_';
-import { useSelector } from 'react-redux';
-import { Box, Button, FormExtendedEvent, Main } from 'grommet';
-import { useAction, useAsyncAction, useAuth } from '@common/hooks';
-import { getCurrentUser } from '@store/selectors';
-import { asyncAccountActions } from './asyncActions';
-import { AccountFormFields, AvatarFormFields, PasswordFormFields } from './types';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { UserObject } from '@api/schema';
-import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
+import { useSelector } from 'react-redux';
 import { getText } from '@common/langUtils';
 import { appActions } from '@store/reducer';
-import { NotificationStatus } from '@components/Notification/Notification';
+import { getCurrentUser } from '@store/selectors';
+import { asyncAccountActions } from './asyncActions';
 import { AvatarForm } from './Components/AvatarForm';
 import { AccountForm } from './Components/AccountForm';
 import { ChangePassword } from './Components/ChangePassword';
+import { Box, Button, FormExtendedEvent, Main } from 'grommet';
+import { useAction, useAsyncAction, useAuth } from '@common/hooks';
+import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
+import { NotificationStatus } from '@components/Notification/Notification';
+import { AccountFormFields, AvatarFormFields, PasswordFormFields } from './types';
 
 const block = b_.lock('account');
 

@@ -1,6 +1,6 @@
 import { AppThunk } from '@store/store';
-import { apiUpdateAvatar, apiUpdatePassword, apiUpdateProfile } from '@api/methods';
 import { asyncAppActions } from '@store/asyncActions';
+import { apiUpdateAvatar, apiUpdatePassword, apiUpdateProfile } from '@api/methods';
 import { UpdateAvatarParams, UpdatePasswordParams, UpdateProfileParams } from '@api/schema';
 
 export const asyncAccountActions = {

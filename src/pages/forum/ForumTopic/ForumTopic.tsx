@@ -1,19 +1,19 @@
 import './forum-topic.css';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import b_ from 'b_';
-import { useHistory, useParams } from 'react-router-dom';
-import { RouteParams, ROUTES } from '@common/constants';
-import { useAction, useAuth } from '@common/hooks';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getForumTopicById } from '../selectors';
-import { ForumTopicMessageModal } from '../Components/MessageModal/ForumTopicMessageModal';
-import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
 import { forumActions } from '../reducer';
-import { getCurrentUser } from '@store/selectors';
 import { random } from '../../game/lib/utils';
-import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
 import { DEFAULT_TOPIC_ID } from '../constants';
+import { getForumTopicById } from '../selectors';
+import { getCurrentUser } from '@store/selectors';
+import { useAction, useAuth } from '@common/hooks';
+import { RouteParams, ROUTES } from '@common/constants';
+import { useHistory, useParams } from 'react-router-dom';
 import { Container } from '@components/Container/Container';
+import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
+import { ForumTopicMessageModal } from '../Components/MessageModal/ForumTopicMessageModal';
+import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
 
 const block = b_.lock('forum-topic');
 

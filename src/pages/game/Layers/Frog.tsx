@@ -1,10 +1,23 @@
 // Модуль отображает лягушку
 
-import React, { FC, useEffect, useMemo, useRef } from 'react';
 import levels from '../levels';
 import Frog from '../lib/frog';
 import Ball from '../lib/ball';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
+import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
+import { useAction } from '@common/hooks';
+import { fps, random } from '../lib/utils';
+import { coverWithLip } from './utils/frog';
+import { BULLET_ARMING_SPEED } from '../setup';
+import {
+  getAngle,
+  getBulletPosition,
+  getBulletState,
+  getCurrentLevel,
+  getGamePhase,
+  getRemainColors,
+} from '../selectors';
 import {
   BALL_RADIUS,
   BULLET_ARMED_POSITION,
@@ -14,19 +27,6 @@ import {
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
-import {
-  getAngle,
-  getBulletPosition,
-  getBulletState,
-  getCurrentLevel,
-  getGamePhase,
-  getRemainColors,
-} from '../selectors';
-import { gameActions } from '../reducer';
-import { fps, random } from '../lib/utils';
-import { coverWithLip } from './utils/frog';
-import { BULLET_ARMING_SPEED } from '../setup';
-import { useAction } from '@common/hooks';
 
 export const FrogLayer: FC = () => {
   const setBulletPosition = useAction(gameActions.setBulletPosition);

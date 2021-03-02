@@ -1,3 +1,4 @@
+import { createApiMethod } from './core';
 import {
   GetLeaderboardParams,
   GetLeaderboardResponse,
@@ -9,7 +10,6 @@ import {
   UpdateLeaderboardResponse, UpdatePasswordParams, UpdatePasswordResponse, UpdateProfileParams, UpdateProfileResponse,
   UserObject,
 } from './schema';
-import { createApiMethod } from './core';
 
 export const YANDEX_API_URL = 'https://ya-praktikum.tech';
 const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;

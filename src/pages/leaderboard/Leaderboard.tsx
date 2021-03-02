@@ -1,19 +1,19 @@
 import './leaderboard.css';
-import React, { FC, useEffect, useState } from 'react';
 import b_ from 'b_';
-import { useAsyncAction, useAuth } from '@common/hooks';
-import { LeaderboardTop } from './Components/Top/LeaderboardTop';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Heading } from 'grommet';
-import { getText } from '@common/langUtils';
 import { useSelector } from 'react-redux';
-import { getCurrentUser } from '@store/selectors';
-import { LeaderboardTable } from './Components/Table/LeaderboardTable';
+import { getText } from '@common/langUtils';
 import { TOP_USERS_COUNT } from './constants';
-import { asyncLeaderboardActions } from './asyncActions';
+import { getCurrentUser } from '@store/selectors';
 import { getLeaderboardRecords } from './selectors';
 import { Spinner } from '@components/Spinner/Spinner';
-import { LeaderboardTablePlaceholder } from './Components/TablePlaceholder/LeaderboardTablePlaceholder';
+import { useAsyncAction, useAuth } from '@common/hooks';
+import { asyncLeaderboardActions } from './asyncActions';
 import { Container } from '@components/Container/Container';
+import { LeaderboardTop } from './Components/Top/LeaderboardTop';
+import { LeaderboardTable } from './Components/Table/LeaderboardTable';
+import { LeaderboardTablePlaceholder } from './Components/TablePlaceholder/LeaderboardTablePlaceholder';
 
 const block = b_.lock('leaderboard');
 
