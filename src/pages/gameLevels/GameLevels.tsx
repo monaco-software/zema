@@ -17,8 +17,6 @@ import { LoadingOverlay } from '../../components/LoadingOverlay/LoadingOverlay';
 const block = b_.lock('game-levels');
 
 export const GameLevels: FC = () => {
-  useAuth();
-
   const fetchAllowedLevels = useAsyncAction(asyncGameLevelActions.fetchAllowedLevels);
 
   const [isLoading, setIsLoading] = useState(true);
