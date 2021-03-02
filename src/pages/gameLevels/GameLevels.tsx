@@ -5,7 +5,7 @@ import b_ from 'b_';
 import { Heading } from 'grommet';
 import { useSelector } from 'react-redux';
 
-import { useAsyncAction, useAuth } from '../../hooks';
+import { useAsyncAction } from '../../hooks';
 import { getText } from '../../common/langUtils';
 import levels from '../game/levels';
 import { GameLevel } from './Components/GameLevel';
