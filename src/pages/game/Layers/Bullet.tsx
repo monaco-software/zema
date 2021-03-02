@@ -1,16 +1,15 @@
 // Модуль отображает летящую пулю
 
 import React, { FC, useEffect, useRef } from 'react';
+import Ball from '../lib/ball';
 import { useSelector } from 'react-redux';
-
 import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE } from '../constants';
 import { getBulletColor, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 import { gameActions } from '../reducer';
 import { getBallsRemainColors } from './utils/balls';
 import { fps } from '../lib/utils';
 import { BULLET_SPEED } from '../setup';
-import Ball from '../lib/ball';
-import { useAction } from '../../../hooks';
+import { useAction } from '@common/hooks';
 
 export const BulletLayer: FC = () => {
   const setShotPosition = useAction(gameActions.setShotPosition);

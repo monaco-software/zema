@@ -1,18 +1,17 @@
 // Модуль отображает шары
 
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import Ball from '../lib/ball';
+import levels from '../levels';
 import { useSelector } from 'react-redux';
-
 import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 import { ALLOWANCE, BALL_EXPLODE_TIMEOUT } from '../setup';
 import { getBulletColor, getCombo, getCurrentLevel, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 import { gameActions } from '../reducer';
 import { applyPhysic, calculateRemainColors, createBalls, findSame } from './utils/balls';
-import Ball from '../lib/ball';
-import levels from '../levels';
 import { getCloserPoint, getLineLen } from '../lib/geometry';
 import { fps } from '../lib/utils';
-import { useAction } from '../../../hooks';
+import { useAction } from '@common/hooks';
 
 interface Props {
   ballsPath: number[][];

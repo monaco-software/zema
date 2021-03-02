@@ -1,4 +1,4 @@
-import { LeaderboardRecordObject, UserObject } from '../../api/schema';
+import { LeaderboardRecordObject, UserObject } from '@api/schema';
 import { LEADERBOARD_VALUE_FIELD_NAME } from './constants';
 
 type PartialLeaderboardRecordObject = Omit<LeaderboardRecordObject, 'user_id' | typeof LEADERBOARD_VALUE_FIELD_NAME>;

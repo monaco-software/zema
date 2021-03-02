@@ -1,10 +1,10 @@
 import { useLayoutEffect } from 'react';
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, bindActionCreators } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsSignedInd } from './store/selectors';
+import { getIsSignedInd } from '@store/selectors';
 import { useHistory } from 'react-router-dom';
-import { ROUTES } from './common/constants';
-import { AppThunk, Dispatch } from './store/store';
+import { ROUTES } from './constants';
+import { AppThunk, Dispatch } from '@store/store';
 
 export const useAction =
   <P>(action: undefined extends P ? ActionCreatorWithoutPayload : ActionCreatorWithPayload<P>) => {

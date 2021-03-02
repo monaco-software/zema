@@ -1,12 +1,11 @@
 // Модуль отображает взрывы и частицы
 
 import React, { FC, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-
-import { BALL_DIAMETER, BALL_RADIUS, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
-import { getExplosion, getGamePhase, getGameResult } from '../selectors';
 import Explosion from '../lib/explosion';
 import Particle from '../lib/paricle';
+import { useSelector } from 'react-redux';
+import { BALL_DIAMETER, BALL_RADIUS, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import { getExplosion, getGamePhase, getGameResult } from '../selectors';
 import { fps, random } from '../lib/utils';
 import { DEFAULT_FRAMERATE } from '../setup';
 

@@ -1,15 +1,15 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
+// слушает мышь и рассчитывает путь пули
 import React, { FC, useEffect, useRef } from 'react';
+import levels from '../levels';
 import { useSelector } from 'react-redux';
-
 import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { BULLET_TICK_DISTANCE } from '../setup';
 import { gameActions } from '../reducer';
 import { getBulletState, getCurrentLevel, getGamePhase } from '../selectors';
-import levels from '../levels';
-import { useAction } from '../../../hooks';
+import { useAction } from '@common/hooks';
 
 export const UiLayer: FC = () => {
   const resetCombo = useAction(gameActions.resetCombo);

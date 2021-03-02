@@ -1,4 +1,4 @@
-import { RootState } from '../../store/store';
+import { RootState } from '@store/store';
 import { createSelector } from '@reduxjs/toolkit';
 import { DEFAULT_TOPIC_ID } from './constants';
 

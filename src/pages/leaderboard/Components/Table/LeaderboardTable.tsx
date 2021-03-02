@@ -2,8 +2,8 @@ import './leaderboard-table.css';
 import React, { FC } from 'react';
 import b_ from 'b_';
 import { LeaderboardRecord } from '../../types';
-import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/AvatarWithFallback';
-import { getUserFullName } from '../../../../common/helpers';
+import { AvatarWithFallback } from '@components/AvatarWithFallback/AvatarWithFallback';
+import { getUserFullName } from '@common/helpers';
 
 const block = b_.lock('leaderboard-table');
 

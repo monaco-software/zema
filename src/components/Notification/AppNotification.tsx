@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { getAppNotification } from '../../store/selectors';
+import { getAppNotification } from '@store/selectors';
 import { Notification } from './Notification';
-import { useAction } from '../../hooks';
-import { appActions } from '../../store/reducer';
+import { useAction } from '@common/hooks';
+import { appActions } from '@store/reducer';
 
 export const AppNotification: FC = ({}) => {
   const timeoutRef = useRef<number>();

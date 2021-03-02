@@ -1,4 +1,4 @@
-import { RootState } from '../../store/store';
+import { RootState } from '@store/store';
 import { createSelector } from '@reduxjs/toolkit';
 
 const getLeaderboardState = (state: RootState) => state.leaderboard;

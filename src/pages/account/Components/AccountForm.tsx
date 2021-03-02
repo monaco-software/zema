@@ -14,9 +14,9 @@ import {
 } from 'grommet';
 
 import { AccountFormFields } from '../types';
-import { getText } from '../../../common/langUtils';
-import { emailValidate, nameValidate, phoneValidate } from '../../../common/validations';
-import { phoneMask } from '../../../common/masks';
+import { getText } from '@common/langUtils';
+import { emailValidate, nameValidate, phoneValidate } from '@common/validations';
+import { phoneMask } from '@common/masks';
 
 const TypedForm = Form as TypedForm<AccountFormFields>;
 

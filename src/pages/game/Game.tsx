@@ -1,23 +1,19 @@
 import './game.css';
-
 import React, { FC, useEffect, useMemo, useRef } from 'react';
+import b_ from 'b_';
+import levels from './levels';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Main } from 'grommet';
-import b_ from 'b_';
-
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
-import { ROUTES } from '../../common/constants';
-
+import { ROUTES } from '@common/constants';
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
-import { useAction, useAsyncAction } from '../../hooks';
+import { useAction, useAsyncAction } from '@common/hooks';
 import { gameActions } from './reducer';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 import { getAllowedLevels } from '../gameLevels/selectors';
-import { uniqAndSort } from '../../common/utils';
-
-import levels from './levels';
+import { uniqAndSort } from '@common/utils';
 import { getPath } from './lib/geometry';
 import { BallsLayer } from './Layers/Balls';
 import { TitleLayer } from './Layers/Title';

@@ -15,8 +15,8 @@ import {
   TypedForm,
 } from 'grommet';
 import { SignUpFormFields } from '../../types';
-import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
-import { getText } from '../../../../common/langUtils';
+import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
+import { getText } from '@common/langUtils';
 import {
   emailValidate,
   loginValidate,
@@ -24,9 +24,9 @@ import {
   passwordConfirmValidate,
   passwordValidate,
   phoneValidate,
-} from '../../../../common/validations';
-import { phoneMask } from '../../../../common/masks';
-import { GROMMET_COLORS } from '../../../../components/App/grommetTheme';
+} from '@common/validations';
+import { phoneMask } from '@common/masks';
+import { GROMMET_COLORS } from '@components/App/grommetTheme';
 
 const TypedForm = Form as TypedForm<SignUpFormFields>;
 

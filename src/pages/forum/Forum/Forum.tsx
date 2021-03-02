@@ -1,10 +1,10 @@
 import './forum.css';
 import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAction, useAuth } from '../../../hooks';
+import { useAction, useAuth } from '@common/hooks';
 import { ForumHead } from '../Components/ForumHeader/ForumHead';
 import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
-import { Container } from '../../../components/Container/Container';
+import { Container } from '@components/Container/Container';
 import { CreateTopicFormFields } from '../types';
 import { FormExtendedEvent } from 'grommet';
 import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';

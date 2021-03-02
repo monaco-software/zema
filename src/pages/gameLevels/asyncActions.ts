@@ -1,8 +1,8 @@
-import { AppThunk } from '../../store/store';
+import levels from '../game/levels';
+import { AppThunk } from '@store/store';
 import { gameLevelsActions } from './reducer';
 import { LOCALSTORAGE_LEVELS } from './constants';
-import { isJsonString } from '../../common/utils';
-import levels from '../game/levels';
+import { isJsonString } from '@common/utils';
 
 const inLevels = (n: number) => n >= 0 && n < levels.length;
 

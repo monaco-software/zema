@@ -1,12 +1,11 @@
 // Модуль отображает череп
 
-import { useSelector } from 'react-redux';
 import React, { FC, useEffect, useRef } from 'react';
-
-import { FRAME, SKULL_RADIUS } from '../constants';
-import { getCurrentLevel } from '../selectors';
 import Skull from '../lib/skull';
 import levels from '../levels';
+import { useSelector } from 'react-redux';
+import { FRAME, SKULL_RADIUS } from '../constants';
+import { getCurrentLevel } from '../selectors';
 
 export const SkullLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

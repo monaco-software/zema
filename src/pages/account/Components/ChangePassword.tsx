@@ -1,7 +1,7 @@
 import './change-password.css';
-
-import { FormClose } from 'grommet-icons';
 import React, { FC } from 'react';
+import b_ from 'b_';
+import { FormClose } from 'grommet-icons';
 import {
   Box,
   Button,
@@ -16,12 +16,10 @@ import {
   TextInput,
   TypedForm,
 } from 'grommet';
-import b_ from 'b_';
-
-import { grommetTheme } from '../../../components/App/grommetTheme';
+import { grommetTheme } from '@components/App/grommetTheme';
 import { PasswordFormFields } from '../types';
-import { getText } from '../../../common/langUtils';
-import { passwordConfirmValidate, passwordValidate } from '../../../common/validations';
+import { getText } from '@common/langUtils';
+import { passwordConfirmValidate, passwordValidate } from '@common/validations';
 
 const TypedForm = Form as TypedForm<PasswordFormFields>;
 

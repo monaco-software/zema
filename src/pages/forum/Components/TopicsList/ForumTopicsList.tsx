@@ -4,8 +4,8 @@ import b_ from 'b_';
 import { Grid, Heading } from 'grommet';
 import { Link } from 'react-router-dom';
 import { Topic } from '../../types';
-import { getText } from '../../../../common/langUtils';
-import { ROUTES } from '../../../../common/constants';
+import { getText } from '@common/langUtils';
+import { ROUTES } from '@common/constants';
 
 const block = b_.lock('forum-topics-list');
 

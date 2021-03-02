@@ -1,13 +1,12 @@
 // Модуль отображает сообщения комбо
 
 import React, { FC, useEffect, useRef } from 'react';
+import levels from '../levels';
 import { useSelector } from 'react-redux';
-
 import { COMBO_DISPLAY_PHASES, FRAME } from '../constants';
 import { COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
 import { getCombo, getCurrentLevel } from '../selectors';
 import { decimalToHex, distort, fps } from '../lib/utils';
-import levels from '../levels';
 
 export const ComboLayer: FC = () => {
   const combo = useSelector(getCombo);

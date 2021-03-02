@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ForumState, TopicMessage } from './types';
-import { UserObject } from '../../api/schema';
+import { UserObject } from '@api/schema';
 
 // TODO: удалить, когда появится АПИ
 const userMock: UserObject = {

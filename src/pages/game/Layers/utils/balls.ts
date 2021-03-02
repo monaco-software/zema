@@ -1,9 +1,9 @@
 import Ball from '../../lib/ball';
+import levels from '../../levels';
 import { random } from '../../lib/utils';
 import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
-import levels from '../../levels';
 import { Physics } from '../../types';
-import { uniqAndSort } from '../../../../common/utils';
+import { uniqAndSort } from '@common/utils';
 
 export const gameBalls: Ball[] = [];
 

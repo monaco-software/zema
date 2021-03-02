@@ -2,13 +2,13 @@ import './sign-in.css';
 import React, { FC, useState } from 'react';
 import b_ from 'b_';
 import { FormExtendedEvent, Heading, Main } from 'grommet';
-import { getText } from '../../common/langUtils';
+import { getText } from '@common/langUtils';
 import { SignInForm } from './Components/Form/SignInForm';
 import { SignInFormFields } from './types';
 import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../../common/constants';
-import { useAsyncAction, useAuth } from '../../hooks';
-import { asyncAppActions } from '../../store/asyncActions';
+import { ROUTES } from '@common/constants';
+import { useAsyncAction, useAuth } from '@common/hooks';
+import { asyncAppActions } from '@store/asyncActions';
 
 const block = b_.lock('sign-in');
 

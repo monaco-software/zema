@@ -1,7 +1,7 @@
-import { AppThunk } from '../store/store';
-import { appActions } from '../store/reducer';
-import { NotificationStatus } from '../components/Notification/Notification';
-import { isJsonString } from '../common/utils';
+import { AppThunk } from '@store/store';
+import { appActions } from '@store/reducer';
+import { NotificationStatus } from '@components/Notification/Notification';
+import { isJsonString } from '@common/utils';
 
 type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
 

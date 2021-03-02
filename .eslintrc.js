@@ -20,7 +20,9 @@ module.exports = {
     "Set": true,
     "Map": true
   },
+  "plugins": ["pretty-imports"],
   "rules": {
+    "pretty-imports/sorted":  ["warn", "no-line-length-sort"],
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/no-unnecessary-condition": "off",

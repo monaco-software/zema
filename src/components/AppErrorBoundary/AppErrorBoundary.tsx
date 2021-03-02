@@ -1,8 +1,8 @@
 import './app-error-boundary.css';
 import React, { Component, ErrorInfo } from 'react';
 import b_ from 'b_';
-import { getText } from '../../common/langUtils';
-import { ROUTES } from '../../common/constants';
+import { getText } from '@common/langUtils';
+import { ROUTES } from '@common/constants';
 
 const block = b_.lock('app-error-boundary');
 

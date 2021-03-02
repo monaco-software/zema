@@ -4,10 +4,10 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import b_ from 'b_';
 import { NavLink } from 'react-router-dom';
 import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
-import { ROUTES } from '../../common/constants';
+import { ROUTES } from '@common/constants';
 import { Gamepad } from 'grommet-icons/es6';
 import { Icon } from 'grommet-icons/icons';
-import { getText } from '../../common/langUtils';
+import { getText } from '@common/langUtils';
 import { GROMMET_COLORS } from '../App/grommetTheme';
 
 const block = b_.lock('navbar');
