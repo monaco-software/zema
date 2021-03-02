@@ -82,6 +82,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
+        { from: './src/manifest.json' },
+        { from: './src/android-icon-96x96.png' },
       ],
     }),
     new WorkboxPlugin.GenerateSW({

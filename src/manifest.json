@@ -1,0 +1,16 @@
+{
+  "name": "zooma deluxe",
+  "short_name": "zooma",
+  "lang": "ru-RU",
+  "start_url": "./game/levels",
+  "display": "standalone",
+ "icons": [
+  {
+   "src": "/android-icon-96x96.png",
+   "sizes": "96x96",
+   "type": "image/png",
+   "density": "2.0"
+  }
+ ]
+}
+
