@@ -23,6 +23,14 @@ import { Root } from '../../pages/root/Root';
 
 const block = b_.lock('app');
 
+const onLoad = () => {
+  navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+    console.log('SW registered: ', registration);
+  }).catch((registrationError) => {
+    console.log('SW registration failed: ', registrationError);
+  });
+};
+
 export const App: FC = () => {
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
@@ -32,14 +40,11 @@ export const App: FC = () => {
     fetchUser(undefined)
       .finally(() => setIsLoading(false));
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-          console.log('SW registered: ', registration);
-        }).catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
-        });
-      });
+      window.addEventListener('load', onLoad);
     }
+    return () => {
+      window.removeEventListener('load', onLoad);
+    };
   }, []);
 
   return (

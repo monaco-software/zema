@@ -3,7 +3,9 @@
   "short_name": "zooma",
   "lang": "ru-RU",
   "start_url": "./game/levels",
-  "display": "standalone",
+  "display": "fullscreen",
+  "background_color": "#7d4cdb",
+  "theme_color": "#7d4cdb",
   "icons": [
     {
       "src": "\/android-icon-36x36.png",
