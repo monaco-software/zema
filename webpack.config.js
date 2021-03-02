@@ -70,7 +70,6 @@ module.exports = {
       template: './src/index.html',
       inject: 'head',
       scriptLoading: 'defer',
-      favicon: './src/favicon.ico',
     }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
@@ -82,8 +81,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
-        { from: './src/manifest.json' },
-        { from: './src/android-icon-96x96.png' },
+        { from: './src/manifest/' },
       ],
     }),
     new WorkboxPlugin.GenerateSW({
