@@ -81,7 +81,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
-        { from: './src/manifest/' },
+        { from: './src/pwa/' },
       ],
     }),
     new WorkboxPlugin.GenerateSW({
