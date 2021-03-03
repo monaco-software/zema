@@ -58,15 +58,22 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     ctx.shadowColor = '#000000';
     ctx.shadowBlur = 10;
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
+    const start = performance.now();
+    let ballsRemain = 0;
     balls.forEach((ball) => {
       if (ball.position < 0 || ball.position >= ballsPath.length - 1) {
         return;
       }
+      ballsRemain += 1;
       ball.update(ball.position + ball.rotationOffset, ballsPath[ball.position][2]);
       ctx.drawImage(ball.canvas,
         ballsPath[ball.position][0] - BALL_RADIUS,
         ballsPath[ball.position][1] - BALL_RADIUS);
     });
+
+    const now = performance.now();
+    Ball.updates += ballsRemain;
+    Ball.updateTime += now - start;
   };
 
   const explode = (sameBalls: number[]) => {

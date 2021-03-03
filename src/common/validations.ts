@@ -55,7 +55,8 @@ export const passwordValidate: FormFiledValidation = [
 
 export const passwordConfirmValidate: FormFiledValidation = [
   (value: string, fields: Record<string, any>) => {
-    if (value !== fields.password) {
+    const compareField = fields.password || fields.newPassword;
+    if (value !== compareField) {
       return getText('form_password_equal_confirm');
     }
     return undefined;

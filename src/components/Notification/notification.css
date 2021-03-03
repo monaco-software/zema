@@ -1,9 +1,9 @@
 .notification__body {
   display: flex;
   align-items: center;
-  border-radius: 3px;
   margin: 40px;
-  padding: 10px 20px;
+  padding: 12px 20px;
+  border-radius: 999px;
   min-width: 200px;
   max-width: 400px;
   word-break: break-word;

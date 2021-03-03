@@ -32,10 +32,8 @@ export const Game: FC = () => {
   const history = useHistory();
 
   const level = useSelector(getCurrentLevel);
-
   const gamePhase = useSelector(getGamePhase);
   const gameResult = useSelector(getGameResult);
-
   const allowedLevels = useSelector(getAllowedLevels);
 
   const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);

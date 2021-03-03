@@ -96,7 +96,7 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     if (!ctx) {
       return;
     }
-    if (bulletState === BULLET_STATE.ARMING) {
+    if (bulletState === BULLET_STATE.ARMING && remainColors.length) {
       bullet.color = remainColors[random(remainColors.length)];
       bullet.rotationOffset = random(bullet.numberOfFrames);
       setBulletColor(bullet.color);

@@ -1,4 +1,4 @@
-// Модуль отображает рейтинг и сообщения
+// Модуль отображает затемнение
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
