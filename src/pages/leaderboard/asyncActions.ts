@@ -1,11 +1,11 @@
-import { AppThunk } from '../../store/store';
-import { getCurrentUser } from '../../store/selectors';
-import { GetLeaderboardParams, UpdateLeaderboardParams } from '../../api/schema';
-import { LEADERBOARD_VALUE_FIELD_NAME } from './constants';
-import { apiGetLeaderboard, apiGetUserById, apiUpdateLeaderboard } from '../../api/methods';
+import { AppThunk } from '@store/store';
 import { LeaderboardRecord } from './types';
 import { leaderboardActions } from './reducer';
-import { getUserWithFullAvatarUrl } from '../../common/helpers';
+import { getCurrentUser } from '@store/selectors';
+import { LEADERBOARD_VALUE_FIELD_NAME } from './constants';
+import { getUserWithFullAvatarUrl } from '@common/helpers';
+import { GetLeaderboardParams, UpdateLeaderboardParams } from '@api/schema';
+import { apiGetLeaderboard, apiGetUserById, apiUpdateLeaderboard } from '@api/methods';
 
 export const asyncLeaderboardActions = {
 

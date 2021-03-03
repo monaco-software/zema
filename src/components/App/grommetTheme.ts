@@ -1,5 +1,5 @@
-import { grommet, ThemeType } from 'grommet';
 import { deepMerge } from 'grommet/utils';
+import { grommet, ThemeType } from 'grommet';
 
 // https://v2.grommet.io/color
 export enum GROMMET_COLORS {

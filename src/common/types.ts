@@ -1,5 +1,5 @@
-import { UserObject } from '../api/schema';
-import { NotificationStatus } from '../components/Notification/Notification';
+import { UserObject } from '@api/schema';
+import { NotificationStatus } from '@components/Notification/Notification';
 
 interface Notification {
   status: NotificationStatus;

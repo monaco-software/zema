@@ -1,11 +1,11 @@
 import './sign-in-form.css';
-import React, { FC } from 'react';
 import b_ from 'b_';
-import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent, Box, Text } from 'grommet';
-import { getText } from '../../../../common/langUtils';
+import React, { FC } from 'react';
+import { getText } from '@common/langUtils';
 import { SignInFormFields } from '../../types';
-import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
-import { GROMMET_COLORS } from '../../../../components/App/grommetTheme';
+import { GROMMET_COLORS } from '@components/App/grommetTheme';
+import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
+import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent, Box, Text } from 'grommet';
 
 const block = b_.lock('sign-in-form');
 

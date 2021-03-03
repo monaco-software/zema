@@ -1,6 +1,6 @@
 import Sprite from './sprite';
-import { BALL_DIAMETER } from '../constants';
 import particleSprite from '../assets/images/particle.png';
+import { BALL_DIAMETER } from '../constants';
 
 export default class Particle extends Sprite {
   image: HTMLImageElement;

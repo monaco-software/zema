@@ -1,4 +1,4 @@
-import { UpdatePasswordParams, UpdateProfileParams } from '../../api/schema';
+import { UpdatePasswordParams, UpdateProfileParams } from '@api/schema';
 
 export type AccountFormFields = UpdateProfileParams;
 

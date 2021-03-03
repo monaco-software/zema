@@ -1,11 +1,11 @@
 import './forum-topics-list.css';
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
+import { Topic } from '../../types';
 import { Grid, Heading } from 'grommet';
 import { Link } from 'react-router-dom';
-import { Topic } from '../../types';
-import { getText } from '../../../../common/langUtils';
-import { ROUTES } from '../../../../common/constants';
+import { ROUTES } from '@common/constants';
+import { getText } from '@common/langUtils';
 
 const block = b_.lock('forum-topics-list');
 

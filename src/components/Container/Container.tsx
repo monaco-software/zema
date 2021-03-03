@@ -1,6 +1,6 @@
 import './container.css';
-import React, { FC, HTMLAttributes } from 'react';
 import b_ from 'b_';
+import React, { FC, HTMLAttributes } from 'react';
 
 const block = b_.lock('container');
 

@@ -1,11 +1,10 @@
 // Модуль отображает сообщения на весь экран
 
 import React, { FC, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-
 import { FRAME } from '../constants';
-import { TITLE_FONT_SIZE } from '../setup';
 import { getTitle } from '../selectors';
+import { useSelector } from 'react-redux';
+import { TITLE_FONT_SIZE } from '../setup';
 
 export const TitleLayer: FC = () => {
   const title = useSelector(getTitle);

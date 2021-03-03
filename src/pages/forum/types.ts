@@ -1,4 +1,4 @@
-import { UserObject } from '../../api/schema';
+import { UserObject } from '@api/schema';
 
 export interface CreateTopicFormFields {
   topicName: string;

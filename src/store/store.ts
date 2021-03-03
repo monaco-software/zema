@@ -1,9 +1,9 @@
-import { Action, combineReducers, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { appReducer } from './reducer';
-import { gameReducer } from '../pages/game/reducer';
-import { leaderboardReducer } from '../pages/leaderboard/reducer';
-import { gameLevelsReducer } from '../pages/gameLevels/reducer';
-import { forumReducer } from '../pages/forum/reducer';
+import { gameReducer } from '@pages/game/reducer';
+import { forumReducer } from '@pages/forum/reducer';
+import { gameLevelsReducer } from '@pages/gameLevels/reducer';
+import { leaderboardReducer } from '@pages/leaderboard/reducer';
+import { Action, combineReducers, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 const reducer = combineReducers({
   app: appReducer,
