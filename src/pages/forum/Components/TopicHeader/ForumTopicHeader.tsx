@@ -1,9 +1,9 @@
 import './forum-topic-header.css';
-import React, { FC } from 'react';
-import { Box, Button, Heading } from 'grommet';
 import b_ from 'b_';
-import { getText } from '../../../../common/langUtils';
+import React, { FC } from 'react';
 import { Edit } from 'grommet-icons';
+import { getText } from '@common/langUtils';
+import { Box, Button, Heading } from 'grommet';
 
 const block = b_.lock('forum-topic-header');
 

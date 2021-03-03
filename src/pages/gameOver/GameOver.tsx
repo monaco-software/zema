@@ -1,14 +1,12 @@
-import { useHistory } from 'react-router-dom';
-import React, { FC } from 'react';
-import b_ from 'b_';
-import { Box, Button, Grommet, Heading, Image, Main } from 'grommet';
-
-import { ROUTES } from '../../common/constants';
-import { getText } from '../../common/langUtils';
-import { useAuth } from '../../hooks';
-import skullImage from '../game/assets/images/skull.png';
-
 import './game-over.css';
+import b_ from 'b_';
+import React, { FC } from 'react';
+import skullImage from '../game/assets/images/skull.png';
+import { useAuth } from '@common/hooks';
+import { ROUTES } from '@common/constants';
+import { getText } from '@common/langUtils';
+import { useHistory } from 'react-router-dom';
+import { Box, Button, Grommet, Heading, Image, Main } from 'grommet';
 
 const block = b_.lock('game-over');
 

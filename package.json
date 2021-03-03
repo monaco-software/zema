@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "14.15.1"
+    "node": "14.15.1",
+    "npm": "6.14.8"
   },
   "scripts": {
     "start": "node server",
@@ -41,6 +42,7 @@
     "css-loader": "5.0.1",
     "cssnano": "4.1.10",
     "eslint": "7.19.0",
+    "eslint-plugin-pretty-imports": "1.1.3",
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-webpack-plugin": "2.4.3",
@@ -58,6 +60,7 @@
     "stylelint-selector-bem-pattern": "2.1.0",
     "stylelint-webpack-plugin": "2.1.1",
     "ts-loader": "8.0.14",
+    "tsconfig-paths-webpack-plugin": "3.3.0",
     "typescript": "4.1.3",
     "webpack": "5.20.1",
     "webpack-cli": "4.5.0",

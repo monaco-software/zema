@@ -1,10 +1,9 @@
 // Модуль отображает статистику красным
 
+import Ball from '../lib/ball';
 import React, { FC, useEffect, useRef } from 'react';
-
 import { FRAME } from '../constants';
 import { print } from '../lib/print';
-import Ball from '../lib/ball';
 import { padWithSpaces } from '../lib/utils';
 
 export const InfoLayer: FC = () => {

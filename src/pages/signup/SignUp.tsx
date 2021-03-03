@@ -1,15 +1,14 @@
 import './sign-up.css';
-
-import React, { FC, useState } from 'react';
 import b_ from 'b_';
-import { useAsyncAction, useAuth } from '../../hooks';
+import React, { FC, useState } from 'react';
+import { ROUTES } from '@common/constants';
+import { SignUpFormFields } from './types';
+import { getText } from '@common/langUtils';
+import { useHistory } from 'react-router-dom';
+import { asyncAppActions } from '@store/asyncActions';
+import { useAsyncAction, useAuth } from '@common/hooks';
 import { SignUpForm } from './Components/Form/SignUpForm';
 import { FormExtendedEvent, Heading, Main } from 'grommet';
-import { getText } from '../../common/langUtils';
-import { ROUTES } from '../../common/constants';
-import { useHistory } from 'react-router-dom';
-import { SignUpFormFields } from './types';
-import { asyncAppActions } from '../../store/asyncActions';
 
 const block = b_.lock('sign-up');
 

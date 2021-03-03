@@ -1,7 +1,6 @@
 import './loading-overlay.css';
-
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
 import { Spinner, SpinnerProps } from '../Spinner/Spinner';
 
 const block = b_.lock('loading-overlay');

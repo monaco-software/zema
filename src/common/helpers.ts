@@ -1,5 +1,5 @@
-import { YANDEX_API_URL } from '../api/methods';
-import { UserObject } from '../api/schema';
+import { UserObject } from '@api/schema';
+import { YANDEX_API_URL } from '@api/methods';
 
 export const getAvatarFullPath = (path: string) => `${YANDEX_API_URL}${path}`;
 

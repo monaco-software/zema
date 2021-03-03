@@ -5,7 +5,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -22,7 +22,8 @@ module.exports = {
     publicPath: '/'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    plugins: [new TsconfigPathsPlugin()],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   module: {
     rules: [
@@ -70,6 +71,7 @@ module.exports = {
       template: './src/index.html',
       inject: 'head',
       scriptLoading: 'defer',
+      favicon: './src/favicon.ico',
     }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
@@ -81,14 +83,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
-        { from: './src/pwa/' },
       ],
-    }),
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 10*1024*1024,
-      navigateFallback: '/index.html',
     }),
   ],
 }

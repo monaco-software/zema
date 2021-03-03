@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Box, Button, Form, FormExtendedEvent, FormField, Heading, Layer, TextInput, TypedForm } from 'grommet';
-import { getText } from '../../../../common/langUtils';
+import { getText } from '@common/langUtils';
 import { CreateTopicFormFields } from '../../types';
-import { LoadingOverlay } from '../../../../components/LoadingOverlay/LoadingOverlay';
+import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
+import { Box, Button, Form, FormExtendedEvent, FormField, Heading, Layer, TextInput, TypedForm } from 'grommet';
 
 const TypedForm = Form as TypedForm<CreateTopicFormFields>;
 

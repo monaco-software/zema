@@ -1,10 +1,10 @@
 import './leaderboard-top.css';
+import b_ from 'b_';
 import React, { FC } from 'react';
 import { Box } from 'grommet';
-import b_ from 'b_';
 import { LeaderboardRecord } from '../../types';
-import { AvatarWithFallback } from '../../../../components/AvatarWithFallback/AvatarWithFallback';
-import { getUserFullName } from '../../../../common/helpers';
+import { getUserFullName } from '@common/helpers';
+import { AvatarWithFallback } from '@components/AvatarWithFallback/AvatarWithFallback';
 
 const block = b_.lock('leaderboard-top');
 

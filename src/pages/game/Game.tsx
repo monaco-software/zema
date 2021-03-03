@@ -1,36 +1,32 @@
 import './game.css';
-
-import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Main } from 'grommet';
 import b_ from 'b_';
-
-import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
-import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
-import { ROUTES } from '../../common/constants';
-
-import { asyncGameLevelActions } from '../gameLevels/asyncActions';
-import { useAction, useAsyncAction } from '../../hooks';
-import { gameActions } from './reducer';
-import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
-import { getAllowedLevels } from '../gameLevels/selectors';
-import { uniqAndSort } from '../../common/utils';
-
 import levels from './levels';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
+import { Main } from 'grommet';
+import { UiLayer } from './Layers/Ui';
+import { gameActions } from './reducer';
 import { getPath } from './lib/geometry';
+import { useSelector } from 'react-redux';
+import { BackLayer } from './Layers/Back';
+import { FrogLayer } from './Layers/Frog';
+import { InfoLayer } from './Layers/Info';
+import { ROUTES } from '@common/constants';
+import { uniqAndSort } from '@common/utils';
 import { BallsLayer } from './Layers/Balls';
 import { TitleLayer } from './Layers/Title';
-import { BackLayer } from './Layers/Back';
-import { EffectsLayer } from './Layers/Effects';
-import { FrogLayer } from './Layers/Frog';
-import { UiLayer } from './Layers/Ui';
 import { ScoreLayer } from './Layers/Score';
 import { ComboLayer } from './Layers/Combo';
-import { BlackoutLayer } from './Layers/Blackout';
 import { SkullLayer } from './Layers/Skull';
+import { useHistory } from 'react-router-dom';
 import { BulletLayer } from './Layers/Bullet';
-import { InfoLayer } from './Layers/Info';
+import { EffectsLayer } from './Layers/Effects';
+import { BlackoutLayer } from './Layers/Blackout';
+import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
+import { useAction, useAsyncAction } from '@common/hooks';
+import { getAllowedLevels } from '../gameLevels/selectors';
+import { asyncGameLevelActions } from '../gameLevels/asyncActions';
+import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
+import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 
 const block = b_.lock('game');
 
