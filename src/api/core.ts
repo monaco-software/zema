@@ -3,10 +3,16 @@ import { appActions } from '@store/reducer';
 import { isJsonString } from '@common/utils';
 import { NotificationStatus } from '@components/Notification/Notification';
 
-type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
+export enum HTTP_METHODS {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  PATCH = 'PATCH',
+}
 
 interface RequestOptions extends RequestInit {
-  method: Methods;
+  method: HTTP_METHODS;
 }
 
 export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: string, options: RequestOptions) => {
