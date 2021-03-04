@@ -1,0 +1,71 @@
+.leaderboard-table {
+  --leaderboard-table-cell-height: 48px;
+  --leaderboard-table-cell-horizontal-padding: 15px;
+  --leaderboard-table-first-cell-triangle-width: 12px;
+  --leaderboard-table-cell-border-radius: 12px;
+  width: 100%;
+  border-spacing: 0 10px;
+  background-color: var(--light-1);
+  padding: 20px;
+  border-radius: 3px;
+}
+
+.leaderboard-table__cell {
+  height: var(--leaderboard-table-cell-height);
+  padding: 5px var(--leaderboard-table-cell-horizontal-padding);
+  background-color: var(--brand-light-2);
+  font-weight: 500;
+}
+
+.leaderboard-table__row_current-user .leaderboard-table__cell {
+  background-color: var(--yellow-light-1);
+}
+
+.leaderboard-table__cell:first-child {
+  position: relative;
+  width: 1%;
+  padding-right: calc(var(--leaderboard-table-cell-horizontal-padding) / 2);
+  border-top-left-radius: var(--leaderboard-table-cell-border-radius);
+  border-bottom-left-radius: var(--leaderboard-table-cell-border-radius);
+  background-color: var(--brand);
+  color: var(--light-1);
+  min-width: 32px;
+  font-weight: 700;
+}
+
+.leaderboard-table__row_current-user .leaderboard-table__cell:first-child {
+  background-color: var(--accent-4);
+}
+
+.leaderboard-table__cell:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 100%;
+  border-top: var(--leaderboard-table-cell-height) solid transparent;
+  border-left: var(--leaderboard-table-first-cell-triangle-width) solid var(--brand);
+}
+
+.leaderboard-table__row_current-user .leaderboard-table__cell:first-child::after {
+  border-left-color: var(--accent-4);
+}
+
+.leaderboard-table__cell:nth-child(2) {
+  padding-left: calc(var(--leaderboard-table-cell-horizontal-padding) + var(--leaderboard-table-first-cell-triangle-width));
+}
+
+.leaderboard-table__cell:last-child {
+  border-top-right-radius: var(--leaderboard-table-cell-border-radius);
+  border-bottom-right-radius: var(--leaderboard-table-cell-border-radius);
+  text-align: right;
+}
+
+.leaderboard-table__cell_type_name {
+  display: flex;
+  align-items: center;
+}
+
+.leaderboard-table__user-avatar {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
