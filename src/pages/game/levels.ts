@@ -1,12 +1,11 @@
-import { Level } from './types';
-import { BALL_COLORS } from './constants';
 import level1Thumb from './assets/images/thumbnails/level_1_thumb.png';
 import level2Thumb from './assets/images/thumbnails/level_2_thumb.png';
 import level3Thumb from './assets/images/thumbnails/level_3_thumb.png';
-
 import level1Background from './assets/images/backgrounds/level_1_back.png';
 import level2Background from './assets/images/backgrounds/level_2_back.png';
 import level3Background from './assets/images/backgrounds/level_3_back.png';
+import { Level } from './types';
+import { BALL_COLORS } from './constants';
 
 const levels: Level[] = [{
   title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',

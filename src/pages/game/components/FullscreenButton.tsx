@@ -1,13 +1,11 @@
 import './fullscreen-button.css';
-
-import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
-import { Contract, Expand } from 'grommet-icons';
 import b_ from 'b_';
-
+import React, { FC } from 'react';
 import { gameActions } from '../reducer';
+import { useSelector } from 'react-redux';
+import { useAction } from '@common/hooks';
+import { Contract, Expand } from 'grommet-icons';
 import { getFullscreenState } from '../selectors';
-import { useAction } from '../../../hooks';
 
 const block = b_.lock('fullscreen-button');
 

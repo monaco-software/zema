@@ -1,3 +1,4 @@
+import { createApiMethod, HTTP_METHODS } from './core';
 import {
   GetLeaderboardParams,
   GetLeaderboardResponse,
@@ -9,7 +10,6 @@ import {
   UpdateLeaderboardResponse, UpdatePasswordParams, UpdatePasswordResponse, UpdateProfileParams, UpdateProfileResponse,
   UserObject,
 } from './schema';
-import { createApiMethod } from './core';
 
 export const YANDEX_API_URL = 'https://ya-praktikum.tech';
 const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;
@@ -17,7 +17,7 @@ const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;
 export const apiGetUser = createApiMethod<undefined, UserObject>(
   getFullPath('/auth/user'),
   {
-    method: 'GET',
+    method: HTTP_METHODS.GET,
     credentials: 'include',
   }
 );
@@ -25,7 +25,7 @@ export const apiGetUser = createApiMethod<undefined, UserObject>(
 export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
   getFullPath('/auth/signin'),
   {
-    method: 'POST',
+    method: HTTP_METHODS.POST,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
 export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
   getFullPath('/auth/signup'),
   {
-    method: 'POST',
+    method: HTTP_METHODS.POST,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
 export const apiGetUserById = (userId: number) => createApiMethod<undefined, UserObject>(
   getFullPath(`/user/${userId}`),
   {
-    method: 'GET',
+    method: HTTP_METHODS.GET,
     credentials: 'include',
   }
 );
@@ -55,7 +55,7 @@ export const apiGetUserById = (userId: number) => createApiMethod<undefined, Use
 export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, UpdateLeaderboardResponse>(
   getFullPath('/leaderboard'),
   {
-    method: 'POST',
+    method: HTTP_METHODS.POST,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, Upd
 export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeaderboardResponse>(
   getFullPath('/leaderboard/all'),
   {
-    method: 'POST',
+    method: HTTP_METHODS.POST,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeader
 export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfileResponse>(
   getFullPath('/user/profile'),
   {
-    method: 'PUT',
+    method: HTTP_METHODS.PUT,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfi
 export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarResponse>(
   getFullPath('/user/profile/avatar'),
   {
-    method: 'PUT',
+    method: HTTP_METHODS.PUT,
     credentials: 'include',
   }
 );
@@ -96,7 +96,7 @@ export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarR
 export const apiUpdatePassword = createApiMethod<UpdatePasswordParams, UpdatePasswordResponse>(
   getFullPath('/user/password'),
   {
-    method: 'PUT',
+    method: HTTP_METHODS.PUT,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',

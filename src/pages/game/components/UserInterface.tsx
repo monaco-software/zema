@@ -1,32 +1,28 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
-
 import './user-interface.css';
-
 import b_ from 'b_';
-
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
-import { BULLET_TICK_DISTANCE } from '../setup';
-import { gameActions } from '../reducer';
-import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../selectors';
 import levels from '../levels';
-import { useAction } from '../../../hooks';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { gameActions } from '../reducer';
+import { useSelector } from 'react-redux';
+import { useAction } from '@common/hooks';
+import { getPath } from '../lib/geometry';
 import { FrogLayer } from '../Layers/Frog';
 import { BackLayer } from '../Layers/Back';
+import { InfoLayer } from '../Layers/Info';
 import { BallsLayer } from '../Layers/Balls';
-import { EffectsLayer } from '../Layers/Effects';
 import { SkullLayer } from '../Layers/Skull';
-import { BulletLayer } from '../Layers/Bullet';
 import { ComboLayer } from '../Layers/Combo';
 import { ScoreLayer } from '../Layers/Score';
-import { BlackoutLayer } from '../Layers/Blackout';
 import { TitleLayer } from '../Layers/Title';
-import { InfoLayer } from '../Layers/Info';
-import { getPath } from '../lib/geometry';
+import { BulletLayer } from '../Layers/Bullet';
+import { BULLET_TICK_DISTANCE } from '../setup';
+import { EffectsLayer } from '../Layers/Effects';
+import { BlackoutLayer } from '../Layers/Blackout';
 import { FullscreenButton } from './FullscreenButton';
+import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
+import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../selectors';
 
 const block = b_.lock('user-interface');
 

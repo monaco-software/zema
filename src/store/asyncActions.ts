@@ -1,8 +1,8 @@
-import { getUserWithFullAvatarUrl } from '../common/helpers';
 import { AppThunk } from './store';
-import { apiGetUser, apiPerformSignIn, apiPerformSignUp } from '../api/methods';
 import { appActions } from './reducer';
-import { SignInParams, SignUpParams } from '../api/schema';
+import { SignInParams, SignUpParams } from '@api/schema';
+import { getUserWithFullAvatarUrl } from '@common/helpers';
+import { apiGetUser, apiPerformSignIn, apiPerformSignUp } from '@api/methods';
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { Box, Button, Heading } from 'grommet';
-import { getText } from '../../../../common/langUtils';
 import { Add } from 'grommet-icons';
+import { getText } from '@common/langUtils';
+import { Box, Button, Heading } from 'grommet';
 
 interface Props {
   onTopicCreateClick: VoidFunction;

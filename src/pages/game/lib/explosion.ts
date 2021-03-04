@@ -1,6 +1,6 @@
 import Sprite from './sprite';
-import { BALL_DIAMETER } from '../constants';
 import boomSprite from '../assets/images/boom.png';
+import { BALL_DIAMETER } from '../constants';
 
 export default class Explosion extends Sprite {
   image: HTMLImageElement;

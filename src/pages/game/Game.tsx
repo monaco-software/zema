@@ -1,22 +1,19 @@
 import './game.css';
-
-import React, { FC, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import b_ from 'b_';
-
-import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
-import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
-import { ROUTES } from '../../common/constants';
-
-import { asyncGameLevelActions } from '../gameLevels/asyncActions';
-import { useAction, useAsyncAction } from '../../hooks';
-import { gameActions } from './reducer';
-import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
-import { getAllowedLevels } from '../gameLevels/selectors';
-import { uniqAndSort } from '../../common/utils';
-import { UserInterface } from './components/UserInterface';
 import levels from './levels';
+import React, { FC, useEffect, useRef } from 'react';
+import { gameActions } from './reducer';
+import { useSelector } from 'react-redux';
+import { ROUTES } from '@common/constants';
+import { uniqAndSort } from '@common/utils';
+import { useHistory } from 'react-router-dom';
+import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
+import { useAction, useAsyncAction } from '@common/hooks';
+import { getAllowedLevels } from '../gameLevels/selectors';
+import { UserInterface } from './components/UserInterface';
+import { asyncGameLevelActions } from '../gameLevels/asyncActions';
+import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
+import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 
 const block = b_.lock('game');
 

@@ -1,18 +1,17 @@
 // Модуль отображает шары
 
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
-import { ALLOWANCE, BALL_EXPLODE_TIMEOUT } from '../setup';
-import { getBulletColor, getCombo, getCurrentLevel, getGamePhase, getShotPath, getShotPosition } from '../selectors';
-import { gameActions } from '../reducer';
-import { applyPhysic, calculateRemainColors, createBalls, findSame } from './utils/balls';
 import Ball from '../lib/ball';
 import levels from '../levels';
-import { getCloserPoint, getLineLen } from '../lib/geometry';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { fps } from '../lib/utils';
-import { useAction } from '../../../hooks';
+import { gameActions } from '../reducer';
+import { useSelector } from 'react-redux';
+import { useAction } from '@common/hooks';
+import { ALLOWANCE, BALL_EXPLODE_TIMEOUT } from '../setup';
+import { getCloserPoint, getLineLen } from '../lib/geometry';
+import { applyPhysic, calculateRemainColors, createBalls, findSame } from './utils/balls';
+import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import { getBulletColor, getCombo, getCurrentLevel, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 
 interface Props {
   ballsPath: number[][];

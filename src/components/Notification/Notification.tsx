@@ -1,6 +1,6 @@
 import './notification.css';
-import React, { FC, ReactNode } from 'react';
 import b_ from 'b_';
+import React, { FC, ReactNode } from 'react';
 import { Button, Layer } from 'grommet';
 import { Alert, FormClose, StatusGood, StatusInfo } from 'grommet-icons';
 

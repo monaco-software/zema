@@ -1,7 +1,10 @@
 import './account-form.css';
-
-import React, { FC } from 'react';
 import b_ from 'b_';
+import React, { FC } from 'react';
+import { phoneMask } from '@common/masks';
+import { getText } from '@common/langUtils';
+import { AccountFormFields } from '../types';
+import { emailValidate, nameValidate, phoneValidate } from '@common/validations';
 import {
   Button,
   Form,
@@ -12,11 +15,6 @@ import {
   TextInput,
   TypedForm,
 } from 'grommet';
-
-import { AccountFormFields } from '../types';
-import { getText } from '../../../common/langUtils';
-import { emailValidate, nameValidate, phoneValidate } from '../../../common/validations';
-import { phoneMask } from '../../../common/masks';
 
 const TypedForm = Form as TypedForm<AccountFormFields>;
 

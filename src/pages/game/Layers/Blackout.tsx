@@ -2,11 +2,10 @@
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-
-import { BLACKOUT_INCREMENT, FRAME, GAME_PHASE } from '../constants';
 import { getGamePhase } from '../selectors';
-import { decimalToHex, fps } from '../lib/utils';
 import { DEFAULT_FRAMERATE } from '../setup';
+import { decimalToHex, fps } from '../lib/utils';
+import { BLACKOUT_INCREMENT, FRAME, GAME_PHASE } from '../constants';
 
 export const BlackoutLayer: FC = () => {
   const gamePhase = useSelector(getGamePhase);
