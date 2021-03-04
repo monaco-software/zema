@@ -50,6 +50,42 @@ export default class Ball extends Sprite {
     this.image.src = ballSprite;
   }
 
+  updateBuffer(index: number, bufferIndex: number) {
+    // если не закэшировано - рендерим и пишем в кэш
+    super.update(index, 0);
+    const bufferCtx = Ball.buffer[bufferIndex].getContext('2d');
+    if (!bufferCtx) {
+      throw new Error('Cant update buffer canvas');
+    }
+    bufferCtx.drawImage(
+      this.canvas,
+      0, 0,
+      this.width,
+      this.height,
+      0, 0,
+      this.width,
+      this.height
+    );
+    Ball.index[bufferIndex] += 1;
+  }
+
+  getBuffer(index: number): HTMLCanvasElement | undefined {
+    if (!this.image.width) {
+      return;
+    }
+    let frame = index % this.numberOfFrames;
+    if (frame < 0) {
+      return;
+    }
+
+    const bufferIndex = this.color * this.numberOfFrames + frame;
+    const notCached = Ball.index[bufferIndex] === 0;
+    if (notCached) {
+      this.updateBuffer(index, bufferIndex);
+    }
+    return Ball.buffer[bufferIndex];
+  }
+
   update(index = 0, angle = 0) {
     if (!this.image.width) {
       return;
@@ -63,22 +99,7 @@ export default class Ball extends Sprite {
     const notCached = Ball.index[bufferIndex] === 0;
 
     if (notCached) {
-      // если не закэшировано - рендерим и пишем в кэш
-      super.update(index, 0);
-
-      const bufferCtx = Ball.buffer[bufferIndex].getContext('2d');
-      if (!bufferCtx) {
-        throw new Error('Cant update buffer canvas');
-      }
-      bufferCtx.drawImage(
-        this.canvas,
-        0, 0,
-        this.width,
-        this.height,
-        0, 0,
-        this.width,
-        this.height
-      );
+      this.updateBuffer(index, bufferIndex);
     }
     this.ctx.clearRect(0, 0, this.width, this.height);
 

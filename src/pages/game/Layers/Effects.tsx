@@ -63,8 +63,8 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
         Math.floor(i / 2));
     }
     drawTimeoutRef.current = window.setTimeout(() => {
-      requestRef.current = window.requestAnimationFrame(draw), fps(DEFAULT_FRAMERATE);
-    });
+      requestRef.current = window.requestAnimationFrame(draw);
+    }, fps(DEFAULT_FRAMERATE));
   };
 
   useEffect(() => {
@@ -96,6 +96,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     }
     if (gamePhase === GAME_PHASE.STARTING ||
       gamePhase === GAME_PHASE.ENDING && gameResult === GAME_RESULT.WIN) {
+      console.log([gamePhase, 'runParticles']);
       runParticles();
     }
   }, [gamePhase]);

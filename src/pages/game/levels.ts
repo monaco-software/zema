@@ -10,7 +10,7 @@ import { BALL_COLORS } from './constants';
 const levels: Level[] = [{
   title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   speed: 20, // fps и количество тиков pusher в секунду
-  balls: 60,
+  balls: 6,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,

@@ -39,11 +39,13 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   }, []);
 
   const inserting = useRef(false);
+  const exiting = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pusherIncrement = useRef(0);
   const explodeTimeoutRef = useRef<number>();
   const pusherTimeoutRef = useRef<number>();
   const requestRef = useRef<number>();
+  const pusherOffset = useRef(0);
 
   const pusherStartPosition = -levels[level].balls * BALL_DIAMETER;
 
@@ -64,15 +66,25 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
         return;
       }
       ballsRemain += 1;
-      ball.update(ball.position + ball.rotationOffset, ballsPath[ball.position][2]);
-      ctx.drawImage(ball.canvas,
-        ballsPath[ball.position][0] - BALL_RADIUS,
-        ballsPath[ball.position][1] - BALL_RADIUS);
+      const buffer = ball.getBuffer(ball.position + ball.rotationOffset);
+      if (!buffer) { return; }
+      ctx.translate(
+        ballsPath[ball.position][0],
+        ballsPath[ball.position][1]
+      );
+      ctx.rotate(ballsPath[ball.position][2]);
+      ctx.drawImage(buffer, -BALL_RADIUS, -BALL_RADIUS);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     });
 
     const now = performance.now();
     Ball.updates += ballsRemain;
     Ball.updateTime += now - start;
+    if (gamePhase !== GAME_PHASE.ENDED && gamePhase !== GAME_PHASE.EXITING) {
+      pusherTimeoutRef.current = window.setTimeout(() => {
+        setPusher(pusher + pusherIncrement.current + pusherOffset.current);
+      }, fps(levels[level].speed));
+    }
   };
 
   const explode = (sameBalls: number[]) => {
@@ -95,12 +107,17 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   // рассчитывает положения шаров относительно pusher
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx || gamePhase === GAME_PHASE.ENDED) {
+    if (!ctx || gamePhase === GAME_PHASE.ENDED || exiting.current) {
       return;
     }
     // шары кончились, победа
     if (!balls.length && gamePhase === GAME_PHASE.STARTED) {
       setBulletState(BULLET_STATE.IDLE);
+      // выставляем таймаут,
+      // чтобы успели взорваться шары
+      // и флаг exiting для того,
+      // чтобы следующие итерации снова не запустили setGamePhase
+      exiting.current = true;
       pusherTimeoutRef.current = window.setTimeout(
         () => setGamePhase(GAME_PHASE.ENDING),
         BALL_EXPLODE_TIMEOUT);
@@ -140,13 +157,8 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     result.impacts.forEach((i) => {
       explodeSameBalls(balls, i, BALL_EXPLODE_TIMEOUT, true);
     });
+    pusherOffset.current = result.pusherOffset;
     requestRef.current = window.requestAnimationFrame(() => draw());
-
-    if (gamePhase !== GAME_PHASE.ENDED && gamePhase !== GAME_PHASE.EXITING) {
-      pusherTimeoutRef.current = window.setTimeout(() => {
-        setPusher(pusher + pusherIncrement.current + result.pusherOffset);
-      }, fps(levels[level].speed));
-    }
   }, [pusher]);
 
   // запускает и останавливает pusher
@@ -214,7 +226,6 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    // setPusher(pusher + pusherIncrement.current);
 
     return () => {
       setPusher(pusherStartPosition);
