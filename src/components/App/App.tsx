@@ -29,7 +29,7 @@ export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchUser(undefined)
+    fetchUser()
       .finally(() => setIsLoading(false));
   }, []);
 

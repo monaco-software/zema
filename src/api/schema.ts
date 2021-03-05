@@ -18,6 +18,8 @@ export interface SignInParams {
 
 export type SignInResponse = string;
 
+export type SignOutResponse = string;
+
 export interface SignUpParams extends SignInParams{
   first_name: string;
   second_name: string;
