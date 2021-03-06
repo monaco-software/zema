@@ -1,4 +1,5 @@
 import { AppThunk } from '@store/store';
+import { Voidable } from '@common/types';
 import { appActions } from '@store/reducer';
 import { isJsonString } from '@common/utils';
 import { NotificationStatus } from '@components/Notification/Notification';
@@ -16,7 +17,7 @@ interface RequestOptions extends RequestInit {
 }
 
 export const createApiMethod = <TParams = undefined, TResponse = unknown>(path: string, options: RequestOptions) => {
-  return (params: TParams, defaultErrorHandling = true): AppThunk<Promise<TResponse>> => {
+  return (params: Voidable<TParams>, defaultErrorHandling = true): AppThunk<Promise<TResponse>> => {
     return (dispatch): Promise<TResponse> => {
       let preparedParams: BodyInit | null = null;
 

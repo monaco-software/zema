@@ -37,7 +37,7 @@ export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchUser(undefined)
+    fetchUser()
       .finally(() => setIsLoading(false));
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', onLoad);

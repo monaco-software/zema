@@ -4,6 +4,7 @@ import {
   GetLeaderboardResponse,
   SignInParams,
   SignInResponse,
+  SignOutResponse,
   SignUpParams,
   SignUpResponse, UpdateAvatarParams, UpdateAvatarResponse,
   UpdateLeaderboardParams,
@@ -41,6 +42,14 @@ export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
     headers: {
       'Content-Type': 'application/json',
     },
+  }
+);
+
+export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
+  getFullPath('/auth/logout'),
+  {
+    method: HTTP_METHODS.POST,
+    credentials: 'include',
   }
 );
 

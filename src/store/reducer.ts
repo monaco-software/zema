@@ -23,6 +23,9 @@ const app = createSlice({
     setUser(state, { payload }: PayloadAction<AppState['user']>) {
       state.user = payload;
     },
+    resetUser(state) {
+      state.user = initialState.user;
+    },
     setIsSignedIn(state, { payload }: PayloadAction<AppState['isSignedIn']>) {
       state.isSignedIn = payload;
     },
