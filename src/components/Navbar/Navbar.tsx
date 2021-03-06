@@ -1,13 +1,17 @@
 import './navbar.css';
 import b_ from 'b_';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@common/constants';
 import { Icon } from 'grommet-icons/icons';
 import { Gamepad } from 'grommet-icons/es6';
 import { getText } from '@common/langUtils';
+import { useAsyncAction } from '@common/hooks';
+import { getIsSignedInd } from '@store/selectors';
 import { GROMMET_COLORS } from '../App/grommetTheme';
-import { AppsRounded, Chat, Home, Trophy, User } from 'grommet-icons';
+import { asyncAppActions } from '@store/asyncActions';
+import { Chat, Home, Trophy, User, Logout } from 'grommet-icons';
 
 const block = b_.lock('navbar');
 
@@ -17,30 +21,56 @@ const Separator = () => {
   );
 };
 
-interface NavbarItemProps {
+interface NavbarLinkItemProps {
   route: ROUTES;
   exact?: boolean;
   IconComponent: Icon;
   text?: string;
 }
-const NavbarItem: FC<NavbarItemProps> = ({ route, exact, IconComponent, text }) => {
+const NavbarLinkItem: FC<NavbarLinkItemProps> = ({ route, exact, IconComponent, text }) => {
   return (
     <NavLink exact={exact} to={route} className={block('link')} activeClassName={block('link', { active: true })}>
-      <div className={block('link-icon-wrap')}>
-        <IconComponent color={GROMMET_COLORS.LIGHT_1} size="18" className={block('link-icon')} />
+      <div className={block('item-icon-wrap')}>
+        <IconComponent color={GROMMET_COLORS.LIGHT_1} size="18" className={block('item-icon')} />
       </div>
-      <div className={block('link-text')}>
+      <div className={block('item-text')}>
         {text}
       </div>
     </NavLink>
   );
 };
 
+interface NavbarButtonItemProps extends HTMLAttributes<HTMLButtonElement>{
+  IconComponent: Icon;
+  text?: string;
+}
+const NavbarButtonItem: FC<NavbarButtonItemProps> = ({ IconComponent, text, className, ...restProps }) => {
+  const baseClassName = block('button');
+  const fullClassName = className ? `${baseClassName} ${className}` : baseClassName;
+
+  return (
+    <button className={fullClassName} {...restProps}>
+      <div className={block('item-icon-wrap')}>
+        <IconComponent color={GROMMET_COLORS.LIGHT_1} size="18" className={block('item-icon')} />
+      </div>
+      <div className={block('item-text')}>
+        {text}
+      </div>
+    </button>
+  );
+};
+
 export const Navbar: FC = () => {
+  const signOut = useAsyncAction(asyncAppActions.signOutUser);
+
+  const isSignedIn = useSelector(getIsSignedInd);
+
   const [isHidden, setIsHidden] = useState(false);
   const [withTransition, setWithTransition] = useState(false);
 
   const mouseLeaveTimeout = useRef<number>();
+
+  const onSignOutClick = () => signOut();
 
   const onMouseEnter = () => {
     clearTimeout(mouseLeaveTimeout.current);
@@ -49,9 +79,9 @@ export const Navbar: FC = () => {
 
   const onMouseLeave = () => {
     clearTimeout(mouseLeaveTimeout.current);
-    mouseLeaveTimeout.current = setTimeout(() => {
+    mouseLeaveTimeout.current = window.setTimeout(() => {
       setIsHidden(true);
-    }, 1000) as unknown as number;
+    }, 1000);
   };
 
   useEffect(() => {
@@ -61,9 +91,9 @@ export const Navbar: FC = () => {
       setWithTransition(true);
     }, 0);
 
-    mouseLeaveTimeout.current = setTimeout(() => {
+    mouseLeaveTimeout.current = window.setTimeout(() => {
       setIsHidden(true);
-    }, 2000) as unknown as number;
+    }, 2000);
 
     return () => {
       clearTimeout(setTransitionTimeout);
@@ -77,7 +107,7 @@ export const Navbar: FC = () => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <NavbarItem
+      <NavbarLinkItem
         exact
         route={ROUTES.ROOT}
         IconComponent={Home}
@@ -86,28 +116,21 @@ export const Navbar: FC = () => {
 
       <Separator />
 
-      <NavbarItem
-        exact
-        route={ROUTES.GAME}
+      <NavbarLinkItem
+        route={ROUTES.GAME_LEVELS}
         IconComponent={Gamepad}
         text={getText('navbar_game')}
       />
 
-      <NavbarItem
-        route={ROUTES.GAME_LEVELS}
-        IconComponent={AppsRounded}
-        text={getText('navbar_game_levels')}
-      />
-
       <Separator />
 
-      <NavbarItem
+      <NavbarLinkItem
         route={ROUTES.LEADERBOARD}
         IconComponent={Trophy}
         text={getText('navbar_leaderboard')}
       />
 
-      <NavbarItem
+      <NavbarLinkItem
         exact
         route={ROUTES.FORUM}
         IconComponent={Chat}
@@ -116,11 +139,19 @@ export const Navbar: FC = () => {
 
       <Separator />
 
-      <NavbarItem
+      <NavbarLinkItem
         route={ROUTES.ACCOUNT}
         IconComponent={User}
         text={getText('navbar_account')}
       />
+
+      {isSignedIn &&
+        <NavbarButtonItem
+          text={getText('navbar_signout')}
+          IconComponent={Logout}
+          onClick={onSignOutClick}
+        />
+      }
     </nav>
   );
 };

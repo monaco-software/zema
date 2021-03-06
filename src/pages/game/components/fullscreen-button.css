@@ -1,0 +1,14 @@
+.fullscreen-button {
+  display: inline-block;
+  background-color: var(--brand);
+  color: var(--silver);
+  border-radius: 999px;
+  line-height: 0;
+  cursor: pointer;
+  box-shadow: 0 0 3px #000;
+  position: absolute;
+}
+
+.fullscreen-button:hover {
+  box-shadow: 0 0 6px #000;
+}

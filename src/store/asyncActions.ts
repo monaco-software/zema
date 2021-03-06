@@ -2,7 +2,7 @@ import { AppThunk } from './store';
 import { appActions } from './reducer';
 import { SignInParams, SignUpParams } from '@api/schema';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
-import { apiGetUser, apiPerformSignIn, apiPerformSignUp } from '@api/methods';
+import { apiGetUser, apiPerformSignIn, apiPerformSignOut, apiPerformSignUp } from '@api/methods';
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {
@@ -30,6 +30,17 @@ export const asyncAppActions = {
     try {
       await dispatch(apiPerformSignUp(params, false));
       await dispatch(asyncAppActions.fetchUser());
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  signOutUser: (): AppThunk<Promise<void>> => async (dispatch) => {
+    try {
+      await dispatch(apiPerformSignOut());
+
+      dispatch(appActions.resetUser());
+      dispatch(appActions.setIsSignedIn(false));
     } catch (error) {
       throw error;
     }

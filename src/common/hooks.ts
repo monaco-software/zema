@@ -1,5 +1,6 @@
 import { ROUTES } from './constants';
 import { useLayoutEffect } from 'react';
+import { Voidable } from '@common/types';
 import { useHistory } from 'react-router-dom';
 import { getIsSignedInd } from '@store/selectors';
 import { AppThunk, Dispatch } from '@store/store';
@@ -13,10 +14,10 @@ export const useAction =
     return bindActionCreators(action, dispatch);
   };
 
-export const useAsyncAction = <TParams, TResponse>(action: (params: TParams) => AppThunk<TResponse>) => {
+export const useAsyncAction = <TParams, TResponse>(action: (params: Voidable<TParams>) => AppThunk<TResponse>) => {
   const dispatch = useDispatch<Dispatch>();
 
-  return (params: TParams) => dispatch(action(params));
+  return (params: Voidable<TParams>) => dispatch(action(params));
 };
 
 export const useAuth = (needAuth = true) => {

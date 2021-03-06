@@ -6,17 +6,15 @@ import { Heading } from 'grommet';
 import { useSelector } from 'react-redux';
 import { getText } from '@common/langUtils';
 import { getAllowedLevels } from './selectors';
+import { useAsyncAction } from '@common/hooks';
 import { GameLevel } from './Components/GameLevel';
 import { getCurrentLevel } from '../game/selectors';
 import { asyncGameLevelActions } from './asyncActions';
-import { useAsyncAction, useAuth } from '@common/hooks';
 import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
 
 const block = b_.lock('game-levels');
 
 export const GameLevels: FC = () => {
-  useAuth();
-
   const fetchAllowedLevels = useAsyncAction(asyncGameLevelActions.fetchAllowedLevels);
 
   const [isLoading, setIsLoading] = useState(true);
