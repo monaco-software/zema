@@ -23,6 +23,14 @@ import { AppNotification } from '../Notification/AppNotification';
 
 const block = b_.lock('app');
 
+const onLoad = () => {
+  navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+    console.info('SW registered: ', registration);
+  }).catch((error) => {
+    console.error('SW registration failed: ', error);
+  });
+};
+
 export const App: FC = () => {
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
@@ -31,6 +39,12 @@ export const App: FC = () => {
   useEffect(() => {
     fetchUser(undefined)
       .finally(() => setIsLoading(false));
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', onLoad);
+    }
+    return () => {
+      window.removeEventListener('load', onLoad);
+    };
   }, []);
 
   return (
