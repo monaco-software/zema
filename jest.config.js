@@ -8,10 +8,6 @@ module.exports = {
     prefix: `<rootDir>/${compilerOptions.baseUrl}`,
   }),
   transform: {
-    '\\.css$': 'jest-raw-loader',
-    '\\.png$': 'jest-raw-loader',
-    '\\.jpg$': 'jest-raw-loader',
-    '\\.jpeg$': 'jest-raw-loader',
-    '\\.svg$': 'jest-raw-loader',
+    '\\.(css|png|jpg|jpeg|svg)$': 'jest-raw-loader',
   }
 };
