@@ -1,29 +1,16 @@
 import './game.css';
 import b_ from 'b_';
 import levels from './levels';
-import React, { FC, useEffect, useMemo, useRef } from 'react';
-import { Main } from 'grommet';
-import { UiLayer } from './Layers/Ui';
+import React, { FC, useEffect, useRef } from 'react';
 import { gameActions } from './reducer';
-import { getPath } from './lib/geometry';
 import { useSelector } from 'react-redux';
-import { BackLayer } from './Layers/Back';
-import { FrogLayer } from './Layers/Frog';
-import { InfoLayer } from './Layers/Info';
 import { ROUTES } from '@common/constants';
 import { uniqAndSort } from '@common/utils';
-import { BallsLayer } from './Layers/Balls';
-import { TitleLayer } from './Layers/Title';
-import { ScoreLayer } from './Layers/Score';
-import { ComboLayer } from './Layers/Combo';
-import { SkullLayer } from './Layers/Skull';
 import { useHistory } from 'react-router-dom';
-import { BulletLayer } from './Layers/Bullet';
-import { EffectsLayer } from './Layers/Effects';
-import { BlackoutLayer } from './Layers/Blackout';
 import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { getAllowedLevels } from '../gameLevels/selectors';
+import { UserInterface } from './components/UserInterface';
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
@@ -47,8 +34,6 @@ export const Game: FC = () => {
   const allowedLevels = useSelector(getAllowedLevels);
 
   const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);
-
-  const ballsPath = useMemo(() => getPath(levels[level].start, levels[level].curve), []);
 
   const timeoutRef = useRef<number>();
 
@@ -135,20 +120,7 @@ export const Game: FC = () => {
 
   return (
     <div className={block()}>
-      <Main justify="center" align="center">
-        <BackLayer />
-        <BallsLayer ballsPath={ballsPath} />
-        <EffectsLayer ballsPath={ballsPath} />
-        <SkullLayer />
-        <BulletLayer />
-        <FrogLayer />
-        <ComboLayer />
-        <ScoreLayer />
-        <BlackoutLayer />
-        <TitleLayer />
-        <InfoLayer />
-        <UiLayer />
-      </Main>
+      <UserInterface />
     </div>
   );
 };

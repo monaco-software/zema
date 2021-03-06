@@ -17,11 +17,11 @@ interface Game {
   pusher: number;
   shotPath: number[][];
   shotPosition: number;
-  angle: number;
   gameResult: number;
   title: string;
   score: number;
   combo: number;
+  fullscreenState: boolean;
 }
 
 const initialGame: Game = {
@@ -40,11 +40,11 @@ const initialGame: Game = {
   pusher: Number.MIN_SAFE_INTEGER,
   shotPath: [],
   shotPosition: 0,
-  angle: 0,
   gameResult: GAME_RESULT.WIN,
   title: '',
   score: 0,
   combo: 0,
+  fullscreenState: false,
 };
 
 const game = createSlice({
@@ -93,11 +93,11 @@ const game = createSlice({
     setShotPosition(state, { payload }: PayloadAction<Game['shotPosition']>) {
       state.shotPosition = payload;
     },
-    setAngle(state, { payload }: PayloadAction<Game['angle']>) {
-      state.angle = payload;
-    },
     setTitle(state, { payload }: PayloadAction<Game['title']>) {
       state.title = payload;
+    },
+    setFullscreenState(state, { payload }: PayloadAction<Game['fullscreenState']>) {
+      state.fullscreenState = payload;
     },
     increaseScore(state, { payload }: PayloadAction<Game['score']>) {
       state.score += payload;

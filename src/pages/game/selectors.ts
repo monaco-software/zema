@@ -12,7 +12,7 @@ export const getGamePhase = (state: RootState) => getAppState(state).phase;
 export const getGameResult = (state: RootState) => getAppState(state).gameResult;
 export const getShotPath = (state: RootState) => getAppState(state).shotPath;
 export const getShotPosition = (state: RootState) => getAppState(state).shotPosition;
-export const getAngle = (state: RootState) => getAppState(state).angle;
 export const getTitle = (state: RootState) => getAppState(state).title;
 export const getScore = (state: RootState) => getAppState(state).score;
 export const getCombo = (state: RootState) => getAppState(state).combo;
+export const getFullscreenState = (state: RootState) => getAppState(state).fullscreenState;

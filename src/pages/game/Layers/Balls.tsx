@@ -84,7 +84,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   const explodeSameBalls = (balls: Ball[], ballIndex: number, timeout: number, needTwoSide = false) => {
     const sameBalls = findSame(balls, ballIndex, needTwoSide);
     if (sameBalls.length >= 3) {
-      let score = sameBalls.length - 1 + Math.pow(sameBalls.length - 2, 2);
+      let score = Math.pow(sameBalls.length, 2);
       score *= combo + 1;
       increaseScore(score);
       incrementCombo();
@@ -228,7 +228,7 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
 
   return (
     <canvas
-      style={{ position: 'absolute' }}
+      style={{ position: 'absolute', height: '100%', width: '100%' }}
       ref={canvasRef}
     />
   );

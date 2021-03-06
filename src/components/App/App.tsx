@@ -81,7 +81,6 @@ export const App: FC = () => {
             <Route path={ROUTES.GAME_OVER} component={GameOver} />
 
             <Route path={ROUTES.GAME} component={Game} />
-
           </Switch>
         </>
       )}
