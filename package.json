@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server",
     "dev": "npx webpack serve",
-    "build": "npx webpack",
+    "build": "npx webpack --node-env='production'",
     "typecheck": "npx tsc --noEmit",
     "lint:ts": "npx eslint --ext .tsx,.ts src/",
     "lint:style": "npx stylelint \"src/**/*.css\"",

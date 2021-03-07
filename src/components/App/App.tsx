@@ -24,11 +24,13 @@ import { AppNotification } from '../Notification/AppNotification';
 const block = b_.lock('app');
 
 const onLoad = () => {
-  navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-    console.info('SW registered: ', registration);
-  }).catch((error) => {
-    console.error('SW registration failed: ', error);
-  });
+  if (process.env.NODE_ENV === 'production') {
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      console.info('SW registered: ', registration);
+    }).catch((error) => {
+      console.error('SW registration failed: ', error);
+    });
+  }
 };
 
 export const App: FC = () => {
