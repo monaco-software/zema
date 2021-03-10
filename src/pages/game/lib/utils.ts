@@ -1,3 +1,4 @@
+
 export function padWithSpaces(text: string, size: number): string {
   if (text.length >= size) { return text; }
   const diff = size - text.length;
@@ -27,4 +28,13 @@ export function distort(max: number, phases: number, phase: number, gain = 0.5) 
 
 export function fps(frames: number): number {
   return 1000 / frames;
+}
+
+export function bufferDownloader(data: BlobPart, name: string) {
+  let file = new Blob([data], { type: 'application/octet-binary' });
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(file);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
 }

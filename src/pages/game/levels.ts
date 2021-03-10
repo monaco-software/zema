@@ -6,11 +6,12 @@ import level2Background from './assets/images/backgrounds/level_2_back.png';
 import level3Background from './assets/images/backgrounds/level_3_back.png';
 import { Level } from './types';
 import { BALL_COLORS } from './constants';
+import { getText } from '@common/langUtils';
 
 const levels: Level[] = [{
-  title: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  title: getText('game_level_title_1'),
   speed: 20, // fps и количество тиков pusher в секунду
-  balls: 60,
+  balls: 70,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -46,9 +47,9 @@ const levels: Level[] = [{
   background: level1Background,
   thumbnail: level1Thumb,
 }, {
-  title: 'Events are developing rapidly.\nNeed to do something.',
-  speed: 23,
-  balls: 80,
+  title: getText('game_level_title_2'),
+  speed: 22,
+  balls: 90,
   ballColors: [
     BALL_COLORS.GREEN,
     BALL_COLORS.BLUE,
@@ -57,7 +58,7 @@ const levels: Level[] = [{
   frogPosition: { x: 419, y: 292 },
   skullPosition: { x: 158, y: 305 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 50,
+  rollOut: 55,
   start: [0, 163],
   curve: [
     [125, 91, 274, 58, 381, 52],
@@ -88,9 +89,9 @@ const levels: Level[] = [{
   background: level2Background,
   thumbnail: level2Thumb,
 }, {
-  title: 'Untangle\nentangled tracks\nin the desert',
-  speed: 26,
-  balls: 100,
+  title: getText('game_level_title_3'),
+  speed: 24,
+  balls: 110,
   ballColors: [
     BALL_COLORS.RED,
     BALL_COLORS.GREEN,
@@ -100,7 +101,7 @@ const levels: Level[] = [{
   frogPosition: { x: 341, y: 325 },
   skullPosition: { x: 455, y: 214 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 55,
+  rollOut: 60,
   start: [737, 599],
   curve: [
     [739, 539, 748, 334, 715, 200],

@@ -14,10 +14,6 @@ export interface BulletState {
   color: number;
 }
 
-export interface RemainingColorsState {
-  colors: number[];
-}
-
 export interface Point {
   x: number;
   y: number;
@@ -42,4 +38,3 @@ export interface Physics {
   pusherOffset: number;
   impacts: number[];
 }
-
