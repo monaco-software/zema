@@ -36,7 +36,7 @@ export const DecreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
 
   const onDecreaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (muteState || volume === MIN_VOLUME) {
+    if (muteState || volume <= MIN_VOLUME) {
       return;
     }
     decreaseVolume();
