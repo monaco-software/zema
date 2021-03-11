@@ -1,10 +1,10 @@
 import { AppThunk } from '@store/store';
 import { gameActions } from './reducer';
+import { setVolume } from '@pages/game/lib/sound';
 import { DEFAULT_VOLUME } from '@pages/game/setup';
 import { LOCALSTORAGE_VOLUME, MAX_VOLUME, MIN_VOLUME } from './constants';
 
 export const asyncGameActions = {
-
   // заглушка для микросервиса
   // на данный момент берет данные из localStorage
   fetchVolume: (): AppThunk<Promise<void>> => async (dispatch) => {
@@ -30,8 +30,13 @@ export const asyncGameActions = {
 
   // заглушка для микросервиса
   // на данный момент кладет данные в localStorage
-  sendVolume: async (volume: number): Promise<void> => {
+  sendVolume: (volume: number): AppThunk<Promise<void>> => async (dispatch) => {
+    if (volume > MAX_VOLUME || volume < MIN_VOLUME) {
+      throw new Error(`Volume value ${volume} out of range`);
+    }
     localStorage.setItem(LOCALSTORAGE_VOLUME, btoa(volume.toString(10)));
+    setVolume(volume);
+    dispatch(gameActions.setVolume(volume));
   },
 };
 

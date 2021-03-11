@@ -1,35 +1,50 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
 import './user-interface.css';
 import b_ from 'b_';
-import levels from '../levels';
+import levels from '../../levels';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
-import { getPath } from '../lib/geometry';
-import { FrogLayer } from '../Layers/Frog';
-import { BackLayer } from '../Layers/Back';
-import { InfoLayer } from '../Layers/Info';
+import { gameActions } from '../../reducer';
 import { fps } from '@pages/game/lib/utils';
-import { BallsLayer } from '../Layers/Balls';
-import { SkullLayer } from '../Layers/Skull';
-import { ComboLayer } from '../Layers/Combo';
-import { ScoreLayer } from '../Layers/Score';
-import { TitleLayer } from '../Layers/Title';
-import { BulletLayer } from '../Layers/Bullet';
-import { EffectsLayer } from '../Layers/Effects';
-import { BlackoutLayer } from '../Layers/Blackout';
-import { FullscreenButton } from './FullscreenButton';
+import { getPath } from '../../lib/geometry';
+import { FrogLayer } from '../../Layers/Frog';
+import { BackLayer } from '../../Layers/Back';
+import { InfoLayer } from '../../Layers/Info';
+import { BallsLayer } from '../../Layers/Balls';
+import { SkullLayer } from '../../Layers/Skull';
+import { ComboLayer } from '../../Layers/Combo';
+import { ScoreLayer } from '../../Layers/Score';
+import { TitleLayer } from '../../Layers/Title';
+import { BulletLayer } from '../../Layers/Bullet';
+import { EffectsLayer } from '../../Layers/Effects';
+import { BlackoutLayer } from '../../Layers/Blackout';
 import { ButtonsLayer } from '@pages/game/Layers/Buttons';
-import { MuteButton } from '@pages/game/components/MuteButton';
-import { PauseButton } from '@pages/game/components/PauseButton';
-import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../setup';
-import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
-import { DecreaseVolumeButton } from '@pages/game/components/decreaseVolumeButton';
-import { IncreaseVolumeButton } from '@pages/game/components/IncreaseVolumeButton';
-import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../selectors';
+import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../../setup';
+import { FullscreenButton } from '../FullscreenButton/FullscreenButton';
+import { MuteButton } from '@pages/game/components/MuteButton/MuteButton';
+import { PauseButton } from '@pages/game/components/PauseButton/PauseButton';
+import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../../constants';
+import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../../selectors';
+import { IncreaseVolumeButton } from '@pages/game/components/IncreaseVolumeButton/IncreaseVolumeButton';
+import { DecreaseVolumeButton } from '@pages/game/components/DecreaseVolumeButton/DecreaseVolumeButton';
 
 const block = b_.lock('user-interface');
 

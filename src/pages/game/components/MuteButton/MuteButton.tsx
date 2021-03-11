@@ -1,12 +1,12 @@
 import './mute-button.css';
 import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
-import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
-import { playSound } from '@pages/game/lib/sound';
-import { getMuteButton, getMuteState } from '../selectors';
+import { gameActions } from '../../reducer';
+import { mute, setVolume } from '@pages/game/lib/sound';
 import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
+import { getMuteButton, getMuteState, getVolume } from '../../selectors';
 
 const block = b_.lock('mute-button');
 
@@ -20,14 +20,19 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
   const setMuteButton = useAction(gameActions.setMuteButton);
   const setMuteState = useAction(gameActions.setMuteState);
 
+  const volume = useSelector(getVolume);
   const muteButton = useSelector(getMuteButton);
   const muteState = useSelector(getMuteState);
 
   const setMute = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setMuteButton({ ...muteButton, icon: muteState ? ICONS.MUTE : ICONS.SOUND });
-    setMuteState(!muteState);
-    playSound([]);
     e.stopPropagation();
+    setMuteState(!muteState);
+    setMuteButton({ ...muteButton, icon: muteState ? ICONS.MUTE : ICONS.SOUND });
+    if (!muteState) {
+      mute();
+      return;
+    }
+    setVolume(volume);
   };
 
   const handleMouseEnter = () => {

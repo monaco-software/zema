@@ -11,11 +11,11 @@ import { useHistory } from 'react-router-dom';
 import { GAME_PHASE_TIMEOUTS } from './setup';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { getAllowedLevels } from '../gameLevels/selectors';
-import { UserInterface } from './components/UserInterface';
 import { asyncGameActions } from '@pages/game/asyncActions';
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 import { initSound, playSound, SOUNDS } from '@pages/game/lib/sound';
+import { UserInterface } from './components/UserInterface/UserInterface';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 
 const block = b_.lock('game');

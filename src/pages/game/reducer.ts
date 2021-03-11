@@ -1,45 +1,8 @@
+import { Game } from '@pages/game/types';
 import { DEFAULT_VOLUME } from '@pages/game/setup';
 import { ICONS } from '@pages/game/Layers/utils/buttons';
-import { asyncGameActions } from '@pages/game/asyncActions';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BALL_COLORS, BULLET_STATE, GAME_PHASE, GAME_RESULT, MAX_VOLUME, MIN_VOLUME, VOLUME_STEP } from './constants';
-
-export interface IGameButton {
-  icon: string;
-  x: number;
-  y: number;
-  hovered: boolean;
-}
-
-interface Game {
-  phase: number;
-  bullet: {
-    state: BULLET_STATE;
-    color: number;
-    angle: number;
-    position: number;
-  };
-  remainColors: number[];
-  currentLevel: number;
-  openedLevel: number;
-  explosion: number[];
-  particle: number;
-  pusher: number;
-  shotPath: number[][];
-  shotPosition: number;
-  gameResult: number;
-  title: string;
-  score: number;
-  combo: number;
-  fullscreenState: boolean;
-  fullscreenButton: IGameButton;
-  pauseButton: IGameButton;
-  muteState: boolean;
-  muteButton: IGameButton;
-  volume: number;
-  increaseVolumeButton: IGameButton;
-  decreaseVolumeButton: IGameButton;
-}
+import { BALL_COLORS, BULLET_STATE, GAME_PHASE, GAME_RESULT, MAX_VOLUME, MIN_VOLUME } from './constants';
 
 const initialGame: Game = {
   phase: GAME_PHASE.LOADING,
@@ -142,21 +105,8 @@ const game = createSlice({
       state.decreaseVolumeButton = payload;
     },
     setVolume(state, { payload }: PayloadAction<Game['volume']>) {
-      if (payload > MAX_VOLUME || payload < MIN_VOLUME) {
-        throw new Error( `Volume value ${payload} out of range`);
-      }
-      state.volume = payload;
-    },
-    increaseVolume(state) {
-      if (state.volume + VOLUME_STEP <= MAX_VOLUME) {
-        state.volume += VOLUME_STEP;
-        asyncGameActions.sendVolume(state.volume).catch(console.error);
-      }
-    },
-    decreaseVolume(state) {
-      if (state.volume - VOLUME_STEP >= MIN_VOLUME) {
-        state.volume -= VOLUME_STEP;
-        asyncGameActions.sendVolume(state.volume).catch(console.error);
+      if (payload >= MIN_VOLUME && payload <= MAX_VOLUME) {
+        state.volume = payload;
       }
     },
     increaseScore(state, { payload }: PayloadAction<Game['score']>) {

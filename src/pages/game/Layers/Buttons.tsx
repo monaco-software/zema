@@ -39,7 +39,7 @@ export const ButtonsLayer: FC = () => {
     ctx.lineCap = 'round';
     ctx.shadowColor = '#000';
 
-    buttons.forEach( (button) => {
+    buttons.forEach((button) => {
       if (button.hovered) {
         ctx.shadowOffsetX = -2;
         ctx.shadowOffsetY = 2;

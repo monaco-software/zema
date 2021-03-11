@@ -1,12 +1,12 @@
 import './pause-button.css';
 import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
-import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
+import { gameActions } from '../../reducer';
 import { GAME_PHASE } from '@pages/game/constants';
 import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
-import { getGamePhase, getPauseButton, getShotPath } from '../selectors';
+import { getGamePhase, getPauseButton, getShotPath } from '../../selectors';
 
 const block = b_.lock('pause-button');
 

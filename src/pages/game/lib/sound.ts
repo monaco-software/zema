@@ -18,7 +18,8 @@ import knock_2 from '../assets/sounds/knock_2.mp3';
 import starting from '../assets/sounds/starting.mp3';
 import { store } from '@store/store';
 import { random } from '@pages/game/lib/utils';
-import { MAX_VOLUME } from '@pages/game/constants';
+import { DEFAULT_VOLUME } from '@pages/game/setup';
+import { MAX_VOLUME, MIN_VOLUME } from '@pages/game/constants';
 
 type GameSounds = {
   [key: string]: string[];
@@ -47,7 +48,7 @@ const sounds: GameAudio = {};
 let audioCtx: AudioContext;
 let volumeNode: GainNode;
 
-const loadFile = async (file: string): Promise<AudioBuffer | undefined> => {
+const loadFile = (file: string): Promise<AudioBuffer | undefined> => {
   return fetch(file)
     .then((response) => response.arrayBuffer())
     .then((buffer) => audioCtx.decodeAudioData(buffer))
@@ -78,11 +79,34 @@ function playTrack(audioBuffer: AudioBuffer): void {
   play(audioBuffer);
 }
 
-export const initSound = (): Array<Promise<AudioBuffer | undefined>> => {
+export const playSound = (sound: string[]): void => {
+  if (store.getState().game.muteState) {
+    volumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    return;
+  }
+  if (!sound.length) {
+    return;
+  }
+  const sample = sound[random(sound.length)];
+  if (sounds[sample]) {
+    playTrack(sounds[sample] as AudioBuffer);
+  }
+};
+
+export const mute = () => {
+  volumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
+};
+
+export const setVolume = (volume: number) => {
+  if (volume < MIN_VOLUME || volume > MAX_VOLUME) { return; }
+  volumeNode.gain.setValueAtTime(volume / MAX_VOLUME, audioCtx.currentTime);
+};
+
+export const initSound = (volume = DEFAULT_VOLUME / MAX_VOLUME): Array<Promise<AudioBuffer | undefined>> => {
   if (!audioCtx) {
     audioCtx = new AudioContext();
     volumeNode = audioCtx.createGain();
-    volumeNode.gain.value = store.getState().game.volume;
+    volumeNode.gain.value = volume;
     volumeNode.connect(audioCtx.destination);
   }
 
@@ -101,17 +125,3 @@ export const initSound = (): Array<Promise<AudioBuffer | undefined>> => {
   return loadPromises;
 };
 
-export const playSound = (sound: string[]): void => {
-  if (store.getState().game.muteState) {
-    volumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    return;
-  }
-  volumeNode.gain.setValueAtTime(store.getState().game.volume / MAX_VOLUME, audioCtx.currentTime);
-  if (!sound.length) {
-    return;
-  }
-  const sample = sound[random(sound.length)];
-  if (sounds[sample]) {
-    playTrack(sounds[sample] as AudioBuffer);
-  }
-};
