@@ -1,10 +1,10 @@
 const langPack = {
   navbar_root: 'Главная',
   navbar_game: 'Играть',
-  navbar_game_levels: 'Уровни',
   navbar_leaderboard: 'Рейтинг',
   navbar_forum: 'Форум',
   navbar_account: 'Профиль',
+  navbar_signout: 'Выйти',
   required_field: 'Обязательное поле',
   signin_page_header: 'Вход',
   signup_page_header: 'Регистрация',

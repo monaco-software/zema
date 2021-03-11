@@ -1,7 +1,7 @@
 .navbar {
   --navbar-padding-top: 5px;
-  --navbar-link-size: 32px;
-  --navbar-link-text-line-height: 14px;
+  --navbar-item-size: 32px;
+  --navbar-item-text-line-height: 14px;
   cursor: pointer;
   display: grid;
   grid-auto-flow: column;
@@ -24,45 +24,64 @@
 }
 
 .navbar_hidden {
-  transform: translate(-50%, calc(-1 * (var(--navbar-padding-top) + var(--navbar-link-size) + var(--navbar-link-text-line-height))));
+  transform: translate(-50%, calc(-1 * (var(--navbar-padding-top) + var(--navbar-item-size) + var(--navbar-item-text-line-height))));
 }
 
-.navbar__link {
+.navbar__link,
+.navbar__button {
   opacity: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
   transition: opacity .4s ease-in-out;
 }
 
-.navbar_hidden .navbar__link {
+.navbar__link {
+  text-decoration: none;
+}
+
+.navbar__button {
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.navbar__button:focus {
+  outline: 1px solid var(--white);
+}
+
+.navbar_hidden .navbar__link,
+.navbar_hidden .navbar__button {
   opacity: 0;
 }
 
-.navbar__link-icon-wrap {
+.navbar__item-icon-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--navbar-link-size);
-  height: var(--navbar-link-size);
+  width: var(--navbar-item-size);
+  height: var(--navbar-item-size);
   transition: background-color .4s ease-in-out;
   border-radius: 10px;
 }
 
-.navbar__link_active .navbar__link-icon-wrap,
-.navbar__link:hover .navbar__link-icon-wrap {
+.navbar__link_active .navbar__item-icon-wrap,
+.navbar__link:hover .navbar__item-icon-wrap,
+.navbar__button:hover .navbar__item-icon-wrap {
   background-color: var(--light-1);
 }
 
-.navbar__link_active .navbar__link-icon,
-.navbar__link:hover .navbar__link-icon {
+.navbar__link_active .navbar__item-icon,
+.navbar__link:hover .navbar__item-icon,
+.navbar__button:hover .navbar__item-icon {
   stroke: var(--brand);
   fill: var(--brand);
 }
 
-.navbar__link-icon {
+.navbar__item-icon {
   width: 18px;
   height: 18px;
   transition: stroke .2s ease-in-out;
@@ -81,9 +100,9 @@
   opacity: 0;
 }
 
-.navbar__link-text {
+.navbar__item-text {
   font-size: 10px;
-  line-height: var(--navbar-link-text-line-height);
+  line-height: var(--navbar-item-text-line-height);
   color: var(--light-1);
   text-decoration: none;
 }

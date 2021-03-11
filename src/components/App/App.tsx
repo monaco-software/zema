@@ -23,14 +23,30 @@ import { AppNotification } from '../Notification/AppNotification';
 
 const block = b_.lock('app');
 
+const onLoad = () => {
+  if (process.env.NODE_ENV === 'production') {
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      console.info('SW registered: ', registration);
+    }).catch((error) => {
+      console.error('SW registration failed: ', error);
+    });
+  }
+};
+
 export const App: FC = () => {
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchUser(undefined)
+    fetchUser()
       .finally(() => setIsLoading(false));
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', onLoad);
+    }
+    return () => {
+      window.removeEventListener('load', onLoad);
+    };
   }, []);
 
   return (
@@ -64,9 +80,9 @@ export const App: FC = () => {
 
             <Route path={ROUTES.GAME_LEVELS} component={GameLevels} />
 
-            <Route path={ROUTES.GAME} component={Game} />
-
             <Route path={ROUTES.GAME_OVER} component={GameOver} />
+
+            <Route path={ROUTES.GAME} component={Game} />
           </Switch>
         </>
       )}
