@@ -16,7 +16,6 @@ import knock_0 from '../assets/sounds/knock_0.mp3';
 import knock_1 from '../assets/sounds/knock_1.mp3';
 import knock_2 from '../assets/sounds/knock_2.mp3';
 import starting from '../assets/sounds/starting.mp3';
-import { store } from '@store/store';
 import { random } from '@pages/game/lib/utils';
 import { DEFAULT_VOLUME } from '@pages/game/setup';
 import { MAX_VOLUME, MIN_VOLUME } from '@pages/game/constants';
@@ -80,10 +79,6 @@ function playTrack(audioBuffer: AudioBuffer): void {
 }
 
 export const playSound = (sound: string[]): void => {
-  if (store.getState().game.muteState) {
-    volumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    return;
-  }
   if (!sound.length) {
     return;
   }
