@@ -65,13 +65,7 @@ export const ButtonsLayer: FC = () => {
   useEffect(() => {
     requestRef.current = window.requestAnimationFrame(draw);
   },
-  [
-    fullscreenButton,
-    pauseButton,
-    muteButton,
-    increaseVolumeButton,
-    decreaseVolumeButton,
-  ]);
+  [...buttons]);
 
   // init
   useEffect(() => {
