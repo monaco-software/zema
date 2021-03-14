@@ -31,7 +31,7 @@ export const ScoreLayer: FC = () => {
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 10;
       ctx.fillStyle = '#FFFF00D0';
-      ctx.font = `${scoreFontSize.current}px Bangers2`;
+      ctx.font = `${scoreFontSize.current}px BangersLocal`;
       ctx.textBaseline = 'middle';
       const textWidth = ctx.measureText(tmpScore.current.toString()).width;
       ctx.fillText(tmpScore.current.toString(),

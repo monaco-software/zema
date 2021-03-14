@@ -68,6 +68,18 @@ const langPack = {
   change_password_button: 'Поменять пароль',
   global_error: 'Что-то пошло не так 😔️',
   error_boundary_go_to_main_page: 'Вернуться на главную',
+
+  game_messages_win: 'You are a winner',
+  game_messages_fail: 'You are a looser',
+  game_messages_combo: 'combo',
+  game_messages_volume: 'volume',
+  game_messages_pause: 'pause',
+  game_messages_play: 'play',
+  game_messages_mute: 'mute',
+  game_messages_sound: 'sound',
+  game_level_title_1: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  game_level_title_2: 'Events are developing rapidly.\nNeed to do something.',
+  game_level_title_3: 'Untangle\nentangled tracks\nin the desert',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

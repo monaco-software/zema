@@ -9,17 +9,16 @@ import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
-import { BULLET_ARMING_SPEED } from '../setup';
-import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase, getRemainColors } from '../selectors';
+import { playSound, SOUNDS } from '@pages/game/lib/sound';
+import { BULLET_ARMED_POSITION, BULLET_ARMING_SPEED, BULLET_START_POSITION } from '../setup';
 import {
   BALL_RADIUS,
-  BULLET_ARMED_POSITION,
-  BULLET_START_POSITION,
   BULLET_STATE,
   FRAME,
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
+import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase, getRemainColors } from '../selectors';
 
 interface Props {
   angle: number;
@@ -71,6 +70,9 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     }
     if (bulletState === BULLET_STATE.ARMING) {
       // выкатываем шар из брюха
+      if (bulletPosition === BULLET_ARMED_POSITION - 5) {
+        playSound(SOUNDS.GULP);
+      }
       if (bulletPosition < BULLET_ARMED_POSITION) {
         timeoutRef.current = window.setTimeout(() => {
           setBulletPosition(bulletPosition + 1);
@@ -83,10 +85,6 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
   }, [bulletPosition]);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     requestRef.current = window.requestAnimationFrame(drawFrog);
   }, [angle]);
 
@@ -113,7 +111,7 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     if (gamePhase === GAME_PHASE.ENDING) {
       setBulletState(BULLET_STATE.IDLE);
     }
-    if (gamePhase === GAME_PHASE.STARTED) {
+    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED) {
       setBulletState(BULLET_STATE.ARMING);
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);

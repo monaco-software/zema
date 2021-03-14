@@ -8,6 +8,7 @@ import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { getBallsRemainColors } from './utils/balls';
+import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE } from '../constants';
 import { getBulletColor, getGamePhase, getShotPath, getShotPosition } from '../selectors';
 
@@ -16,6 +17,7 @@ export const BulletLayer: FC = () => {
   const setShotPath = useAction(gameActions.setShotPath);
   const setRemainColors = useAction(gameActions.setRemainColors);
   const setBulletState = useAction(gameActions.setBulletState);
+
   const gamePhase = useSelector(getGamePhase);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -34,7 +36,8 @@ export const BulletLayer: FC = () => {
       return;
     }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-    if (!shotPath.length || shotPosition >= shotPath.length) { return; }
+    const skip = !shotPath.length || shotPosition >= shotPath.length || shotPosition <= 0;
+    if (skip) { return; }
 
     const x = shotPath[shotPosition][0];
     const y = shotPath[shotPosition][1];
@@ -50,20 +53,26 @@ export const BulletLayer: FC = () => {
       bullet.current.color = bulletColor;
       mishit.current = false;
       setShotPosition(1);
+      playSound(SOUNDS.SHOT);
+    } else {
+      setShotPosition(0);
     }
   }, [shotPath]);
 
   useEffect(() => {
-    if (gamePhase !== GAME_PHASE.STARTED) { return; }
+    if (gamePhase !== GAME_PHASE.STARTED || !shotPath.length || !shotPosition) {
+      requestRef.current = requestAnimationFrame(draw);
+      return;
+    }
     if (shotPosition >= shotPath.length) { // промахнулись
       if (!mishit.current) {
         // ставим флаг от следующей итерации
         mishit.current = true;
         setShotPath([]);
-        setShotPosition(0);
         setRemainColors(getBallsRemainColors());
         setBulletState(BULLET_STATE.ARMING);
         requestRef.current = requestAnimationFrame(draw);
+        playSound(SOUNDS.MISS);
       }
       return;
     }

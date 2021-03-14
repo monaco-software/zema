@@ -21,7 +21,7 @@ export const TitleLayer: FC = () => {
       ctx.fillStyle = '#FFFFFFDD';
       ctx.textBaseline = 'top';
       const lineHeight = TITLE_FONT_SIZE + 10;
-      ctx.font = `${TITLE_FONT_SIZE}px Bangers2, Arial`;
+      ctx.font = `${TITLE_FONT_SIZE}px BangersLocal, Arial`;
 
       const lines = title.split('\n');
       lines.forEach((line: string, index: number) => {
