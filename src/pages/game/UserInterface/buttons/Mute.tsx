@@ -1,14 +1,12 @@
-import './mute-button.css';
-import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { gameActions } from '../../reducer';
-import { mute, setVolume } from '@pages/game/lib/sound';
-import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
-import { getMuteButton, getMuteState, getVolume } from '../../selectors';
-
-const block = b_.lock('mute-button');
+import { GAME_PHASE } from '@pages/game/constants';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
+import { mute, playSound, setVolume, SOUNDS } from '@pages/game/lib/sound';
+import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
+import { getGamePhase, getMuteButton, getMuteState, getVolume } from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -23,9 +21,15 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
   const volume = useSelector(getVolume);
   const muteButton = useSelector(getMuteButton);
   const muteState = useSelector(getMuteState);
+  const gamePhase = useSelector(getGamePhase);
+
+  const style = useButtonStyle(x, y, ratio);
+
+  const disabled = gamePhase === GAME_PHASE.PAUSED;
 
   const setMute = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+    if (disabled) { return; }
     setMuteState(!muteState);
     setMuteButton({ ...muteButton, icon: muteState ? ICONS.MUTE : ICONS.SOUND });
     if (!muteState) {
@@ -33,9 +37,11 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
       return;
     }
     setVolume(volume);
+    playSound(SOUNDS.MISS);
   };
 
   const handleMouseEnter = () => {
+    if (disabled) { return; }
     setMuteButton({ ...muteButton, hovered: true });
   };
 
@@ -54,16 +60,10 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
 
   return (
     <div
-      className={block()}
       onClick={setMute}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        left: `${x * ratio}px`,
-        top: `${y * ratio}px`,
-        width: `${BUTTON_RADIUS * 2 * ratio}px`,
-        height: `${BUTTON_RADIUS * 2 * ratio}px`,
-      }}
+      style={style}
     />
   );
 };

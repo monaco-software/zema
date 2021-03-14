@@ -18,7 +18,7 @@ export const asyncGameActions = {
     const localStorageVolumeValue = parseInt(localStorageVolume, 10);
 
     if (
-      Number.isInteger(localStorageVolumeValue) &&
+      !Number.isNaN(localStorageVolumeValue) &&
       localStorageVolumeValue <= MAX_VOLUME &&
       localStorageVolumeValue >= MIN_VOLUME
     ) {
@@ -34,7 +34,7 @@ export const asyncGameActions = {
     if (volume > MAX_VOLUME || volume < MIN_VOLUME) {
       throw new Error(`Volume value ${volume} out of range`);
     }
-    localStorage.setItem(LOCALSTORAGE_VOLUME, btoa(volume.toString(10)));
+    localStorage.setItem(LOCALSTORAGE_VOLUME, btoa(Math.floor(volume).toString(10)));
     setVolume(volume);
     dispatch(gameActions.setVolume(volume));
   },

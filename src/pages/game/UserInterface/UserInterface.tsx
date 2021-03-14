@@ -1,37 +1,36 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
-import './user-interface.css';
-import b_ from 'b_';
-import levels from '../../levels';
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+// слушает мышь и рассчитывает путь пули
+import levels from '../levels';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
-import { gameActions } from '../../reducer';
+import { getPath } from '../lib/geometry';
+import { FrogLayer } from '../Layers/Frog';
+import { BackLayer } from '../Layers/Back';
+import { InfoLayer } from '../Layers/Info';
 import { fps } from '@pages/game/lib/utils';
-import { getPath } from '../../lib/geometry';
-import { FrogLayer } from '../../Layers/Frog';
-import { BackLayer } from '../../Layers/Back';
-import { InfoLayer } from '../../Layers/Info';
-import { BallsLayer } from '../../Layers/Balls';
-import { SkullLayer } from '../../Layers/Skull';
-import { ComboLayer } from '../../Layers/Combo';
-import { ScoreLayer } from '../../Layers/Score';
-import { TitleLayer } from '../../Layers/Title';
-import { BulletLayer } from '../../Layers/Bullet';
-import { EffectsLayer } from '../../Layers/Effects';
-import { BlackoutLayer } from '../../Layers/Blackout';
+import { BallsLayer } from '../Layers/Balls';
+import { SkullLayer } from '../Layers/Skull';
+import { ComboLayer } from '../Layers/Combo';
+import { ScoreLayer } from '../Layers/Score';
+import { TitleLayer } from '../Layers/Title';
+import { BulletLayer } from '../Layers/Bullet';
+import { EffectsLayer } from '../Layers/Effects';
+import { BlackoutLayer } from '../Layers/Blackout';
+import { FullscreenButton } from './buttons/Fullscreen';
 import { ButtonsLayer } from '@pages/game/Layers/Buttons';
-import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../../setup';
-import { FullscreenButton } from '../FullscreenButton/FullscreenButton';
-import { MuteButton } from '@pages/game/components/MuteButton/MuteButton';
-import { PauseButton } from '@pages/game/components/PauseButton/PauseButton';
-import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../../constants';
-import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../../selectors';
-import { IncreaseVolumeButton } from '@pages/game/components/IncreaseVolumeButton/IncreaseVolumeButton';
-import { DecreaseVolumeButton } from '@pages/game/components/DecreaseVolumeButton/DecreaseVolumeButton';
-
-const block = b_.lock('user-interface');
+import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../setup';
+import { MuteButton } from '@pages/game/UserInterface/buttons/Mute';
+import { PauseButton } from '@pages/game/UserInterface/buttons/Pause';
+import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
+import { DecreaseVolumeButton } from '@pages/game/UserInterface/buttons/DecreaseVolume';
+import { IncreaseVolumeButton } from '@pages/game/UserInterface/buttons/IncreaseVolume';
+import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../selectors';
 
 export const UserInterface: FC = () => {
   const resetCombo = useAction(gameActions.resetCombo);
@@ -153,12 +152,17 @@ export const UserInterface: FC = () => {
   }, []);
 
   return (
-    <div ref={screenRef} className={block()}>
+    <div ref={screenRef}>
       <div
         ref={boxRef}
-        className={block('box')}
         onMouseMove={mouseMove}
         onClick={mouseClick}
+        style={{
+          position: 'relative',
+          margin: 'auto',
+          width: `${FRAME.WIDTH}px`,
+          height: `${FRAME.HEIGHT}px`,
+        }}
       >
         <BackLayer />
         <BallsLayer ballsPath={ballsPath} />
@@ -179,23 +183,23 @@ export const UserInterface: FC = () => {
         />
         <FullscreenButton
           ratio={ratio}
-          x={FRAME.WIDTH - 60}
-          y={20}
-        />
-        <MuteButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 50}
-          y={60}
+          x={FRAME.WIDTH - 65}
+          y={25}
         />
         <IncreaseVolumeButton
           ratio={ratio}
           x={FRAME.WIDTH - 50}
-          y={90}
+          y={60}
         />
         <DecreaseVolumeButton
           ratio={ratio}
           x={FRAME.WIDTH - 50}
-          y={120}
+          y={95}
+        />
+        <MuteButton
+          ratio={ratio}
+          x={FRAME.WIDTH - 50}
+          y={130}
         />
       </div>
     </div>

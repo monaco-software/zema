@@ -12,4 +12,4 @@ export const ICONS = {
 };
 
 export const ICON_RADIUS = 12;
-export const BUTTON_RADIUS = 20;
+export const BUTTON_RADIUS = 16;

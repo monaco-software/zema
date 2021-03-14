@@ -1,14 +1,11 @@
-import './pause-button.css';
-import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { gameActions } from '../../reducer';
 import { GAME_PHASE } from '@pages/game/constants';
-import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { getGamePhase, getPauseButton, getShotPath } from '../../selectors';
-
-const block = b_.lock('pause-button');
+import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
 
 interface Props {
   ratio: number;
@@ -24,8 +21,13 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
   const pauseButton = useSelector(getPauseButton);
   const shotPath = useSelector(getShotPath);
 
+  const style = useButtonStyle(x, y, ratio);
+
+  const disabled = shotPath.length || gamePhase !== GAME_PHASE.STARTED && gamePhase !== GAME_PHASE.PAUSED;
+
   const setPause = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (shotPath.length) { return; }
+    e.stopPropagation();
+    if (disabled) { return; }
 
     if (gamePhase === GAME_PHASE.STARTED) {
       setPauseButton({ ...pauseButton, icon: ICONS.PLAY });
@@ -36,10 +38,10 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
       setPauseButton({ ...pauseButton, icon: ICONS.PAUSE });
       setGamePhase(GAME_PHASE.STARTED);
     }
-    e.stopPropagation();
   };
 
   const handleMouseEnter = () => {
+    if (disabled) { return; }
     setPauseButton({ ...pauseButton, hovered: true });
   };
 
@@ -58,16 +60,10 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
 
   return (
     <div
-      className={block()}
       onClick={setPause}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        left: `${x * ratio}px`,
-        top: `${y * ratio}px`,
-        width: `${BUTTON_RADIUS * 2 * ratio}px`,
-        height: `${BUTTON_RADIUS * 2 * ratio}px`,
-      }}
+      style={style}
     />
   );
 };

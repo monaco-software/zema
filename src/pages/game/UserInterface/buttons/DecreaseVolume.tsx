@@ -1,16 +1,13 @@
-import './decrease-volume-button.css';
-import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { gameActions } from '../../reducer';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { asyncGameActions } from '@pages/game/asyncActions';
-import { MIN_VOLUME, VOLUME_STEP } from '@pages/game/constants';
-import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
-import { getDecreaseVolumeButton, getMuteState, getVolume } from '../../selectors';
-
-const block = b_.lock('decrease-volume-button');
+import { GAME_PHASE, MIN_VOLUME, VOLUME_STEP } from '@pages/game/constants';
+import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
+import { getDecreaseVolumeButton, getGamePhase, getMuteState, getVolume } from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -24,27 +21,26 @@ export const DecreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
   const decreaseVolumeButton = useSelector(getDecreaseVolumeButton);
   const muteState = useSelector(getMuteState);
   const volume = useSelector(getVolume);
+  const gamePhase = useSelector(getGamePhase);
 
   const sendVolume = useAsyncAction(asyncGameActions.sendVolume);
 
-  const decreaseVolume = () => {
+  const style = useButtonStyle(x, y, ratio);
+
+  const disabled = muteState || volume <= MIN_VOLUME || gamePhase === GAME_PHASE.PAUSED;
+
+  const decreaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (disabled) { return; }
     const newVolume = volume - VOLUME_STEP;
     if (newVolume >= MIN_VOLUME) {
       sendVolume(newVolume).catch(console.error);
     }
-  };
-
-  const onDecreaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    if (muteState || volume <= MIN_VOLUME) {
-      return;
-    }
-    decreaseVolume();
     playSound(SOUNDS.MISS);
   };
 
   const handleMouseEnter = () => {
-    if (muteState || volume === MIN_VOLUME) { return; }
+    if (disabled) { return; }
     setDecreaseVolumeButton({ ...decreaseVolumeButton, hovered: true });
   };
 
@@ -63,16 +59,10 @@ export const DecreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
 
   return (
     <div
-      className={block()}
-      onClick={onDecreaseVolume}
+      onClick={decreaseVolume}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        left: `${x * ratio}px`,
-        top: `${y * ratio}px`,
-        width: `${BUTTON_RADIUS * 2 * ratio}px`,
-        height: `${BUTTON_RADIUS * 2 * ratio}px`,
-      }}
+      style={style}
     />
   );
 };

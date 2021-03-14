@@ -35,6 +35,5 @@ export function bufferDownloader(data: BlobPart, name: string) {
   let a = document.createElement('a');
   a.href = URL.createObjectURL(file);
   a.download = name;
-  document.body.appendChild(a);
   a.click();
 }

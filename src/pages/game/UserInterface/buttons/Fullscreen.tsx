@@ -1,13 +1,10 @@
-import './fullscreen-button.css';
-import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { gameActions } from '../../reducer';
-import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { getFullscreenButton, getFullscreenState } from '../../selectors';
-
-const block = b_.lock('fullscreen-button');
+import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
 
 interface Props {
   ratio: number;
@@ -22,6 +19,8 @@ export const FullscreenButton: FC<Props> = ({ ratio, x, y }) => {
   const fullscreenState = useSelector(getFullscreenState);
   const fullscreenButton = useSelector(getFullscreenButton);
 
+  const style = useButtonStyle(x, y, ratio);
+
   const setFullscreen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setFullscreenButton(
       { ...fullscreenButton, icon: fullscreenState ? ICONS.EXPAND : ICONS.CONTRACT });
@@ -29,14 +28,12 @@ export const FullscreenButton: FC<Props> = ({ ratio, x, y }) => {
     e.stopPropagation();
   };
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseEnter = () => {
     setFullscreenButton({ ...fullscreenButton, hovered: true });
-    e.stopPropagation();
   };
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseLeave = () => {
     setFullscreenButton({ ...fullscreenButton, hovered: false });
-    e.stopPropagation();
   };
 
   useEffect(() => {
@@ -50,16 +47,10 @@ export const FullscreenButton: FC<Props> = ({ ratio, x, y }) => {
 
   return (
     <div
-      className={block()}
       onClick={setFullscreen}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        left: `${x * ratio}px`,
-        top: `${y * ratio}px`,
-        width: `${BUTTON_RADIUS * 2 * ratio}px`,
-        height: `${BUTTON_RADIUS * 2 * ratio}px`,
-      }}
+      style={style}
     />
   );
 };

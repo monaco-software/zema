@@ -1,16 +1,13 @@
-import './increase-volume-button.css';
-import b_ from 'b_';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { gameActions } from '../../reducer';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { asyncGameActions } from '@pages/game/asyncActions';
-import { MAX_VOLUME, VOLUME_STEP } from '@pages/game/constants';
-import { BUTTON_RADIUS, ICONS } from '@pages/game/Layers/utils/buttons';
-import { getIncreaseVolumeButton, getMuteState, getVolume } from '../../selectors';
-
-const block = b_.lock('increase-volume-button');
+import { GAME_PHASE, MAX_VOLUME, VOLUME_STEP } from '@pages/game/constants';
+import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
+import { getGamePhase, getIncreaseVolumeButton, getMuteState, getVolume } from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -24,25 +21,26 @@ export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
   const increaseVolumeButton = useSelector(getIncreaseVolumeButton);
   const muteState = useSelector(getMuteState);
   const volume = useSelector(getVolume);
+  const gamePhase = useSelector(getGamePhase);
 
   const sendVolume = useAsyncAction(asyncGameActions.sendVolume);
 
-  const increaseVolume = () => {
+  const style = useButtonStyle(x, y, ratio);
+
+  const disabled = muteState || volume >= MAX_VOLUME || gamePhase === GAME_PHASE.PAUSED;
+
+  const increaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (disabled) { return; }
     const newVolume = volume + VOLUME_STEP;
     if (newVolume <= MAX_VOLUME) {
       sendVolume(newVolume).catch(console.error);
     }
-  };
-
-  const onIncreaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    if (muteState || volume >= MAX_VOLUME) { return; }
-    increaseVolume();
     playSound(SOUNDS.MISS);
   };
 
   const handleMouseEnter = () => {
-    if (muteState || volume >= MAX_VOLUME) { return; }
+    if (disabled) { return; }
     setIncreaseVolumeButton({ ...increaseVolumeButton, hovered: true });
   };
 
@@ -61,16 +59,10 @@ export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
 
   return (
     <div
-      className={block()}
-      onClick={onIncreaseVolume}
+      onClick={increaseVolume}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        left: `${x * ratio}px`,
-        top: `${y * ratio}px`,
-        width: `${BUTTON_RADIUS * 2 * ratio}px`,
-        height: `${BUTTON_RADIUS * 2 * ratio}px`,
-      }}
+      style={style}
     />
   );
 };

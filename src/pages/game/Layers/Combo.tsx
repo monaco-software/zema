@@ -2,18 +2,14 @@
 
 import levels from '../levels';
 import React, { FC, useEffect, useRef } from 'react';
-import { useAction } from '@common/hooks';
 import { useSelector } from 'react-redux';
 import { getText } from '@common/langUtils';
-import { gameActions } from '@pages/game/reducer';
+import { FRAME, GAME_PHASE } from '../constants';
 import { decimalToHex, distort, fps } from '../lib/utils';
-import { COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
-import { COMBO_DISPLAY_PHASES, FRAME, GAME_PHASE } from '../constants';
+import { COMBO_DISPLAY_PHASES, COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
 import { getCombo, getCurrentLevel, getGamePhase, getMuteState, getVolume } from '../selectors';
 
 export const ComboLayer: FC = () => {
-  const resetCombo = useAction(gameActions.resetCombo);
-
   const combo = useSelector(getCombo);
   const level = useSelector(getCurrentLevel);
   const volume = useSelector(getVolume);
@@ -25,28 +21,30 @@ export const ComboLayer: FC = () => {
   const timeoutRef = useRef<number>();
   const requestRef = useRef<number>();
   const messageRef = useRef('');
+  const comboGrow = useRef(false);
 
   const draw = () => {
     if (!canvasRef.current) { return; }
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) { return; }
 
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 10;
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     if (comboDisplayPhase.current < COMBO_DISPLAY_PHASES) {
-      const opacity = distort(208, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.75);
+      const opacity = distort(208, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.8);
       ctx.fillStyle = `#FFFF00${decimalToHex(opacity)}`;
 
-      let lineHeight = distort(COMBO_FONT_SIZE, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.75);
-      lineHeight += combo * 5;
-      ctx.font = `${lineHeight}px BangersLocal`;
+      let scaleRatio = distort(1200, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.7) / 1000;
+      if (comboGrow.current) {
+        scaleRatio += combo * 0.1;
+      }
+      ctx.translate(canvasRef.current.width / 2, levels[level].scorePosition.y);
+      ctx.scale(scaleRatio, scaleRatio);
 
       let textWidth = ctx.measureText(messageRef.current).width;
-      ctx.fillText(messageRef.current, canvasRef.current.width / 2 - textWidth / 2,
-        levels[level].scorePosition.y);
+      ctx.fillText(messageRef.current, - textWidth / 2,
+        0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0,);
     }
 
     if (comboDisplayPhase.current <= COMBO_DISPLAY_PHASES) {
@@ -62,7 +60,9 @@ export const ComboLayer: FC = () => {
   };
 
   useEffect(() => {
+    if (gamePhase === GAME_PHASE.PAUSED) { return; }
     if (combo >= 2) {
+      comboGrow.current = true;
       messageRef.current = `x  ${combo}  ${getText('game_messages_combo')}`;
       comboDisplayPhase.current = 0;
       draw();
@@ -70,14 +70,16 @@ export const ComboLayer: FC = () => {
   }, [combo]);
 
   useEffect(() => {
-    resetCombo();
+    if (gamePhase === GAME_PHASE.PAUSED) { return; }
+    comboGrow.current = false;
     messageRef.current = `${getText('game_messages_volume')}  ${volume}`;
     comboDisplayPhase.current = 0;
     draw();
   }, [volume]);
 
   useEffect(() => {
-    resetCombo();
+    if (gamePhase === GAME_PHASE.PAUSED) { return; }
+    comboGrow.current = false;
     messageRef.current = muteState ?
       getText('game_messages_mute') :
       getText('game_messages_sound');
@@ -86,7 +88,7 @@ export const ComboLayer: FC = () => {
   }, [muteState]);
 
   useEffect(() => {
-    resetCombo();
+    comboGrow.current = false;
     if (gamePhase === GAME_PHASE.STARTED) {
       messageRef.current = getText('game_messages_play');
       comboDisplayPhase.current = 0;
@@ -107,6 +109,16 @@ export const ComboLayer: FC = () => {
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Combo context 2d not found');
+    }
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'black';
+    ctx.shadowBlur = 10;
+    ctx.font = `${COMBO_FONT_SIZE}px BangersLocal`;
+
     return () => {
       clearTimeout(timeoutRef.current);
       if (requestRef.current) {

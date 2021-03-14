@@ -11,6 +11,7 @@ export const BALL_EXPLODE_TIMEOUT = 300;
 export const BALL_EXPLODE_GAP = 30;
 export const DEFAULT_FRAMERATE = 24;
 export const COMBO_MESSAGE_SPEED = 32;
+export const COMBO_DISPLAY_PHASES = 24;
 export const SCORE_ROLLING_SPEED = 32;
 export const DEFAULT_VOLUME = 50;
 
@@ -20,3 +21,4 @@ export enum GAME_PHASE_TIMEOUTS {
   ENDING = 2000,
   ENDED = 4000,
 }
+

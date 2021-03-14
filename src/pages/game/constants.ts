@@ -2,7 +2,6 @@ export const BALL_RADIUS = 15;
 export const BALL_DIAMETER = BALL_RADIUS * 2;
 export const FROG_RADIUS = 50;
 export const SKULL_RADIUS = 52;
-export const COMBO_DISPLAY_PHASES = 24;
 export const BLACKOUT_INCREMENT = 4;
 export const MIN_VOLUME = 0;
 export const MAX_VOLUME = 100;
