@@ -5,20 +5,24 @@ import React, { FC, useEffect, useRef } from 'react';
 import { gameActions } from './reducer';
 import { useSelector } from 'react-redux';
 import { ROUTES } from '@common/constants';
+import { getText } from '@common/langUtils';
 import { uniqAndSort } from '@common/utils';
 import { useHistory } from 'react-router-dom';
-import { GAME_PHASE_TIMEOUTS, MESSAGES } from './setup';
+import { GAME_PHASE_TIMEOUTS } from './setup';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { getAllowedLevels } from '../gameLevels/selectors';
-import { UserInterface } from './components/UserInterface';
+import { asyncGameActions } from '@pages/game/asyncActions';
+import { UserInterface } from './UserInterface/UserInterface';
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
+import { initSound, playSound, SOUNDS } from '@pages/game/lib/sound';
 import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
 
 const block = b_.lock('game');
 
 export const Game: FC = () => {
   const resetScore = useAction(gameActions.resetScore);
+  const resetCombo = useAction(gameActions.resetCombo);
   const setTitle = useAction(gameActions.setTitle);
   const setRemainColors = useAction(gameActions.setRemainColors);
   const setShotPath = useAction(gameActions.setShotPath);
@@ -34,6 +38,7 @@ export const Game: FC = () => {
   const allowedLevels = useSelector(getAllowedLevels);
 
   const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);
+  const fetchVolume = useAsyncAction(asyncGameActions.fetchVolume);
 
   const timeoutRef = useRef<number>();
 
@@ -67,9 +72,9 @@ export const Game: FC = () => {
           GAME_PHASE_TIMEOUTS.ENDED
         );
         if (gameResult === GAME_RESULT.WIN) {
-          setTitle(MESSAGES.WIN);
+          setTitle(getText('game_messages_win'));
         } else {
-          setTitle(MESSAGES.FAIL);
+          setTitle(getText('game_messages_fail'));
         }
         break;
       case GAME_PHASE.EXITING:
@@ -102,19 +107,26 @@ export const Game: FC = () => {
       return;
     }
     setRemainColors(levels[level].ballColors);
-    const myFont = new FontFace('Bangers2', 'url(Bangers.ttf)');
+
+    fetchVolume().catch(console.error);
+
+    const myFont = new FontFace('BangersLocal', 'url(Bangers.ttf)');
     myFont.load().then(function(font) {
       document.fonts.add(font);
-      document.body.style.fontFamily = 'Bangers2, serif';
-      setGamePhase(GAME_PHASE.LOADED);
+      document.body.style.fontFamily = 'BangersLocal';
+      Promise.all(initSound()).then(() => {
+        playSound(SOUNDS.LOADED);
+        setGamePhase(GAME_PHASE.LOADED);
+      });
     });
 
     return () => {
       resetScore();
+      resetCombo();
       setBulletState(BULLET_STATE.IDLE);
       setGamePhase(GAME_PHASE.LOADING);
       setShotPath([]);
-      setGameResult(GAME_RESULT.WIN);
+      setGameResult(GAME_RESULT.UNKNOWN);
     };
   }, []);
 
