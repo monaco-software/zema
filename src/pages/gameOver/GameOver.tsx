@@ -2,7 +2,6 @@ import './game-over.css';
 import b_ from 'b_';
 import React, { FC } from 'react';
 import skullImage from '../game/assets/images/skull.png';
-import { useAuth } from '@common/hooks';
 import { ROUTES } from '@common/constants';
 import { getText } from '@common/langUtils';
 import { useHistory } from 'react-router-dom';
@@ -19,8 +18,6 @@ const theme = {
 };
 
 export const GameOver: FC = () => {
-  useAuth();
-
   const history = useHistory();
 
   const goToHome = () => history.push(ROUTES.ROOT);

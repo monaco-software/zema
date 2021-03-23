@@ -1,17 +1,16 @@
 import './navbar.css';
 import b_ from 'b_';
 import React, { FC, HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { isMobile } from '@common/utils';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@common/constants';
-import { Icon } from 'grommet-icons/icons';
-import { Gamepad } from 'grommet-icons/es6';
 import { getText } from '@common/langUtils';
 import { useAsyncAction } from '@common/hooks';
 import { getIsSignedInd } from '@store/selectors';
 import { GROMMET_COLORS } from '../App/grommetTheme';
 import { asyncAppActions } from '@store/asyncActions';
-import { Chat, Home, Trophy, User, Logout } from 'grommet-icons';
+import { Chat, Gamepad, Home, Icon, Logout, Trophy, User } from 'grommet-icons';
 
 const block = b_.lock('navbar');
 
@@ -103,7 +102,7 @@ export const Navbar: FC = () => {
 
   return (
     <nav
-      className={block({ 'hidden': isHidden, 'with-transition': withTransition })}
+      className={isMobile ? block() : block({ 'hidden': isHidden, 'with-transition': withTransition })}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

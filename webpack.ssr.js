@@ -1,29 +1,86 @@
-const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const NodemonPlugin = require('nodemon-webpack-plugin')
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
-const { closeSync, openSync, utimesSync } = require('fs');
+
+const stats = {
+  all: false,
+  entrypoints: true,
+  chunkGroups: true,
+  timings: true,
+  errors: true,
+};
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
-const spaConfig = {
+const serverConfig = {
+  name: "server",
+  stats,
+  mode: isProductionMode ? 'production' : 'development',
+  target: 'node',
+  externals: [nodeExternals()],
+  entry: {
+    server: './src/server.tsx',
+  },
+  output: {
+    filename: 'server.js',
+    path: path.resolve(__dirname, 'ssr/server'),
+  },
+  resolve: {
+    plugins: [new TsconfigPathsPlugin()],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: [/node_modules/]
+      },
+      {
+        test: /\.css$/,
+        use: ['null-loader'],
+      },
+      {
+        test: /\.png|\.mp3$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              emitFile: false,
+              publicPath: '/',
+            },
+          },
+        ],
+      },
+    ]
+  },
+  plugins: [
+    new ESLintPlugin({
+      extensions: ['.ts', '.tsx'],
+    }),
+  ],
+};
+
+const clientConfig = {
+  name: "client",
+  stats,
   mode: isProductionMode ? 'production' : 'development',
   devtool: !isProductionMode && 'inline-source-map',
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
   entry: {
-    index: './src/index.tsx',
+    index: './src/client.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'ssr/dist'),
     publicPath: '/',
   },
   resolve: {
@@ -65,26 +122,8 @@ const spaConfig = {
       },
     },
   },
-  devServer: {
-    watchContentBase: true,
-    watchOptions: {
-      ignored: /node_modules/,
-      aggregateTimeout: 500,
-      poll: 500,
-    },
-    historyApiFallback: true,
-    hot: true,
-    port: 9000,
-  },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      inject: 'head',
-      scriptLoading: 'defer',
-      favicon: './src/pwa/favicon.ico',
-      manifest: isProductionMode ? 'manifest.json' : undefined,
-    }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
     }),
@@ -95,7 +134,10 @@ const spaConfig = {
       files: ['./src/**.css'],
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: './src/pages/game/assets/fonts/Bangers.ttf' }],
+      patterns: [
+        { from: './src/pages/game/assets/fonts/Bangers.ttf' },
+        { from: './src/pwa/favicon.ico' }
+      ],
     }),
     isProductionMode ?
       new CopyWebpackPlugin({
@@ -115,7 +157,6 @@ const spaConfig = {
         script: './ssr/server/server.js',
         watch: [
           path.resolve('./ssr/server/server.js'),
-          path.resolve('./ssr/dist/index.html'),
           path.resolve('./ssr/dist/stats.json'),
         ],
         delay: '2000',
@@ -132,4 +173,4 @@ const spaConfig = {
   ].filter(Boolean),
 };
 
-module.exports = spaConfig;
+module.exports = [serverConfig, clientConfig];
