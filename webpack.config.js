@@ -1,20 +1,18 @@
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const NodemonPlugin = require('nodemon-webpack-plugin')
-const { StatsWriterPlugin } = require('webpack-stats-plugin');
-const { closeSync, openSync, utimesSync } = require('fs');
+
+console.log(`\u{1F527}\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`)
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
-const spaConfig = {
+module.exports = {
   mode: isProductionMode ? 'production' : 'development',
   devtool: !isProductionMode && 'inline-source-map',
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
@@ -24,7 +22,7 @@ const spaConfig = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
+    publicPath: '/'
   },
   resolve: {
     plugins: [new TsconfigPathsPlugin()],
@@ -35,7 +33,7 @@ const spaConfig = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: [/node_modules/],
+        exclude: /node_modules/
       },
       {
         test: /\.css$/,
@@ -43,15 +41,9 @@ const spaConfig = {
       },
       {
         test: /\.png|\.mp3$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[hash].[ext]',
-            publicPath: '/',
-          },
-        },
+        use: ['file-loader'],
       },
-    ],
+    ]
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -82,8 +74,6 @@ const spaConfig = {
       template: './src/index.html',
       inject: 'head',
       scriptLoading: 'defer',
-      favicon: './src/pwa/favicon.ico',
-      manifest: isProductionMode ? 'manifest.json' : undefined,
     }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
@@ -91,45 +81,20 @@ const spaConfig = {
     new ESLintPlugin({
       extensions: ['.ts', '.tsx'],
     }),
-    new StylelintPlugin({
-      files: ['./src/**.css'],
-    }),
+    new StylelintPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{ from: './src/pages/game/assets/fonts/Bangers.ttf' }],
+      patterns: [
+        { from: './src/pages/game/assets/fonts/Bangers.ttf' },
+        { from: './src/pwa/' },
+      ],
     }),
-    isProductionMode ?
-      new CopyWebpackPlugin({
-        patterns: [{ from: './src/pwa/' }],
-      }) :
-      new CopyWebpackPlugin({
-        patterns: [{ from: './scripts/reload.js' }],
-      }),
     isProductionMode ?
       new WorkboxPlugin.GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: 10*1024*1024,
         navigateFallback: '/index.html',
-      }) :
-      new NodemonPlugin({
-        script: './ssr/server/server.js',
-        watch: [
-          path.resolve('./ssr/server/server.js'),
-          path.resolve('./ssr/dist/index.html'),
-          path.resolve('./ssr/dist/stats.json'),
-        ],
-        delay: '2000',
-        verbose: false,
-      }),
-    new StatsWriterPlugin({
-      filename: 'stats.json',
-      transform(data) {
-        return JSON.stringify(
-          data.assetsByChunkName.index
-            .concat(data.assetsByChunkName.vendors));
-      },
-    }),
+      })
+      : false,
   ].filter(Boolean),
-};
-
-module.exports = spaConfig;
+}
