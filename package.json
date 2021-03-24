@@ -8,8 +8,8 @@
     "npm": "6.14.8"
   },
   "scripts": {
-    "start": "ssr:start",
-    "build": "ssr:build",
+    "start": "npm run ssr:start",
+    "build": "npm run ssr:build",
     "spa:dev": "npx webpack serve",
     "spa:start": "node server.js",
     "spa:build": "npx webpack --node-env='production'",
