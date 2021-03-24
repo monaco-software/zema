@@ -1,5 +1,5 @@
 import Sprite from './sprite';
-import ballSprite from '../assets/images/balls.png';
+import ballSprite from '../assets/images/balls.webp';
 import { random } from './utils';
 import { BALL_DIAMETER } from '../constants';
 
@@ -13,11 +13,13 @@ export default class Ball extends Sprite {
   static readonly amountOfFrames = 60;
   static readonly yOffset = 180;
 
-  static index: number[];
+  static cached: boolean[];
   static buffer: HTMLCanvasElement[];
 
   static updateTime = 0;
   static updates = 0;
+
+  static image = new Image();
 
   position = 0;
   acceleration = 0;
@@ -32,25 +34,24 @@ export default class Ball extends Sprite {
       width: BALL_DIAMETER,
       height: BALL_DIAMETER,
     });
-    // всегда должен быть хотябы один шар
     if (!Ball.instance) {
       Ball.instance = this;
       const len = Ball.amountOfColors * Ball.amountOfFrames;
-      Ball.index = Array(len).fill(0);
+      Ball.cached = Array(len).fill(false);
       Ball.buffer = Array(len).fill(0).map(() => {
         const canvas = document.createElement('canvas');
         canvas.width = BALL_DIAMETER;
         canvas.height = BALL_DIAMETER;
         return canvas;
       });
+      Ball.image.src = ballSprite;
     }
     this._color = color;
     this.rotationOffset = positionOffset;
-    this.image = new Image();
-    this.image.src = ballSprite;
+    this.image = Ball.image;
   }
 
-  updateBuffer(index: number, bufferIndex: number) {
+  private updateBuffer(index: number, bufferIndex: number) {
     // если не закэшировано - рендерим и пишем в кэш
     super.update(index, 0);
     const bufferCtx = Ball.buffer[bufferIndex].getContext('2d');
@@ -66,43 +67,31 @@ export default class Ball extends Sprite {
       this.width,
       this.height
     );
-    Ball.index[bufferIndex] += 1;
+    Ball.cached[bufferIndex] = true;
   }
 
   getBuffer(index: number): HTMLCanvasElement | undefined {
-    if (!this.image.width) {
-      return;
-    }
     let frame = index % this.numberOfFrames;
-    if (frame < 0) {
+    if (frame < 0 || !this.image.width) {
       return;
     }
-
     const bufferIndex = this.color * this.numberOfFrames + frame;
-    const notCached = Ball.index[bufferIndex] === 0;
-    if (notCached) {
+    if (!Ball.cached[bufferIndex]) {
       this.updateBuffer(index, bufferIndex);
     }
     return Ball.buffer[bufferIndex];
   }
 
   update(index = 0, angle = 0) {
-    if (!this.image.width) {
-      return;
-    }
     let frame = index % this.numberOfFrames;
-    if (frame < 0) {
+    if (frame < 0 || !this.image.width) {
       return;
     }
-
     const bufferIndex = this.color * this.numberOfFrames + frame;
-    const notCached = Ball.index[bufferIndex] === 0;
-
-    if (notCached) {
+    if (!Ball.cached[bufferIndex]) {
       this.updateBuffer(index, bufferIndex);
     }
     this.ctx.clearRect(0, 0, this.width, this.height);
-
     this.ctx.translate(this.width / 2, this.height / 2);
     this.ctx.rotate(angle);
     this.ctx.translate(-this.width / 2, -this.height / 2);
@@ -116,7 +105,6 @@ export default class Ball extends Sprite {
       this.height
     );
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-    Ball.index[bufferIndex] += 1;
   }
 
   get color() {

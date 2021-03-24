@@ -40,7 +40,7 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.png|\.mp3$/,
+        test: /\.webp|\.mp3$/,
         use: ['file-loader'],
       },
     ]

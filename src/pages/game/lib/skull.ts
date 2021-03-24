@@ -1,4 +1,4 @@
-import skullImage from '../assets/images/skull.png';
+import skullImage from '../assets/images/skull.webp';
 
 export default class Skull {
   image = new Image();
