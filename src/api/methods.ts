@@ -1,3 +1,4 @@
+import { API_PATH, getProxyPath } from '@api/paths';
 import { createApiMethod, HTTP_METHODS } from './core';
 import {
   GetLeaderboardParams,
@@ -12,11 +13,8 @@ import {
   UserObject,
 } from './schema';
 
-export const YANDEX_API_URL = 'https://ya-praktikum.tech';
-const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;
-
 export const apiGetUser = createApiMethod<undefined, UserObject>(
-  getFullPath('/auth/user'),
+  getProxyPath(API_PATH.AUTH_USER),
   {
     method: HTTP_METHODS.GET,
     credentials: 'include',
@@ -24,7 +22,7 @@ export const apiGetUser = createApiMethod<undefined, UserObject>(
 );
 
 export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
-  getFullPath('/auth/signin'),
+  getProxyPath(API_PATH.AUTH_SIGNIN),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -35,7 +33,7 @@ export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
 );
 
 export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
-  getFullPath('/auth/signup'),
+  getProxyPath(API_PATH.AUTH_SIGNUP),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -46,7 +44,7 @@ export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
 );
 
 export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
-  getFullPath('/auth/logout'),
+  getProxyPath(API_PATH.AUTH_LOGOUT),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -54,7 +52,7 @@ export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
 );
 
 export const apiGetUserById = (userId: number) => createApiMethod<undefined, UserObject>(
-  getFullPath(`/user/${userId}`),
+  `${getProxyPath(API_PATH.USER_BY_ID)}/${userId}`,
   {
     method: HTTP_METHODS.GET,
     credentials: 'include',
@@ -62,7 +60,7 @@ export const apiGetUserById = (userId: number) => createApiMethod<undefined, Use
 );
 
 export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, UpdateLeaderboardResponse>(
-  getFullPath('/leaderboard'),
+  getProxyPath(API_PATH.LEADERBOARD_UPDATE),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -73,7 +71,7 @@ export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, Upd
 );
 
 export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeaderboardResponse>(
-  getFullPath('/leaderboard/all'),
+  getProxyPath(API_PATH.LEADERBOARD_ALL),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -84,7 +82,7 @@ export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeader
 );
 
 export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfileResponse>(
-  getFullPath('/user/profile'),
+  getProxyPath(API_PATH.USER_PROFILE),
   {
     method: HTTP_METHODS.PUT,
     credentials: 'include',
@@ -95,7 +93,7 @@ export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfi
 );
 
 export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarResponse>(
-  getFullPath('/user/profile/avatar'),
+  getProxyPath(API_PATH.USER_PROFILE_AVATAR),
   {
     method: HTTP_METHODS.PUT,
     credentials: 'include',
@@ -103,7 +101,7 @@ export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarR
 );
 
 export const apiUpdatePassword = createApiMethod<UpdatePasswordParams, UpdatePasswordResponse>(
-  getFullPath('/user/password'),
+  getProxyPath(API_PATH.USER_PASSWORD),
   {
     method: HTTP_METHODS.PUT,
     credentials: 'include',

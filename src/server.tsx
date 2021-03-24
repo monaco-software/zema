@@ -6,6 +6,7 @@ import https from 'https';
 import express from 'express';
 import root from 'app-root-path';
 import enforce from 'express-sslify';
+import cookieParser from 'cookie-parser';
 import { store } from '@store/store';
 import { Provider } from 'react-redux';
 import { App } from '@components/App/App';
@@ -14,6 +15,7 @@ import { StaticRouter } from 'react-router';
 import { isProduction } from '@common/utils';
 import { cspHeader } from './middlewares/csp';
 import { renderToString } from 'react-dom/server';
+import { yandexApiProxy } from './middlewares/yandexApiProxy';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { NotificationStatus } from '@components/Notification/Notification';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
@@ -29,7 +31,11 @@ if (isProduction) {
 }
 app.use(cspHeader);
 
+app.use(cookieParser());
+
 app.use(express.static(root.resolve('ssr/dist')));
+
+yandexApiProxy(app);
 
 const jsFiles: string[] = [];
 const cssFiles: string[] = [];
