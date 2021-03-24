@@ -4,6 +4,10 @@ export const YANDEX_API_URL = `${YANDEX_API_DOMAIN}/api/v2`;
 
 export const YANDEX_API_PROXY_PREFIX = '/yaApiProxy';
 
+export const getFullPath = (path: string) => {
+  return `${YANDEX_API_URL}${path}`;
+};
+
 export const getFullPathFromProxy = (proxyPath: string) => {
   const path = proxyPath.replace(YANDEX_API_PROXY_PREFIX, '');
   return `${YANDEX_API_URL}${path}`;

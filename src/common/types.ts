@@ -12,4 +12,5 @@ export interface AppState {
   user: UserObject;
   isSignedIn: boolean;
   notification: Notification | null;
+  isSSR: boolean;
 }

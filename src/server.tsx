@@ -1,29 +1,31 @@
 /* eslint-disable new-cap */
 import './index.css';
 import * as fs from 'fs';
-import React from 'react';
 import https from 'https';
 import express from 'express';
+import fetch from 'node-fetch';
 import root from 'app-root-path';
+import React, { FC } from 'react';
 import enforce from 'express-sslify';
 import cookieParser from 'cookie-parser';
-import { store } from '@store/store';
 import { Provider } from 'react-redux';
 import { App } from '@components/App/App';
 import { ROUTES } from '@common/constants';
 import { StaticRouter } from 'react-router';
+import { appActions } from '@store/reducer';
 import { isProduction } from '@common/utils';
 import { cspHeader } from './middlewares/csp';
+import { RootState, store } from '@store/store';
 import { renderToString } from 'react-dom/server';
+import { API_PATH, getFullPath } from '@api/paths';
+import { getCookies } from './middlewares/helpers';
 import { yandexApiProxy } from './middlewares/yandexApiProxy';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
-import { NotificationStatus } from '@components/Notification/Notification';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
 
 const port = process.env.PORT || 3000;
 
 const sheet = new ServerStyleSheet();
-const serverState = store.getState();
 const app = express();
 if (isProduction) {
   // перенаправляет HTTP в HTTPS
@@ -89,10 +91,10 @@ updateChunks();
 getStyles();
 
 interface Props {
-  children: React.ReactNode;
+  serverState: RootState;
 }
 
-const Html = ({ children }: Props) => {
+const Html: FC<Props> = ({ children, serverState }) => {
   return (
     <html>
       <head>
@@ -127,21 +129,15 @@ const Html = ({ children }: Props) => {
   );
 };
 
-app.get('*', (req, res) => {
-  if (!isProduction) {
-    getStyles();
-    updateChunks();
-  }
-  console.info(req.method, req.hostname, req.url, res.statusCode);
+const getAppHtml = (reduxStore: typeof store, locationUrl: string) => {
+  const serverState = reduxStore.getState();
 
-  // можно попробовать renderToNodeStream
-  // но разницы я не заметил
-  const html = renderToString(
-    <Html>
+  return renderToString(
+    <Html serverState={serverState}>
       <AppErrorBoundary>
         <Provider store={store}>
           <StyleSheetManager sheet={sheet.instance}>
-            <StaticRouter location={req.url || '/'}>
+            <StaticRouter location={locationUrl || '/'}>
               {sheet.getStyleElement()}
               <App />
             </StaticRouter>
@@ -150,11 +146,38 @@ app.get('*', (req, res) => {
       </AppErrorBoundary>
     </Html>,
   );
-  res.send(html);
+};
+
+app.get('*', (req, res) => {
+  if (!isProduction) {
+    getStyles();
+    updateChunks();
+  }
+  console.info(req.method, req.hostname, req.url, res.statusCode);
+
+  fetch(getFullPath(API_PATH.AUTH_USER), {
+    method: 'GET',
+    headers: {
+      ...getCookies(req),
+    },
+  })
+    .then(async (response) => {
+      if (response.ok) {
+        const userData = await response.json();
+        store.dispatch(appActions.setUser(userData));
+        store.dispatch(appActions.setIsSignedIn(true));
+      }
+    })
+    .catch(console.log)
+    .finally(() => {
+      store.dispatch(appActions.setIsSSR(true));
+
+      const html = getAppHtml(store, req.url);
+      res.send(html);
+    });
 });
 
 if (!isProduction) {
-  serverState.app.notification = { message: 'Hello from node server', status: NotificationStatus.INFO };
   // ключи созданы командой
   // mkcert localhost 127.0.0.1 ::1
   // https://github.com/FiloSottile/mkcert
