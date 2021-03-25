@@ -19,6 +19,7 @@ import { RootState, store } from '@store/store';
 import { renderToString } from 'react-dom/server';
 import { API_PATH, getFullPath } from '@api/paths';
 import { getCookies } from './middlewares/helpers';
+import { getUserWithFullAvatarUrl } from '@common/helpers';
 import { yandexApiProxy } from './middlewares/yandexApiProxy';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
@@ -164,7 +165,8 @@ app.get('*', (req, res) => {
     .then(async (response) => {
       if (response.ok) {
         const userData = await response.json();
-        store.dispatch(appActions.setUser(userData));
+        const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
+        store.dispatch(appActions.setUser(userDataWithFullAvatar));
         store.dispatch(appActions.setIsSignedIn(true));
       }
     })

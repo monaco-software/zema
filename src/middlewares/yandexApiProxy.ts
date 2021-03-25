@@ -1,9 +1,13 @@
+import multer from 'multer';
 import fetch from 'node-fetch';
+import FormData from 'form-data';
 import express, { Express } from 'express';
+import { AVATAR_FIELD_NAME } from '@common/constants';
 import { getCookies, handleApiError, setCookies } from './helpers';
 import { API_PATH, getFullPathFromProxy, getProxyPath } from '@api/paths';
 
 const jsonParser = express.json();
+const upload = multer();
 
 const authProxy = (app: Express) => {
   app.get(getProxyPath(API_PATH.AUTH_USER), (req, res) => {
@@ -97,11 +101,27 @@ const userProxy = (app: Express) => {
       .catch((error) => handleApiError(error, res));
   });
 
-  app.put(getProxyPath(API_PATH.USER_PROFILE_AVATAR), (_req, res) => {
-    // TODO: пока что не разобрался как работать с Form Data
-    res
-      .status(404)
-      .send(false);
+  app.put(getProxyPath(API_PATH.USER_PROFILE_AVATAR), upload.single(AVATAR_FIELD_NAME), (req, res) => {
+    const { buffer, originalname } = req.file;
+
+    const formData = new FormData();
+    formData.append(AVATAR_FIELD_NAME, buffer, {
+      filename: encodeURIComponent(originalname),
+    });
+
+    fetch(getFullPathFromProxy(req.url), {
+      method: req.method,
+      headers: {
+        ...getCookies(req),
+      },
+      body: formData,
+    })
+      .then(async (apiResponse) => {
+        res
+          .status(apiResponse.status)
+          .send(await apiResponse.text());
+      })
+      .catch((error) => handleApiError(error, res));
   });
 };
 
