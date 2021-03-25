@@ -1,4 +1,5 @@
 import { appReducer } from './reducer';
+import { PreloadedState } from '@store/types';
 import { gameReducer } from '@pages/game/reducer';
 import { forumReducer } from '@pages/forum/reducer';
 import { gameLevelsReducer } from '@pages/gameLevels/reducer';
@@ -17,6 +18,14 @@ export const store = configureStore({
   reducer,
   devTools: process.env.NODE_ENV !== 'production',
 });
+
+export const createStore = (preloadedState: PreloadedState) => {
+  return configureStore({
+    reducer,
+    preloadedState,
+    devTools: process.env.NODE_ENV !== 'production',
+  });
+};
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = ThunkDispatch<RootState, unknown, Action>;

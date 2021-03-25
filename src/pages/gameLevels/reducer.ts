@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface GameLevels {
+export interface GameLevels {
   allowedLevels: number[];
 }
 
