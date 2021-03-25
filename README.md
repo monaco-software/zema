@@ -22,9 +22,9 @@
 <details><summary>Скриншоты</summary>
 
 <p align="center">
-<img src="/src/pages/game/assets/images/thumbnails/level_1_thumb.png">
-<img src="/src/pages/game/assets/images/thumbnails/level_2_thumb.png">
-<img src="/src/pages/game/assets/images/thumbnails/level_3_thumb.png">
+<img src="/src/pages/game/assets/images/thumbnails/level_1_thumb.webp">
+<img src="/src/pages/game/assets/images/thumbnails/level_2_thumb.webp">
+<img src="/src/pages/game/assets/images/thumbnails/level_3_thumb.webp">
 </p>
 
 </details>
@@ -62,8 +62,10 @@
     |   ├── gameLevels        # страница уровней
     |   ├── gameOver          # для проигравших
     |   ├── leaderboard       # достижения
+    |   ├── root              # лэндинг
     |   ├── signin            # авторизация
     |   └── signup            # регистрация
+    ├── pwa                   # прогрессивное web-приложение
     └── store                 # хранилище Redux
 ```
 
@@ -75,15 +77,36 @@
 game
 ├── assets
 │   ├── fonts
-│   └── images
+│   ├── images
+│   └── sounds
+├── UserInterface             # взаимодействие с пользователем
 ├── Layers                    # компоненты Canvas
 ├── lib                       # классы и утилиты
 ├── constants.ts              # константы и перечисления
 ├── Game.tsx                  # точка входа
 ├── levels.ts                 # настройка уровней
 └── setup.ts                  # настройки движка
-
 ```
+
+</details>
+
+<details><summary>Работа с памятью</summary>
+
+
+1. Устранены утечки памяти при работе с сайд-эффектами React
+   - определены ссылки на
+     - setTimeout()
+     - setInterval()
+     - requestAnimationFrame()
+   - на выходе ресурсы освобождаются вызовом соответствующих функций
+
+1. Обнаружены и устранены наложения длительных сайд-эффектов
+
+1. В классах спрайтов введены статические переменные для изображений, что позволило отказаться от `new Image()` в конструкторах.
+
+1. Расчеты изменены таким образом, чтобы не использовать `slice()` для массивов.
+
+1. В игре для устранения коротких фризов при работе Garbage Collector были введены массивы для хранения удаленных объектов. Ресурсы высвобождаются после завершения уровня.
 
 </details>
 
@@ -146,6 +169,6 @@ ___
 Изображения, шрифты и другие ресурсы, используемые в проекте, взяты из открытых источников.
 
 <p align="center">
-<img src="/src/pages/game/assets/images/frog.png" width="35" height="35">
+<img src="/src/pages/game/assets/images/frog.webp" width="35" height="35">
 </p>
 

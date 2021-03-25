@@ -22,6 +22,7 @@ export const asyncGameActions = {
       localStorageVolumeValue <= MAX_VOLUME &&
       localStorageVolumeValue >= MIN_VOLUME
     ) {
+      setVolume(localStorageVolumeValue);
       dispatch(gameActions.setVolume(localStorageVolumeValue));
       return;
     }

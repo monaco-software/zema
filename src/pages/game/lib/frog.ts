@@ -1,4 +1,4 @@
-import frogImage from '../assets/images/frog.png';
+import frogImage from '../assets/images/frog.webp';
 
 export default class Frog {
   image = new Image();

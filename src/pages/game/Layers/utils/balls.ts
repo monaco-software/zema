@@ -36,8 +36,8 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
   if (both && (left.length < 2 || right.length < 1)) {
     return [index];
   }
-  const res = left.concat(right);
-  return uniqAndSort(res);
+  left.push(...right);
+  return uniqAndSort(left);
 };
 
 export const getBallsRemainColors = (): number[] => {
@@ -49,26 +49,6 @@ export const getBallsRemainColors = (): number[] => {
 export const getRandomColorFromRemains = () => {
   const colors = getBallsRemainColors();
   return colors[random(colors.length)];
-};
-
-// высчитыват оставшиеся на поле цвета
-// после попадания и всех столкновений
-// принимает массив шаров и индекс вставки
-// возвращает массив индексов цветов
-export const calculateRemainColors = (b: Ball[], i: number): number[] => {
-  const balls = b.slice();
-  let index = i;
-  let sameBalls = findSame(balls, index);
-  while (sameBalls.length >= 3) {
-    index = sameBalls[0];
-    balls.splice(index, sameBalls.length);
-    sameBalls = findSame(balls, index, true);
-  }
-  const remainColors: number[] = [];
-  balls.forEach((ball) => {
-    remainColors.push(ball.color);
-  });
-  return uniqAndSort(remainColors);
 };
 
 export const createBalls = (level: number): Ball[] => {
@@ -128,7 +108,7 @@ export const applyPhysic = (pusherPosition: number): Physics => {
             gameBalls[i].position -= moveDistance;
             gameBalls[i].rotationOffset -= 1;
           }
-          // толькатель отлетает дальше
+          // толкатель отлетает дальше
           pusherOffset -= moveDistance + 4;
           ball.acceleration = 0;
           impacts.push(ballIndex);
