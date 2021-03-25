@@ -10,13 +10,15 @@ import { BALL_EXPLODE_GAP, DEFAULT_FRAMERATE } from '../setup';
 import { getExplosion, getGamePhase, getGameResult } from '../selectors';
 import { BALL_DIAMETER, BALL_RADIUS, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
 
+type Effect = Explosion | Particle;
+
 interface Props {
   ballsPath: number[][];
 }
 
 export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const effects = useRef<Explosion[] | Particle[]>([]);
+  const effects = useRef<Effect[]>([]);
   const gamePhase = useSelector(getGamePhase);
   const gameResult = useSelector(getGameResult);
   const explosion = useSelector(getExplosion);
@@ -25,6 +27,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   const effectTimeoutRef = useRef<number[]>([]);
   const drawTimeoutRef = useRef<number>();
   const requestRef = useRef<number>();
+  const deletedEffects = useRef<Effect[][]>([]);
 
   const draw = () => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -56,7 +59,10 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
         }
         ctx.drawImage(effect.canvas, effect.x - BALL_RADIUS, effect.y - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
       } else {
-        effects.current.splice(index, 1);
+        // предотвращает запуск Garbage Collector во время игры
+        deletedEffects.current.push(
+          effects.current.splice(index, 1)
+        );
       }
     });
     if (effects.current.length) {
@@ -114,12 +120,6 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
         requestRef.current = window.requestAnimationFrame(draw),
       fps(DEFAULT_FRAMERATE));
     }
-
-    return () => {
-      while (effectTimeoutRef.current.length) {
-        clearTimeout(effectTimeoutRef.current.pop());
-      }
-    };
   }, [explosion]);
 
   useEffect(() => {
@@ -147,6 +147,7 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
     canvas.height = FRAME.HEIGHT;
 
     return () => {
+      deletedEffects.current.length = 0;
       clearTimeout(drawTimeoutRef.current);
       while (effectTimeoutRef.current.length) {
         clearTimeout(effectTimeoutRef.current.pop());

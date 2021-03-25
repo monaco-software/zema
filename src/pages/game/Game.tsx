@@ -108,13 +108,12 @@ export const Game: FC = () => {
     }
     setRemainColors(levels[level].ballColors);
 
-    fetchVolume().catch(console.error);
-
     const myFont = new FontFace('BangersLocal', 'url(Bangers.ttf)');
     myFont.load().then(function(font) {
       document.fonts.add(font);
       document.body.style.fontFamily = 'BangersLocal';
       Promise.all(initSound()).then(() => {
+        fetchVolume().catch(console.error);
         playSound(SOUNDS.LOADED);
         setGamePhase(GAME_PHASE.LOADED);
       });

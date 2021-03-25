@@ -1,9 +1,9 @@
-import level1Thumb from './assets/images/thumbnails/level_1_thumb.png';
-import level2Thumb from './assets/images/thumbnails/level_2_thumb.png';
-import level3Thumb from './assets/images/thumbnails/level_3_thumb.png';
-import level1Background from './assets/images/backgrounds/level_1_back.png';
-import level2Background from './assets/images/backgrounds/level_2_back.png';
-import level3Background from './assets/images/backgrounds/level_3_back.png';
+import level1Thumb from './assets/images/thumbnails/level_1_thumb.webp';
+import level2Thumb from './assets/images/thumbnails/level_2_thumb.webp';
+import level3Thumb from './assets/images/thumbnails/level_3_thumb.webp';
+import level1Background from './assets/images/backgrounds/level_1_back.webp';
+import level2Background from './assets/images/backgrounds/level_2_back.webp';
+import level3Background from './assets/images/backgrounds/level_3_back.webp';
 import { Level } from './types';
 import { BALL_COLORS } from './constants';
 import { getText } from '@common/langUtils';
@@ -20,7 +20,7 @@ const levels: Level[] = [{
   frogPosition: { x: 303, y: 310 },
   skullPosition: { x: 567, y: 362 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 50, // как далеко выкатывать в начале уровня
+  rollOut: 55, // как далеко выкатывать в начале уровня
   start: [421, 0], // начало кривой Безье
   curve: [ // контрольные точки
     [502, 36, 623, 113, 690, 195],
@@ -58,7 +58,7 @@ const levels: Level[] = [{
   frogPosition: { x: 419, y: 292 },
   skullPosition: { x: 158, y: 305 },
   scorePosition: { x: 90, y: 50 },
-  rollOut: 55,
+  rollOut: 60,
   start: [0, 163],
   curve: [
     [125, 91, 274, 58, 381, 52],
