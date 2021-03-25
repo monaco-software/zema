@@ -48,22 +48,24 @@ export const App: FC = () => {
       window.removeEventListener('load', onLoad);
     };
   }, []);
-
+  // пока полностью убрал спиннер
+  // TODO - разобраться, можно ли его как-то использовать
   return (
     <Grommet className={block()} theme={grommetTheme} cssVars>
-      {isLoading && (
+      {isLoading && false && (
         <Main justify="center" align="center">
           <Spinner size={48} />
         </Main>
       )}
 
-      {!isLoading && (
+      {(!isLoading || true) && (
         <>
           <Navbar />
 
           <AppNotification />
 
           <Switch>
+
             <Route exact path={ROUTES.ROOT} component={Root} />
 
             <Route path={ROUTES.SIGNIN} component={SignIn} />
