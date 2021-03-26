@@ -6,9 +6,9 @@ import { gameActions } from './reducer';
 import { useSelector } from 'react-redux';
 import { ROUTES } from '@common/constants';
 import { getText } from '@common/langUtils';
-import { uniqAndSort } from '@common/utils';
 import { useHistory } from 'react-router-dom';
 import { GAME_PHASE_TIMEOUTS } from './setup';
+import { isServer, uniqAndSort } from '@common/utils';
 import { useAction, useAsyncAction } from '@common/hooks';
 import { getAllowedLevels } from '../gameLevels/selectors';
 import { asyncGameActions } from '@pages/game/asyncActions';
@@ -131,7 +131,7 @@ export const Game: FC = () => {
 
   return (
     <div className={block()}>
-      <UserInterface />
+      {!isServer && (<UserInterface />)}
     </div>
   );
 };

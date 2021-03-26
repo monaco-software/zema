@@ -49,7 +49,7 @@ const serverConfig = {
         use: ['null-loader'],
       },
       {
-        test: /\.png|\.mp3$/,
+        test: /\.webp|\.mp3$/,
         use: [
           {
             loader: 'file-loader',
@@ -99,7 +99,7 @@ const clientConfig = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.png|\.mp3$/,
+        test: /\.webp|\.mp3$/,
         use: {
           loader: 'file-loader',
           options: {

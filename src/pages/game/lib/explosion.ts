@@ -7,11 +7,12 @@ export default class Explosion extends Sprite {
   x = 0;
   y = 0;
   phase = 0;
-  static image = new Image;
+  static image: HTMLImageElement;
 
   constructor(x = 0, y = 0) {
     super({ yOffset: 0, numberOfFrames: 6, width: BALL_DIAMETER, height: BALL_DIAMETER });
-    if (!Explosion.image.src) {
+    if (!Explosion.image) {
+      Explosion.image = new Image();
       Explosion.image.src = boomSprite;
     }
     this.x = x;
