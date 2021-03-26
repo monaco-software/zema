@@ -19,7 +19,7 @@ export default class Ball extends Sprite {
   static updateTime = 0;
   static updates = 0;
 
-  static image = new Image();
+  static image: HTMLImageElement;
 
   position = 0;
   acceleration = 0;
@@ -44,6 +44,7 @@ export default class Ball extends Sprite {
         canvas.height = BALL_DIAMETER;
         return canvas;
       });
+      Ball.image = new Image();
       Ball.image.src = ballSprite;
     }
     this._color = color;
