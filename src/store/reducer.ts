@@ -14,6 +14,7 @@ const initialState: AppState = {
   },
   isSignedIn: false,
   notification: null,
+  isSSR: false,
 };
 
 const app = createSlice({
@@ -31,6 +32,9 @@ const app = createSlice({
     },
     setNotification(state, { payload }: PayloadAction<AppState['notification']>) {
       state.notification = payload;
+    },
+    setIsSSR(state, { payload }: PayloadAction<AppState['isSSR']>) {
+      state.isSSR = payload;
     },
   },
 });

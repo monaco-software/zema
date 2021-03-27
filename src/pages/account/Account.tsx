@@ -8,6 +8,7 @@ import { appActions } from '@store/reducer';
 import { getCurrentUser } from '@store/selectors';
 import { asyncAccountActions } from './asyncActions';
 import { AvatarForm } from './Components/AvatarForm';
+import { AVATAR_FIELD_NAME } from '@common/constants';
 import { AccountForm } from './Components/AccountForm';
 import { ChangePassword } from './Components/ChangePassword';
 import { Box, Button, FormExtendedEvent, Main } from 'grommet';
@@ -83,7 +84,7 @@ export const Account: FC = () => {
     if (!value.avatarFileInput) { return; }
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('avatar', value.avatarFileInput);
+    formData.append(AVATAR_FIELD_NAME, value.avatarFileInput);
     updateAvatar(formData)
       .then(() => {
         setIsLoading(false);

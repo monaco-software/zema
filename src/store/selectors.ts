@@ -17,3 +17,8 @@ export const getAppNotification = createSelector(
   getAppState,
   (state) => state.notification,
 );
+
+export const getIsSSR = createSelector(
+  getAppState,
+  (state) => state.isSSR,
+);
