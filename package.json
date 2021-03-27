@@ -20,6 +20,8 @@
     "lint:ts": "npx eslint --ext .tsx,.ts src/",
     "lint:style": "npx stylelint \"src/**/*.css\"",
     "lint": "npm-run-all lint:*",
+    "prettier:write": "npx prettier --write .",
+    "prettier:check": "npx prettier --check .",
     "test": "npx jest"
   },
   "repository": {
@@ -119,7 +121,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm run typecheck && npm run test"
+      "pre-commit": "npm-run-all prettier:check lint typecheck test"
     }
   }
 }
