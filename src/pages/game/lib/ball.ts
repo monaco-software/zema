@@ -38,12 +38,14 @@ export default class Ball extends Sprite {
       Ball.instance = this;
       const len = Ball.amountOfColors * Ball.amountOfFrames;
       Ball.cached = Array(len).fill(false);
-      Ball.buffer = Array(len).fill(0).map(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = BALL_DIAMETER;
-        canvas.height = BALL_DIAMETER;
-        return canvas;
-      });
+      Ball.buffer = Array(len)
+        .fill(0)
+        .map(() => {
+          const canvas = document.createElement('canvas');
+          canvas.width = BALL_DIAMETER;
+          canvas.height = BALL_DIAMETER;
+          return canvas;
+        });
       Ball.image = new Image();
       Ball.image.src = ballSprite;
     }
@@ -61,10 +63,12 @@ export default class Ball extends Sprite {
     }
     bufferCtx.drawImage(
       this.canvas,
-      0, 0,
+      0,
+      0,
       this.width,
       this.height,
-      0, 0,
+      0,
+      0,
       this.width,
       this.height
     );
@@ -98,10 +102,12 @@ export default class Ball extends Sprite {
     this.ctx.translate(-this.width / 2, -this.height / 2);
     this.ctx.drawImage(
       Ball.buffer[bufferIndex],
-      0, 0,
+      0,
+      0,
       this.width,
       this.height,
-      0, 0,
+      0,
+      0,
       this.width,
       this.height
     );

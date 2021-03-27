@@ -48,7 +48,7 @@ export default class Sprite {
 
   xPosition(index: number) {
     const cols = this.image.width / this.width;
-    return index % cols * this.width;
+    return (index % cols) * this.width;
   }
 
   yPosition(index: number) {

@@ -20,7 +20,9 @@ export const SignUp: FC = () => {
   const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
 
   const [formFields, setFormFields] = useState<SignUpFormFields>({
     login: '',
@@ -49,9 +51,7 @@ export const SignUp: FC = () => {
   return (
     <div className={block()}>
       <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
-        <Heading>
-          {getText('signup_page_header')}
-        </Heading>
+        <Heading>{getText('signup_page_header')}</Heading>
 
         <SignUpForm
           fields={formFields}

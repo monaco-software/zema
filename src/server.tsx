@@ -51,7 +51,8 @@ const updateChunks = () => {
   const chunks: string[] = JSON.parse(
     // читает файл, созданный клиентской сборкой
     // в нем массив имен чанков
-    fs.readFileSync(root.resolve('ssr/dist/stats.json'), 'utf8'));
+    fs.readFileSync(root.resolve('ssr/dist/stats.json'), 'utf8')
+  );
 
   chunks.forEach((chunk) => {
     const url = '/' + chunk;
@@ -83,7 +84,7 @@ const getStyles = () => {
             <App />
           </StaticRouter>
         </StyleSheetManager>
-      </Provider>,
+      </Provider>
     );
   });
 };
@@ -119,7 +120,9 @@ const Html: FC<Props> = ({ children, serverState }) => {
         <div id="root">{children}</div>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.__SERVER_STATE__ = ${JSON.stringify(serverState).replace(/</g, '\\u003c')}`,
+            __html: `window.__SERVER_STATE__ = ${JSON.stringify(
+              serverState
+            ).replace(/</g, '\\u003c')}`,
           }}
         />
         {jsFiles.map((script, index) => (
@@ -145,7 +148,7 @@ const getAppHtml = (reduxStore: typeof store, locationUrl: string) => {
           </StyleSheetManager>
         </Provider>
       </AppErrorBoundary>
-    </Html>,
+    </Html>
   );
 };
 
@@ -196,4 +199,3 @@ if (!isProduction) {
     console.info(`HTTP Listening on port ${port}`);
   });
 }
-

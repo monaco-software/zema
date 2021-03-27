@@ -21,4 +21,3 @@ export enum GAME_PHASE_TIMEOUTS {
   ENDING = 2000,
   ENDED = 4000,
 }
-

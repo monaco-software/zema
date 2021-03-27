@@ -4,7 +4,11 @@ import React, { FC } from 'react';
 import { phoneMask } from '@common/masks';
 import { getText } from '@common/langUtils';
 import { AccountFormFields } from '../types';
-import { emailValidate, nameValidate, phoneValidate } from '@common/validations';
+import {
+  emailValidate,
+  nameValidate,
+  phoneValidate,
+} from '@common/validations';
 import {
   Button,
   Form,
@@ -94,11 +98,7 @@ export const AccountForm: FC<Props> = ({
         required
         validate={phoneValidate}
       >
-        <MaskedInput
-          id="account_phone"
-          name="phone"
-          mask={phoneMask}
-        />
+        <MaskedInput id="account_phone" name="phone" mask={phoneMask} />
       </FormField>
 
       <Grid gap="small" margin={{ top: 'medium' }}>

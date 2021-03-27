@@ -4,11 +4,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const checkConnection = () => {
     setTimeout(() => {
-      if (!window.hotReloadSocket || window.hotReloadSocket.readyState !== WebSocket.OPEN) {
+      if (
+        !window.hotReloadSocket ||
+        window.hotReloadSocket.readyState !== WebSocket.OPEN
+      ) {
         window.hotReloadSocket = new WebSocket('ws://localhost:54321');
 
         window.hotReloadSocket.addEventListener('open', () => {
-          const hello = 'Hello, WS Server!'
+          const hello = 'Hello, WS Server!';
           hotReloadSocket.send(hello);
           console.log(`📯 sending '${hello}'`);
         });
@@ -23,6 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       checkConnection();
     }, 5 * 1000);
-  }
+  };
   checkConnection();
 });

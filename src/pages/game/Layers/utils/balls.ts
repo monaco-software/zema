@@ -8,7 +8,11 @@ import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 export const gameBalls: Ball[] = [];
 
 // возвращает массив индексов одинаковых шаров рядом с заданным
-export const findSame = (balls: Ball[], index: number, both = false): number[] => {
+export const findSame = (
+  balls: Ball[],
+  index: number,
+  both = false
+): number[] => {
   const left = [];
   const right = [];
   if (!balls || !balls[index]) {
@@ -41,9 +45,11 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
 };
 
 export const getBallsRemainColors = (): number[] => {
-  return gameBalls.reduce((memo: number[], ball) =>
-    memo.includes(ball.color) ? memo : [...memo, ball.color],
-  []);
+  return gameBalls.reduce(
+    (memo: number[], ball) =>
+      memo.includes(ball.color) ? memo : [...memo, ball.color],
+    []
+  );
 };
 
 export const getRandomColorFromRemains = () => {
@@ -98,7 +104,10 @@ export const applyPhysic = (pusherPosition: number): Physics => {
         // разрыв. придаем шарам ускорение
         ball.acceleration += 1;
         for (let i = ballIndex; i < gameBalls.length; i += 1) {
-          gameBalls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
+          gameBalls[i].position -=
+            ball.acceleration > BALL_DIAMETER
+              ? BALL_DIAMETER
+              : ball.acceleration;
         }
       } else {
         // столкновение. чем сильнее разгон, тем дальше отлетают шары
@@ -118,4 +127,3 @@ export const applyPhysic = (pusherPosition: number): Physics => {
   });
   return { pusherOffset, impacts };
 };
-

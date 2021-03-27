@@ -32,20 +32,14 @@ const Message: FC<MessageProps> = ({ message, isCurrentUser }) => {
         <AvatarWithFallback url={message.user.avatar} size={36} />
 
         <Box direction="row" align="center">
-          <div className={messageBlock('author-name')}>
-            {userName}
-          </div>
+          <div className={messageBlock('author-name')}>{userName}</div>
 
-          <div className={messageBlock('date')}>
-            {date}
-          </div>
+          <div className={messageBlock('date')}>{date}</div>
         </Box>
       </Box>
 
       <div className={messageBlock('text')}>
-        <MarkdownSafe>
-          {message.text}
-        </MarkdownSafe>
+        <MarkdownSafe>{message.text}</MarkdownSafe>
       </div>
     </Box>
   );
@@ -58,7 +52,10 @@ interface Props {
   currentUserId: number;
 }
 
-export const ForumTopicMessageList: FC<Props> = ({ messages, currentUserId }) => {
+export const ForumTopicMessageList: FC<Props> = ({
+  messages,
+  currentUserId,
+}) => {
   return (
     <Grid className={listBlock()} gap="20px">
       {messages.map((message) => {
@@ -75,4 +72,3 @@ export const ForumTopicMessageList: FC<Props> = ({ messages, currentUserId }) =>
     </Grid>
   );
 };
-

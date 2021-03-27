@@ -20,9 +20,14 @@ export const SignIn: FC = () => {
   const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
 
-  const [formFields, setFormFields] = useState<SignInFormFields>({ login: '', password: '' });
+  const [formFields, setFormFields] = useState<SignInFormFields>({
+    login: '',
+    password: '',
+  });
   const onFieldsChange = (value: SignInFormFields) => setFormFields(value);
   const onSubmit = ({ value }: FormExtendedEvent<SignInFormFields>) => {
     if (Object.values(value).some((field) => field.trim() === '')) {
@@ -45,9 +50,7 @@ export const SignIn: FC = () => {
   return (
     <div className={block()}>
       <Main justify="center" align="center" pad={{ vertical: 'xlarge' }}>
-        <Heading>
-          {getText('signin_page_header')}
-        </Heading>
+        <Heading>{getText('signin_page_header')}</Heading>
 
         <SignInForm
           fields={formFields}

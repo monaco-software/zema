@@ -4,15 +4,12 @@ import React, { FC, HTMLAttributes } from 'react';
 
 const block = b_.lock('container');
 
-export const Container: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...restProps }) => {
+export const Container: FC<HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  ...restProps
+}) => {
   const classNameString = className ? ` ${className}` : '';
   const containerClass = `${block()}${classNameString}`;
 
-  return (
-    <div
-      className={containerClass}
-      {...restProps}
-    />
-  );
+  return <div className={containerClass} {...restProps} />;
 };
-

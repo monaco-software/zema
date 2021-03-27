@@ -2,7 +2,9 @@ import setCookie from 'set-cookie-parser';
 import { Request, Response } from 'express';
 import { Response as FetchResponse } from 'node-fetch';
 
-export const getCookies = (req: Request): { cookie: string } | Record<string, never> => {
+export const getCookies = (
+  req: Request
+): { cookie: string } | Record<string, never> => {
   const { cookie } = req.headers;
 
   if (cookie) {
@@ -26,10 +28,7 @@ export const setCookies = (apiResponse: FetchResponse, res: Response) => {
 
 export const handleApiError = (error: any, res: Response) => {
   console.error(error);
-  const errorString = typeof error === 'string'
-    ? error
-    : error.message || JSON.stringify(error);
-  res
-    .status(error.status ?? 400)
-    .send(errorString);
+  const errorString =
+    typeof error === 'string' ? error : error.message || JSON.stringify(error);
+  res.status(error.status ?? 400).send(errorString);
 };

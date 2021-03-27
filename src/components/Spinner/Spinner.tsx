@@ -5,10 +5,7 @@ export interface SpinnerProps {
   size?: number;
 }
 
-export const Spinner: FC<SpinnerProps> = ({
-  color = '#7D4CDB',
-  size = 28,
-}) => {
+export const Spinner: FC<SpinnerProps> = ({ color = '#7D4CDB', size = 28 }) => {
   return (
     <svg
       version="1.1"

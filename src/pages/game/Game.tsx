@@ -37,7 +37,9 @@ export const Game: FC = () => {
   const gameResult = useSelector(getGameResult);
   const allowedLevels = useSelector(getAllowedLevels);
 
-  const sendAllowedLevels = useAsyncAction(asyncGameLevelActions.sendAllowedLevels);
+  const sendAllowedLevels = useAsyncAction(
+    asyncGameLevelActions.sendAllowedLevels
+  );
   const fetchVolume = useAsyncAction(asyncGameActions.fetchVolume);
 
   const timeoutRef = useRef<number>();
@@ -45,7 +47,7 @@ export const Game: FC = () => {
   useEffect(() => {
     switch (gamePhase) {
       case GAME_PHASE.LOADED:
-        setTitle( `Level ${level + 1}\n\n${levels[level].title}`);
+        setTitle(`Level ${level + 1}\n\n${levels[level].title}`);
         timeoutRef.current = window.setTimeout(
           () => setGamePhase(GAME_PHASE.STARTING),
           GAME_PHASE_TIMEOUTS.LOADED
@@ -82,10 +84,9 @@ export const Game: FC = () => {
           if (level + 1 < levels.length) {
             const allowedLevelsCopy = allowedLevels.slice();
             allowedLevelsCopy.push(level + 1);
-            sendAllowedLevels(uniqAndSort(allowedLevelsCopy))
-              .finally(() => {
-                history.push(ROUTES.GAME_LEVELS);
-              });
+            sendAllowedLevels(uniqAndSort(allowedLevelsCopy)).finally(() => {
+              history.push(ROUTES.GAME_LEVELS);
+            });
             break;
           }
           // если уровень - последний
@@ -109,7 +110,7 @@ export const Game: FC = () => {
     setRemainColors(levels[level].ballColors);
 
     const myFont = new FontFace('BangersLocal', 'url(Bangers.ttf)');
-    myFont.load().then(function(font) {
+    myFont.load().then(function (font) {
       document.fonts.add(font);
       document.body.style.fontFamily = 'BangersLocal';
       Promise.all(initSound()).then(() => {
@@ -129,9 +130,5 @@ export const Game: FC = () => {
     };
   }, []);
 
-  return (
-    <div className={block()}>
-      {!isServer && (<UserInterface />)}
-    </div>
-  );
+  return <div className={block()}>{!isServer && <UserInterface />}</div>;
 };

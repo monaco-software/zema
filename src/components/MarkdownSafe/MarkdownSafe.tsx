@@ -22,4 +22,3 @@ export const MarkdownSafe: FC<Props> = ({ options = {}, ...restProps }) => {
     />
   );
 };
-
