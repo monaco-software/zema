@@ -80,6 +80,12 @@ const langPack = {
   game_level_title_1: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   game_level_title_2: 'Events are developing rapidly.\nNeed to do something.',
   game_level_title_3: 'Untangle\nentangled tracks\nin the desert',
+  game_level_title_4: 'Swirling\nwhirlwind\nsurrounded',
+  game_level_title_5: 'Desert open\nto all winds',
+  game_level_title_6: 'It’s a dark night,\nbullets whistling\nthroughout the steppe',
+  game_level_title_7: 'Under a\nViolet Moon',
+  game_level_title_8: 'In the ancient\ntriangle pyramid',
+  game_level_title_9: 'Along the road\ndead with braids standing.\nAnd silence..',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

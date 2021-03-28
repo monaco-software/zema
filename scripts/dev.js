@@ -78,7 +78,7 @@ if (cluster.isMaster) {
 
 } else {
   compilers[process.env.id].watch({
-    ignored: /node_modules/,
+    ignored: ['**/ssr/**', '**/node_modules'],
     aggregateTimeout: 500,
     poll: 500,
   }, (err, stats) => {

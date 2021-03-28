@@ -55,8 +55,10 @@ export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSel
       <CardBody>
         <Image src= {levelObject.thumbnail} />
       </CardBody>
-      <CardFooter className={block('footer')}>
-        {levelObject.title}
+      <CardFooter pad="x-small" className={block('footer')}>
+        <div style={{ margin: 'auto', alignContent: 'center' }}>
+          {levelObject.title}
+        </div>
       </CardFooter>
     </Card>
   );

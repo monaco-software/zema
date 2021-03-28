@@ -106,6 +106,14 @@ export const UserInterface: FC = () => {
     setBulletState(BULLET_STATE.SHOT);
   };
 
+  const mouseRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    if (bulletState !== BULLET_STATE.ARMED || gamePhase === GAME_PHASE.PAUSED) {
+      return;
+    }
+    setBulletState(BULLET_STATE.ARMING);
+  };
+
   const onFullScreenChange = () => {
     setFullscreenState(!!document.fullscreenElement);
   };
@@ -157,6 +165,7 @@ export const UserInterface: FC = () => {
         ref={boxRef}
         onMouseMove={mouseMove}
         onClick={mouseClick}
+        onContextMenu={mouseRightClick}
         style={{
           position: 'relative',
           margin: 'auto',
