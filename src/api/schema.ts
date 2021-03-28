@@ -20,7 +20,7 @@ export type SignInResponse = string;
 
 export type SignOutResponse = string;
 
-export interface SignUpParams extends SignInParams{
+export interface SignUpParams extends SignInParams {
   first_name: string;
   second_name: string;
   email: string;
@@ -56,7 +56,9 @@ export type GetLeaderboardResponse = Array<{
   data: LeaderboardRecordObject;
 }>;
 
-export type UpdateProfileParams = NonNullable<Omit<UserObject, 'id' | 'avatar'>>;
+export type UpdateProfileParams = NonNullable<
+  Omit<UserObject, 'id' | 'avatar'>
+>;
 
 export type UpdateProfileResponse = string;
 

@@ -1,6 +1,7 @@
-
 export function padWithSpaces(text: string, size: number): string {
-  if (text.length >= size) { return text; }
+  if (text.length >= size) {
+    return text;
+  }
   const diff = size - text.length;
   return text + ' '.repeat(diff);
 }
@@ -21,8 +22,13 @@ export function decimalToHex(d: number, padding = 2) {
   return hex;
 }
 
-export function distort(max: number, phases: number, phase: number, gain = 0.5) {
-  const value = max * gain + max * phase / phases;
+export function distort(
+  max: number,
+  phases: number,
+  phase: number,
+  gain = 0.5
+) {
+  const value = max * gain + (max * phase) / phases;
   return value > max ? max : Math.floor(value);
 }
 

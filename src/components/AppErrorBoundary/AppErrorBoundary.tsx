@@ -15,9 +15,7 @@ export class AppErrorBoundary extends Component<unknown, State> {
   constructor(props: unknown) {
     super(props);
 
-    this.state = {
-
-    };
+    this.state = {};
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -34,26 +32,22 @@ export class AppErrorBoundary extends Component<unknown, State> {
     if (error || errorInfo) {
       return (
         <div className={block()}>
-          <h1 className={block('header')}>
-            {getText('global_error')}
-          </h1>
+          <h1 className={block('header')}>{getText('global_error')}</h1>
 
           <a href={ROUTES.ROOT} className={block('link')}>
             {getText('error_boundary_go_to_main_page')}
           </a>
 
           <code className={block('message')}>
-            {error &&
-              <p className={block('message-header')}>
-                {error.toString()}
-              </p>
-            }
+            {error && (
+              <p className={block('message-header')}>{error.toString()}</p>
+            )}
 
-            {errorInfo &&
+            {errorInfo && (
               <p className={block('message-trace')}>
                 {errorInfo.componentStack.trim()}
               </p>
-            }
+            )}
           </code>
         </div>
       );

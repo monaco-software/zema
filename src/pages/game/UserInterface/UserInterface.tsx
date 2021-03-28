@@ -30,7 +30,12 @@ import { PauseButton } from '@pages/game/UserInterface/buttons/Pause';
 import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { DecreaseVolumeButton } from '@pages/game/UserInterface/buttons/DecreaseVolume';
 import { IncreaseVolumeButton } from '@pages/game/UserInterface/buttons/IncreaseVolume';
-import { getBulletState, getCurrentLevel, getFullscreenState, getGamePhase } from '../selectors';
+import {
+  getBulletState,
+  getCurrentLevel,
+  getFullscreenState,
+  getGamePhase,
+} from '../selectors';
 
 export const UserInterface: FC = () => {
   const resetCombo = useAction(gameActions.resetCombo);
@@ -52,15 +57,26 @@ export const UserInterface: FC = () => {
   const mouseTimeoutRef = useRef<number>();
   const angleRef = useRef(0);
 
-  const ballsPath = useMemo(() => getPath(levels[level].start, levels[level].curve), []);
+  const ballsPath = useMemo(
+    () => getPath(levels[level].start, levels[level].curve),
+    []
+  );
 
   const calculateShotPath = () => {
     // рассчитываем путь
     const path: number[][] = [];
     const shotAngle = angle;
-    for (let i = FROG_RADIUS + BULLET_TICK_DISTANCE; i < FRAME.WIDTH; i += BULLET_TICK_DISTANCE) {
-      const x = Math.round(levels[level].frogPosition.x + i * Math.cos(shotAngle));
-      const y = Math.round(levels[level].frogPosition.y + i * Math.sin(shotAngle));
+    for (
+      let i = FROG_RADIUS + BULLET_TICK_DISTANCE;
+      i < FRAME.WIDTH;
+      i += BULLET_TICK_DISTANCE
+    ) {
+      const x = Math.round(
+        levels[level].frogPosition.x + i * Math.cos(shotAngle)
+      );
+      const y = Math.round(
+        levels[level].frogPosition.y + i * Math.sin(shotAngle)
+      );
       if (x >= 0 && x < FRAME.WIDTH && y >= 0 && y < FRAME.HEIGHT) {
         path.push([x, y, shotAngle]);
       }
@@ -74,7 +90,9 @@ export const UserInterface: FC = () => {
       gamePhase === GAME_PHASE.PAUSED ||
       gamePhase === GAME_PHASE.EXITING ||
       !boxRef.current
-    ) { return; }
+    ) {
+      return;
+    }
 
     const rect = boxRef.current.getBoundingClientRect();
     const x = e.pageX - rect.left;
@@ -89,7 +107,9 @@ export const UserInterface: FC = () => {
     if (delta >= fps(DEFAULT_FRAMERATE)) {
       setAngle(angleRef.current);
     } else {
-      if (mouseTimeoutRef.current) { return; }
+      if (mouseTimeoutRef.current) {
+        return;
+      }
       mouseTimeoutRef.current = window.setTimeout(() => {
         setAngle(angleRef.current);
         mouseTimeoutRef.current = 0;
@@ -111,7 +131,9 @@ export const UserInterface: FC = () => {
   };
 
   const onResize = () => {
-    if (!screenRef.current) { return; }
+    if (!screenRef.current) {
+      return;
+    }
     if (document.fullscreenElement) {
       const width = screenRef.current.clientWidth;
       const height = screenRef.current.clientHeight;
@@ -126,13 +148,17 @@ export const UserInterface: FC = () => {
   };
 
   useEffect(() => {
-    if (!screenRef.current || !boxRef.current) { return; }
+    if (!screenRef.current || !boxRef.current) {
+      return;
+    }
     boxRef.current.style.width = `${FRAME.WIDTH * ratio}px`;
     boxRef.current.style.height = `${FRAME.HEIGHT * ratio}px`;
   }, [ratio]);
 
   useEffect(() => {
-    if (!screenRef.current) { return; }
+    if (!screenRef.current) {
+      return;
+    }
     if (fullscreenState && !document.fullscreenElement) {
       screenRef.current.requestFullscreen();
     }
@@ -143,7 +169,7 @@ export const UserInterface: FC = () => {
 
   // init
   useEffect(() => {
-    document.addEventListener('fullscreenchange', onFullScreenChange );
+    document.addEventListener('fullscreenchange', onFullScreenChange);
     window.addEventListener('resize', onResize);
     return () => {
       document.removeEventListener('fullscreenchange', onFullScreenChange);
@@ -176,31 +202,11 @@ export const UserInterface: FC = () => {
         <BlackoutLayer />
         <TitleLayer />
         <InfoLayer />
-        <PauseButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 105}
-          y={10}
-        />
-        <FullscreenButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 65}
-          y={25}
-        />
-        <IncreaseVolumeButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 50}
-          y={60}
-        />
-        <DecreaseVolumeButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 50}
-          y={95}
-        />
-        <MuteButton
-          ratio={ratio}
-          x={FRAME.WIDTH - 50}
-          y={130}
-        />
+        <PauseButton ratio={ratio} x={FRAME.WIDTH - 105} y={10} />
+        <FullscreenButton ratio={ratio} x={FRAME.WIDTH - 65} y={25} />
+        <IncreaseVolumeButton ratio={ratio} x={FRAME.WIDTH - 50} y={60} />
+        <DecreaseVolumeButton ratio={ratio} x={FRAME.WIDTH - 50} y={95} />
+        <MuteButton ratio={ratio} x={FRAME.WIDTH - 50} y={130} />
       </div>
     </div>
   );

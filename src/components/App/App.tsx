@@ -27,11 +27,14 @@ const block = b_.lock('app');
 
 const onLoad = () => {
   if (process.env.NODE_ENV === 'production') {
-    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-      console.info('SW registered: ', registration);
-    }).catch((error) => {
-      console.error('SW registration failed: ', error);
-    });
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.info('SW registered: ', registration);
+      })
+      .catch((error) => {
+        console.error('SW registration failed: ', error);
+      });
   }
 };
 
@@ -47,8 +50,7 @@ export const App: FC = () => {
       return;
     }
 
-    fetchUser()
-      .finally(() => setIsLoading(false));
+    fetchUser().finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -75,7 +77,6 @@ export const App: FC = () => {
           <AppNotification />
 
           <Switch>
-
             <Route exact path={ROUTES.ROOT} component={Root} />
 
             <Route path={ROUTES.SIGNIN} component={SignIn} />

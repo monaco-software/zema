@@ -21,9 +21,13 @@ export const ScoreLayer: FC = () => {
   const grow = 10;
 
   const draw = () => {
-    if (!canvasRef.current) { return; }
+    if (!canvasRef.current) {
+      return;
+    }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
 
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
@@ -34,14 +38,17 @@ export const ScoreLayer: FC = () => {
       ctx.font = `${scoreFontSize.current}px BangersLocal`;
       ctx.textBaseline = 'middle';
       const textWidth = ctx.measureText(tmpScore.current.toString()).width;
-      ctx.fillText(tmpScore.current.toString(),
+      ctx.fillText(
+        tmpScore.current.toString(),
         levels[level].scorePosition.x - textWidth / 2,
-        levels[level].scorePosition.y + (scoreFontSize.current - SCORE_FONT_SIZE) / 2);
+        levels[level].scorePosition.y +
+          (scoreFontSize.current - SCORE_FONT_SIZE) / 2
+      );
       if (scoreFontSize.current > SCORE_FONT_SIZE) {
         scoreFontSize.current -= 1;
       }
     }
-    if (tmpScore.current < score ) {
+    if (tmpScore.current < score) {
       // крутилка должна быстро догонять реальный счетчик
       const diff = score - tmpScore.current;
       if (diff > 10) {
@@ -51,7 +58,7 @@ export const ScoreLayer: FC = () => {
       }
     }
     // если еще нужно что-то анимировать
-    if (tmpScore.current < score || scoreFontSize.current > SCORE_FONT_SIZE ) {
+    if (tmpScore.current < score || scoreFontSize.current > SCORE_FONT_SIZE) {
       timeoutRef.current = window.setTimeout(() => {
         requestRef.current = window.requestAnimationFrame(draw);
       }, fps(SCORE_ROLLING_SPEED));
@@ -59,7 +66,7 @@ export const ScoreLayer: FC = () => {
   };
 
   useEffect(() => {
-    if (score !== 0 ) {
+    if (score !== 0) {
       scoreFontSize.current = SCORE_FONT_SIZE + grow;
       requestRef.current = window.requestAnimationFrame(draw);
     }

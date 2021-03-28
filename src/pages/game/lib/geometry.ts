@@ -5,9 +5,15 @@ export function getLineLen(sx: number, sy: number, ex: number, ey: number) {
 // Принимает смещение и контрольные точки кривой Безье
 // Возвращает координаты точки
 export function getBezierXY(
-  t: number, sx: number, sy: number,
-  cp1x: number, cp1y: number, cp2x: number, cp2y: number,
-  ex: number, ey: number
+  t: number,
+  sx: number,
+  sy: number,
+  cp1x: number,
+  cp1y: number,
+  cp2x: number,
+  cp2y: number,
+  ex: number,
+  ey: number
 ) {
   return [
     Math.pow(1 - t, 3) * sx +
@@ -24,24 +30,53 @@ export function getBezierXY(
 // Принимает смещение и контрольные точки кривой Безье
 // Возвращает угол касательной
 export function getBezierAngle(
-  t: number, sx: number, sy: number,
-  cp1x: number, cp1y: number, cp2x: number, cp2y: number,
-  ex: number, ey: number
+  t: number,
+  sx: number,
+  sy: number,
+  cp1x: number,
+  cp1y: number,
+  cp2x: number,
+  cp2y: number,
+  ex: number,
+  ey: number
 ) {
-  const dx = Math.pow(1 - t, 2) * (cp1x - sx) + 2 * t * (1 - t) * (cp2x - cp1x) + t * t * (ex - cp2x);
-  const dy = Math.pow(1 - t, 2) * (cp1y - sy) + 2 * t * (1 - t) * (cp2y - cp1y) + t * t * (ey - cp2y);
+  const dx =
+    Math.pow(1 - t, 2) * (cp1x - sx) +
+    2 * t * (1 - t) * (cp2x - cp1x) +
+    t * t * (ex - cp2x);
+  const dy =
+    Math.pow(1 - t, 2) * (cp1y - sy) +
+    2 * t * (1 - t) * (cp2y - cp1y) +
+    t * t * (ey - cp2y);
   return -Math.atan2(dx, dy) + 0.5 * Math.PI;
 }
 
 // Принимает стартовую точку и массив контрольных точек кривых Безье
 // возвращает массив точек через промежутки >= quantum
-export function getPath(start: number[], curve: number[][], quantum = 1, frequency = 5000): number[][] {
+export function getPath(
+  start: number[],
+  curve: number[][],
+  quantum = 1,
+  frequency = 5000
+): number[][] {
   const res: number[][] = [];
   let last = start.slice();
   curve.forEach((c) => {
     for (let i = 0; i < 1; i += 1 / frequency) {
-      const point = getBezierXY(i, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]);
-      point.push(getBezierAngle(i, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5]));
+      const point = getBezierXY(
+        i,
+        last[0],
+        last[1],
+        c[0],
+        c[1],
+        c[2],
+        c[3],
+        c[4],
+        c[5]
+      );
+      point.push(
+        getBezierAngle(i, last[0], last[1], c[0], c[1], c[2], c[3], c[4], c[5])
+      );
       if (i === 0) {
         res.push(point);
       } else {
@@ -49,7 +84,8 @@ export function getPath(start: number[], curve: number[][], quantum = 1, frequen
           res[res.length - 1][0],
           res[res.length - 1][1],
           point[0],
-          point[1]);
+          point[1]
+        );
         if (distance >= quantum) {
           res.push(point);
         }
@@ -93,10 +129,9 @@ export function getCloserPoint(a: number[][], x: number, y: number): number {
 }
 
 export const toRadians = (degrees: number) => {
-  return degrees * Math.PI / 180;
+  return (degrees * Math.PI) / 180;
 };
 
-export const toDegrees = function(radians: number) {
-  return radians * 180 / Math.PI;
+export const toDegrees = function (radians: number) {
+  return (radians * 180) / Math.PI;
 };
-

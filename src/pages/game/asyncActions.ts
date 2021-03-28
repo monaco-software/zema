@@ -8,10 +8,15 @@ export const asyncGameActions = {
   // заглушка для микросервиса
   // на данный момент берет данные из localStorage
   fetchVolume: (): AppThunk<Promise<void>> => async (dispatch) => {
-    const localStorageVolume = atob(localStorage.getItem(LOCALSTORAGE_VOLUME) || '');
+    const localStorageVolume = atob(
+      localStorage.getItem(LOCALSTORAGE_VOLUME) || ''
+    );
 
     if (!localStorageVolume) {
-      localStorage.setItem(LOCALSTORAGE_VOLUME, btoa(JSON.stringify(DEFAULT_VOLUME)));
+      localStorage.setItem(
+        LOCALSTORAGE_VOLUME,
+        btoa(JSON.stringify(DEFAULT_VOLUME))
+      );
       dispatch(gameActions.setVolume(DEFAULT_VOLUME));
       return;
     }
@@ -35,9 +40,11 @@ export const asyncGameActions = {
     if (volume > MAX_VOLUME || volume < MIN_VOLUME) {
       throw new Error(`Volume value ${volume} out of range`);
     }
-    localStorage.setItem(LOCALSTORAGE_VOLUME, btoa(Math.floor(volume).toString(10)));
+    localStorage.setItem(
+      LOCALSTORAGE_VOLUME,
+      btoa(Math.floor(volume).toString(10))
+    );
     setVolume(volume);
     dispatch(gameActions.setVolume(volume));
   },
 };
-

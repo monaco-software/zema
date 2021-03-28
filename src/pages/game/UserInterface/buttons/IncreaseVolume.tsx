@@ -7,7 +7,12 @@ import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { asyncGameActions } from '@pages/game/asyncActions';
 import { GAME_PHASE, MAX_VOLUME, VOLUME_STEP } from '@pages/game/constants';
 import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
-import { getGamePhase, getIncreaseVolumeButton, getMuteState, getVolume } from '../../selectors';
+import {
+  getGamePhase,
+  getIncreaseVolumeButton,
+  getMuteState,
+  getVolume,
+} from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -16,7 +21,9 @@ interface Props {
 }
 
 export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
-  const setIncreaseVolumeButton = useAction(gameActions.setIncreaseVolumeButton);
+  const setIncreaseVolumeButton = useAction(
+    gameActions.setIncreaseVolumeButton
+  );
 
   const increaseVolumeButton = useSelector(getIncreaseVolumeButton);
   const muteState = useSelector(getMuteState);
@@ -27,11 +34,14 @@ export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
 
   const style = useButtonStyle(x, y, ratio);
 
-  const disabled = muteState || volume >= MAX_VOLUME || gamePhase === GAME_PHASE.PAUSED;
+  const disabled =
+    muteState || volume >= MAX_VOLUME || gamePhase === GAME_PHASE.PAUSED;
 
   const increaseVolume = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
     const newVolume = volume + VOLUME_STEP;
     if (newVolume <= MAX_VOLUME) {
       sendVolume(newVolume).catch(console.error);
@@ -40,7 +50,9 @@ export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   const handleMouseEnter = () => {
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
     setIncreaseVolumeButton({ ...increaseVolumeButton, hovered: true });
   };
 
@@ -49,7 +61,7 @@ export const IncreaseVolumeButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   useEffect(() => {
-    setIncreaseVolumeButton( {
+    setIncreaseVolumeButton({
       x,
       y,
       hovered: false,

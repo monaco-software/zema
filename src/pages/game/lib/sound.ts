@@ -93,11 +93,15 @@ export const mute = () => {
 };
 
 export const setVolume = (volume: number) => {
-  if (volume < MIN_VOLUME || volume > MAX_VOLUME) { return; }
+  if (volume < MIN_VOLUME || volume > MAX_VOLUME) {
+    return;
+  }
   volumeNode.gain.setValueAtTime(volume / MAX_VOLUME, audioCtx.currentTime);
 };
 
-export const initSound = (volume = DEFAULT_VOLUME / MAX_VOLUME): Array<Promise<AudioBuffer | undefined>> => {
+export const initSound = (
+  volume = DEFAULT_VOLUME / MAX_VOLUME
+): Array<Promise<AudioBuffer | undefined>> => {
   if (!audioCtx) {
     audioCtx = new AudioContext();
     volumeNode = audioCtx.createGain();
@@ -109,7 +113,9 @@ export const initSound = (volume = DEFAULT_VOLUME / MAX_VOLUME): Array<Promise<A
 
   Object.values(SOUNDS).forEach((e) => {
     e.forEach((sample) => {
-      if (sounds[sample] instanceof AudioBuffer) { return; }
+      if (sounds[sample] instanceof AudioBuffer) {
+        return;
+      }
       (async () => {
         const promise = loadFile(sample);
         loadPromises.push(promise);
@@ -119,4 +125,3 @@ export const initSound = (volume = DEFAULT_VOLUME / MAX_VOLUME): Array<Promise<A
   });
   return loadPromises;
 };
-

@@ -23,11 +23,15 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
 
   const style = useButtonStyle(x, y, ratio);
 
-  const disabled = shotPath.length || gamePhase !== GAME_PHASE.STARTED && gamePhase !== GAME_PHASE.PAUSED;
+  const disabled =
+    shotPath.length ||
+    (gamePhase !== GAME_PHASE.STARTED && gamePhase !== GAME_PHASE.PAUSED);
 
   const setPause = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
 
     if (gamePhase === GAME_PHASE.STARTED) {
       setPauseButton({ ...pauseButton, icon: ICONS.PLAY });
@@ -41,7 +45,9 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   const handleMouseEnter = () => {
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
     setPauseButton({ ...pauseButton, hovered: true });
   };
 
@@ -50,7 +56,7 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   useEffect(() => {
-    setPauseButton( {
+    setPauseButton({
       x,
       y,
       hovered: false,

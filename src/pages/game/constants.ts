@@ -21,7 +21,7 @@ export enum BULLET_STATE {
   ARMING,
   ARMED,
   SHOT,
-  INSERTING
+  INSERTING,
 }
 
 export enum GAME_PHASE {
@@ -32,7 +32,7 @@ export enum GAME_PHASE {
   PAUSED,
   ENDING,
   ENDED,
-  EXITING
+  EXITING,
 }
 
 export enum FRAME {
@@ -43,7 +43,7 @@ export enum FRAME {
 export enum GAME_RESULT {
   UNKNOWN,
   WIN,
-  FAIL
+  FAIL,
 }
 
 export enum BUTTONS {
@@ -52,4 +52,3 @@ export enum BUTTONS {
 
 export const LOCALSTORAGE_VOLUME = '__monaco-software-zooma_volume_key_v1__';
 export const LOCALSTORAGE_MUTE = '__monaco-software-zooma_mute_key_v1__';
-

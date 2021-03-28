@@ -10,7 +10,12 @@ export default class Particle extends Sprite {
   static image: HTMLImageElement;
 
   constructor(x = 0, y = 0) {
-    super({ yOffset: 0, numberOfFrames: 16, width: BALL_DIAMETER, height: BALL_DIAMETER });
+    super({
+      yOffset: 0,
+      numberOfFrames: 16,
+      width: BALL_DIAMETER,
+      height: BALL_DIAMETER,
+    });
     if (!Particle.image) {
       Particle.image = new Image();
       Particle.image.src = particleSprite;

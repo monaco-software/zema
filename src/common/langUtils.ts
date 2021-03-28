@@ -34,7 +34,8 @@ const langPack = {
   game_over_to_game_button: 'Попробовать еще раз',
   game_over_to_levels_button: 'К списку уровней',
   leaderboard_page_header: 'Рейтинг',
-  leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
+  leaderboard_table_placeholder_message:
+    'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
   leaderboard_table_placeholder_cta: 'Играть',
   levels_page_header: 'Уровни игры',
   levels_page_level_word: 'Уровень',
@@ -77,7 +78,8 @@ const langPack = {
   game_messages_play: 'play',
   game_messages_mute: 'mute',
   game_messages_sound: 'sound',
-  game_level_title_1: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  game_level_title_1:
+    'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   game_level_title_2: 'Events are developing rapidly.\nNeed to do something.',
   game_level_title_3: 'Untangle\nentangled tracks\nin the desert',
 };

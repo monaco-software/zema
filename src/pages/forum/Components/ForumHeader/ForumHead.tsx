@@ -12,9 +12,7 @@ export const ForumHead: FC<Props> = ({ onTopicCreateClick }) => {
 
   return (
     <Box direction="row" justify="between" align="center">
-      <Heading level={3}>
-        {getText('forum_page_header')}
-      </Heading>
+      <Heading level={3}>{getText('forum_page_header')}</Heading>
 
       <Button
         icon={addIcon}

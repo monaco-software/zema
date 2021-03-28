@@ -18,34 +18,31 @@ const authProxy = (app: Express) => {
       },
     })
       .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.json());
+        res.status(apiResponse.status).send(await apiResponse.json());
       })
       .catch((error) => handleApiError(error, res));
   });
 
-  app.post([
-    getProxyPath(API_PATH.AUTH_SIGNIN),
-    getProxyPath(API_PATH.AUTH_SIGNUP),
-  ], jsonParser, (req, res) => {
-    fetch(getFullPathFromProxy(req.url), {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...getCookies(req),
-      },
-      body: JSON.stringify(req.body),
-    })
-      .then(async (apiResponse) => {
-        setCookies(apiResponse, res);
-
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.text());
+  app.post(
+    [getProxyPath(API_PATH.AUTH_SIGNIN), getProxyPath(API_PATH.AUTH_SIGNUP)],
+    jsonParser,
+    (req, res) => {
+      fetch(getFullPathFromProxy(req.url), {
+        method: req.method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCookies(req),
+        },
+        body: JSON.stringify(req.body),
       })
-      .catch((error) => handleApiError(error, res));
-  });
+        .then(async (apiResponse) => {
+          setCookies(apiResponse, res);
+
+          res.status(apiResponse.status).send(await apiResponse.text());
+        })
+        .catch((error) => handleApiError(error, res));
+    }
+  );
 
   app.post(getProxyPath(API_PATH.AUTH_LOGOUT), (req, res) => {
     fetch(getFullPathFromProxy(req.url), {
@@ -66,25 +63,24 @@ const authProxy = (app: Express) => {
 };
 
 const userProxy = (app: Express) => {
-  app.put([
-    getProxyPath(API_PATH.USER_PROFILE),
-    getProxyPath(API_PATH.USER_PASSWORD),
-  ], jsonParser, (req, res) => {
-    fetch(getFullPathFromProxy(req.url), {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...getCookies(req),
-      },
-      body: JSON.stringify(req.body),
-    })
-      .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.text());
+  app.put(
+    [getProxyPath(API_PATH.USER_PROFILE), getProxyPath(API_PATH.USER_PASSWORD)],
+    jsonParser,
+    (req, res) => {
+      fetch(getFullPathFromProxy(req.url), {
+        method: req.method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCookies(req),
+        },
+        body: JSON.stringify(req.body),
       })
-      .catch((error) => handleApiError(error, res));
-  });
+        .then(async (apiResponse) => {
+          res.status(apiResponse.status).send(await apiResponse.text());
+        })
+        .catch((error) => handleApiError(error, res));
+    }
+  );
 
   app.get(`${getProxyPath(API_PATH.USER_BY_ID)}/*`, (req, res) => {
     fetch(getFullPathFromProxy(req.url), {
@@ -94,35 +90,35 @@ const userProxy = (app: Express) => {
       },
     })
       .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.json());
+        res.status(apiResponse.status).send(await apiResponse.json());
       })
       .catch((error) => handleApiError(error, res));
   });
 
-  app.put(getProxyPath(API_PATH.USER_PROFILE_AVATAR), upload.single(AVATAR_FIELD_NAME), (req, res) => {
-    const { buffer, originalname } = req.file;
+  app.put(
+    getProxyPath(API_PATH.USER_PROFILE_AVATAR),
+    upload.single(AVATAR_FIELD_NAME),
+    (req, res) => {
+      const { buffer, originalname } = req.file;
 
-    const formData = new FormData();
-    formData.append(AVATAR_FIELD_NAME, buffer, {
-      filename: encodeURIComponent(originalname),
-    });
+      const formData = new FormData();
+      formData.append(AVATAR_FIELD_NAME, buffer, {
+        filename: encodeURIComponent(originalname),
+      });
 
-    fetch(getFullPathFromProxy(req.url), {
-      method: req.method,
-      headers: {
-        ...getCookies(req),
-      },
-      body: formData,
-    })
-      .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.text());
+      fetch(getFullPathFromProxy(req.url), {
+        method: req.method,
+        headers: {
+          ...getCookies(req),
+        },
+        body: formData,
       })
-      .catch((error) => handleApiError(error, res));
-  });
+        .then(async (apiResponse) => {
+          res.status(apiResponse.status).send(await apiResponse.text());
+        })
+        .catch((error) => handleApiError(error, res));
+    }
+  );
 };
 
 const leaderboardProxy = (app: Express) => {
@@ -136,29 +132,29 @@ const leaderboardProxy = (app: Express) => {
       body: JSON.stringify(req.body),
     })
       .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.json());
+        res.status(apiResponse.status).send(await apiResponse.json());
       })
       .catch((error) => handleApiError(error, res));
   });
 
-  app.post(getProxyPath(API_PATH.LEADERBOARD_UPDATE), jsonParser, (req, res) => {
-    fetch(getFullPathFromProxy(req.url), {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...getCookies(req),
-      },
-      body: JSON.stringify(req.body),
-    })
-      .then(async (apiResponse) => {
-        res
-          .status(apiResponse.status)
-          .send(await apiResponse.text());
+  app.post(
+    getProxyPath(API_PATH.LEADERBOARD_UPDATE),
+    jsonParser,
+    (req, res) => {
+      fetch(getFullPathFromProxy(req.url), {
+        method: req.method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCookies(req),
+        },
+        body: JSON.stringify(req.body),
       })
-      .catch((error) => handleApiError(error, res));
-  });
+        .then(async (apiResponse) => {
+          res.status(apiResponse.status).send(await apiResponse.text());
+        })
+        .catch((error) => handleApiError(error, res));
+    }
+  );
 };
 
 export const yandexApiProxy = (app: Express) => {

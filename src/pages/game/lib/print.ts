@@ -19,7 +19,12 @@ export function print(param: Print) {
     for (let y = 0; y < 7; y += 1) {
       for (let x = 0; x < 5; x += 1) {
         if (printChar[y] && printChar[y][x]) {
-          param.ctx.fillRect(param.x + x + index * 6, param.y + y + offset, 1, 1);
+          param.ctx.fillRect(
+            param.x + x + index * 6,
+            param.y + y + offset,
+            1,
+            1
+          );
         }
       }
     }
