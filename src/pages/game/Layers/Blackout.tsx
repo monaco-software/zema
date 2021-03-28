@@ -18,23 +18,29 @@ export const BlackoutLayer: FC = () => {
 
   const doBlackout = (reverse = false) => {
     timeoutRef.current = window.setTimeout(() => {
-      reverse ?
-        setBlackout(blackout - BLACKOUT_INCREMENT) :
-        setBlackout(blackout + BLACKOUT_INCREMENT);
+      reverse
+        ? setBlackout(blackout - BLACKOUT_INCREMENT)
+        : setBlackout(blackout + BLACKOUT_INCREMENT);
     }, fps(DEFAULT_FRAMERATE));
   };
 
   const draw = () => {
-    if (!canvasRef.current) { return; }
+    if (!canvasRef.current) {
+      return;
+    }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     // затемнение в начале
     if (gamePhase === GAME_PHASE.LOADED) {
       ctx.fillStyle = `#000000${decimalToHex(blackout)}`;
       ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-      if (blackout < BLACKOUT_INCREMENT) { return; }
+      if (blackout < BLACKOUT_INCREMENT) {
+        return;
+      }
       doBlackout(true);
     }
 
@@ -42,13 +48,17 @@ export const BlackoutLayer: FC = () => {
     if (gamePhase === GAME_PHASE.ENDED || gamePhase === GAME_PHASE.EXITING) {
       ctx.fillStyle = `#000000${decimalToHex(blackout)}`;
       ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
-      if (blackout > 255 - BLACKOUT_INCREMENT) { return; }
+      if (blackout > 255 - BLACKOUT_INCREMENT) {
+        return;
+      }
       doBlackout();
     }
   };
 
   useEffect(() => {
-    if (gamePhase < GAME_PHASE.LOADED) { return; }
+    if (gamePhase < GAME_PHASE.LOADED) {
+      return;
+    }
     requestRef.current = window.requestAnimationFrame(draw);
   }, [gamePhase, blackout]);
 
@@ -61,7 +71,9 @@ export const BlackoutLayer: FC = () => {
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 

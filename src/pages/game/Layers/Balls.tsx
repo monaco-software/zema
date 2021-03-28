@@ -10,8 +10,20 @@ import { useAction } from '@common/hooks';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { getCloserPoint, getLineLen } from '../lib/geometry';
 import { ALLOWANCE, BALL_EXPLODE_GAP, BALL_EXPLODE_TIMEOUT } from '../setup';
-import { applyPhysic, createBalls, findSame, getBallsRemainColors } from './utils/balls';
-import { BALL_DIAMETER, BALL_RADIUS, BULLET_STATE, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import {
+  applyPhysic,
+  createBalls,
+  findSame,
+  getBallsRemainColors,
+} from './utils/balls';
+import {
+  BALL_DIAMETER,
+  BALL_RADIUS,
+  BULLET_STATE,
+  FRAME,
+  GAME_PHASE,
+  GAME_RESULT,
+} from '../constants';
 import {
   getBulletColor,
   getBulletState,
@@ -80,11 +92,10 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       }
       ballsRendered += 1;
       const buffer = ball.getBuffer(ball.position + ball.rotationOffset);
-      if (!buffer) { return; }
-      ctx.translate(
-        ballsPath[ball.position][0],
-        ballsPath[ball.position][1]
-      );
+      if (!buffer) {
+        return;
+      }
+      ctx.translate(ballsPath[ball.position][0], ballsPath[ball.position][1]);
       ctx.rotate(ballsPath[ball.position][2]);
       ctx.drawImage(buffer, -BALL_RADIUS, -BALL_RADIUS);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -101,25 +112,33 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
   };
 
   const letsArming = () => {
-    if (bulletState !== BULLET_STATE.ARMING && bulletState !== BULLET_STATE.ARMED) {
+    if (
+      bulletState !== BULLET_STATE.ARMING &&
+      bulletState !== BULLET_STATE.ARMED
+    ) {
       setRemainColors(getBallsRemainColors());
       setBulletState(BULLET_STATE.ARMING);
     }
   };
 
   const explode = (sameBalls: number[]) => {
-    const positions = sameBalls.reduce((memo: number[], index) => [...memo, balls[index].position], []);
+    const positions = sameBalls.reduce(
+      (memo: number[], index) => [...memo, balls[index].position],
+      []
+    );
     setExplosion(positions);
     // предотвращает запуск Garbage Collector во время игры
-    deletedBallsRef.current.push(
-      balls.splice(sameBalls[0], sameBalls.length)
-    );
+    deletedBallsRef.current.push(balls.splice(sameBalls[0], sameBalls.length));
     if (findSame(balls, sameBalls[0], true).length < 3) {
       letsArming();
     }
   };
 
-  const explodeSameBalls = (ballIndex: number, timeout: number, needTwoSide = false) => {
+  const explodeSameBalls = (
+    ballIndex: number,
+    timeout: number,
+    needTwoSide = false
+  ) => {
     const sameBalls = findSame(balls, ballIndex, needTwoSide);
     if (sameBalls.length >= 3) {
       ballsExploded.current = sameBalls.length;
@@ -130,7 +149,10 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       if (combo) {
         playSound(SOUNDS.COMBO);
       }
-      explodeTimeoutRef.current = window.setTimeout(() => explode(sameBalls), timeout);
+      explodeTimeoutRef.current = window.setTimeout(
+        () => explode(sameBalls),
+        timeout
+      );
     } else {
       letsArming();
     }
@@ -143,7 +165,9 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       gamePhase === GAME_PHASE.ENDED ||
       exiting.current ||
       pusher === pusherStartPosition
-    ) { return; }
+    ) {
+      return;
+    }
     // шары кончились, победа
     if (!balls.length && gamePhase === GAME_PHASE.STARTED) {
       setBulletState(BULLET_STATE.IDLE);
@@ -152,13 +176,11 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       // и флаг exiting для того,
       // чтобы следующие итерации снова не запустили setGamePhase
       exiting.current = true;
-      pusherTimeoutRef.current = window.setTimeout(
-        () => {
-          playSound(SOUNDS.WIN);
-          setGameResult(GAME_RESULT.WIN);
-          setGamePhase(GAME_PHASE.ENDING);
-        },
-        BALL_EXPLODE_TIMEOUT + ballsExploded.current * BALL_EXPLODE_GAP);
+      pusherTimeoutRef.current = window.setTimeout(() => {
+        playSound(SOUNDS.WIN);
+        setGameResult(GAME_RESULT.WIN);
+        setGamePhase(GAME_PHASE.ENDING);
+      }, BALL_EXPLODE_TIMEOUT + ballsExploded.current * BALL_EXPLODE_GAP);
       requestRef.current = window.requestAnimationFrame(() => draw());
       return;
     }
@@ -176,7 +198,10 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
     const result = applyPhysic(pusher);
 
     // если передний шар добрался до черепа
-    if (gamePhase === GAME_PHASE.STARTED && balls[balls.length - 1].position >= ballsPath.length - 1) {
+    if (
+      gamePhase === GAME_PHASE.STARTED &&
+      balls[balls.length - 1].position >= ballsPath.length - 1
+    ) {
       // быстро сливаем оставшиеся шары
       playSound(SOUNDS.LOSE);
       pusherIncrement.current = BALL_DIAMETER;
@@ -212,17 +237,25 @@ export const BallsLayer: FC<Props> = ({ ballsPath }) => {
       !shotPath.length ||
       shotPosition >= shotPath.length ||
       gamePhase === GAME_PHASE.PAUSED
-    ) { return; }
+    ) {
+      return;
+    }
 
     const x = shotPath[shotPosition][0];
     const y = shotPath[shotPosition][1];
     balls.forEach((ball, index) => {
-      if (ball.position < 0 || ball.position >= ballsPath.length || inserting.current) {
+      if (
+        ball.position < 0 ||
+        ball.position >= ballsPath.length ||
+        inserting.current
+      ) {
         return;
       }
       const distance = getLineLen(
-        x, y,
-        ballsPath[ball.position][0], ballsPath[ball.position][1]
+        x,
+        y,
+        ballsPath[ball.position][0],
+        ballsPath[ball.position][1]
       );
       // проверка на попадание c допуском
       if (distance < BALL_RADIUS + ALLOWANCE) {

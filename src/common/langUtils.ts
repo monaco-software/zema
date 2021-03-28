@@ -1,3 +1,4 @@
+// prettier-ignore
 const langPack = {
   navbar_root: 'Главная',
   navbar_game: 'Играть',
@@ -50,7 +51,6 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
-
   account_form_submit_button: 'Сохранить',
   account_form_reset_button: 'Сбросить',
   account_form_display_name_label: 'Ник',

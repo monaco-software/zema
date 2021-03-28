@@ -1,5 +1,7 @@
 export function isJsonString(str: unknown): boolean {
-  if (typeof str !== 'string') { return false; }
+  if (typeof str !== 'string') {
+    return false;
+  }
   try {
     JSON.parse(str);
   } catch (e) {
@@ -20,5 +22,6 @@ export const isServer = !(
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
-export const isMobile = /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i
-  .test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
+export const isMobile = /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  typeof navigator !== 'undefined' ? navigator.userAgent : ''
+);

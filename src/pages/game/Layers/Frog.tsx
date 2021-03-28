@@ -10,7 +10,11 @@ import { useAction } from '@common/hooks';
 import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
-import { BULLET_ARMED_POSITION, BULLET_ARMING_SPEED, BULLET_START_POSITION } from '../setup';
+import {
+  BULLET_ARMED_POSITION,
+  BULLET_ARMING_SPEED,
+  BULLET_START_POSITION,
+} from '../setup';
 import {
   BALL_RADIUS,
   BULLET_STATE,
@@ -18,7 +22,13 @@ import {
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
-import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase, getRemainColors } from '../selectors';
+import {
+  getBulletPosition,
+  getBulletState,
+  getCurrentLevel,
+  getGamePhase,
+  getRemainColors,
+} from '../selectors';
 
 interface Props {
   angle: number;
@@ -53,7 +63,10 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
     ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
 
-    if (bulletState === BULLET_STATE.ARMING || bulletState === BULLET_STATE.ARMED) {
+    if (
+      bulletState === BULLET_STATE.ARMING ||
+      bulletState === BULLET_STATE.ARMED
+    ) {
       if (bulletState === BULLET_STATE.ARMING) {
         bullet.update(bulletPosition + bullet.rotationOffset, Math.PI * 1.5);
       }
@@ -99,7 +112,11 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
       setBulletColor(bullet.color);
       setBulletPosition(BULLET_START_POSITION + 1);
     }
-    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
+    if (
+      gamePhase === GAME_PHASE.STARTED &&
+      bulletState !== BULLET_STATE.ARMED &&
+      bulletState !== BULLET_STATE.ARMING
+    ) {
       setBulletPosition(BULLET_START_POSITION);
     }
     if (gamePhase === GAME_PHASE.STARTED) {
@@ -111,7 +128,10 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     if (gamePhase === GAME_PHASE.ENDING) {
       setBulletState(BULLET_STATE.IDLE);
     }
-    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED) {
+    if (
+      gamePhase === GAME_PHASE.STARTED &&
+      bulletState !== BULLET_STATE.ARMED
+    ) {
       setBulletState(BULLET_STATE.ARMING);
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);

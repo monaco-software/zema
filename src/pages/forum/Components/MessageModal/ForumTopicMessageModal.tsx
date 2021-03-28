@@ -16,7 +16,13 @@ interface Props {
   onClose: VoidFunction;
 }
 
-export const ForumTopicMessageModal: FC<Props> = ({ value, isLoading, onChange, onSend, onClose }) => {
+export const ForumTopicMessageModal: FC<Props> = ({
+  value,
+  isLoading,
+  onChange,
+  onSend,
+  onClose,
+}) => {
   return (
     <Layer
       className={block()}
@@ -36,7 +42,11 @@ export const ForumTopicMessageModal: FC<Props> = ({ value, isLoading, onChange, 
               autoFocus
             />
 
-            <Box className={block('controls')} direction="row" justify="between">
+            <Box
+              className={block('controls')}
+              direction="row"
+              justify="between"
+            >
               <div className={block('markdown-hint')}>
                 {getText('forum_topic_input_markdown_support')}
                 &nbsp;
@@ -59,13 +69,10 @@ export const ForumTopicMessageModal: FC<Props> = ({ value, isLoading, onChange, 
 
         <Tab title={getText('forum_topic_input_preview_tab')}>
           <div className={block('preview')}>
-            <MarkdownSafe>
-              {value}
-            </MarkdownSafe>
+            <MarkdownSafe>{value}</MarkdownSafe>
           </div>
         </Tab>
       </Tabs>
     </Layer>
   );
 };
-

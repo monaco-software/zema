@@ -5,7 +5,9 @@ import { Game } from '@pages/game/Game';
 import { Grommet, Main } from 'grommet';
 import { Root } from '@pages/root/Root';
 import { Navbar } from '../Navbar/Navbar';
+import { useSelector } from 'react-redux';
 import { ROUTES } from '@common/constants';
+import { getIsSSR } from '@store/selectors';
 import { Spinner } from '../Spinner/Spinner';
 import { SignIn } from '@pages/signin/SignIn';
 import { SignUp } from '@pages/signup/SignUp';
@@ -25,22 +27,33 @@ const block = b_.lock('app');
 
 const onLoad = () => {
   if (process.env.NODE_ENV === 'production') {
-    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-      console.info('SW registered: ', registration);
-    }).catch((error) => {
-      console.error('SW registration failed: ', error);
-    });
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.info('SW registered: ', registration);
+      })
+      .catch((error) => {
+        console.error('SW registration failed: ', error);
+      });
   }
 };
 
 export const App: FC = () => {
+  const isSSR = useSelector(getIsSSR);
+
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!isSSR);
 
   useEffect(() => {
-    fetchUser()
-      .finally(() => setIsLoading(false));
+    if (isSSR) {
+      return;
+    }
+
+    fetchUser().finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', onLoad);
     }
@@ -48,24 +61,22 @@ export const App: FC = () => {
       window.removeEventListener('load', onLoad);
     };
   }, []);
-  // пока полностью убрал спиннер
-  // TODO - разобраться, можно ли его как-то использовать
+
   return (
     <Grommet className={block()} theme={grommetTheme} cssVars>
-      {isLoading && false && (
+      {isLoading && (
         <Main justify="center" align="center">
           <Spinner size={48} />
         </Main>
       )}
 
-      {(!isLoading || true) && (
+      {!isLoading && (
         <>
           <Navbar />
 
           <AppNotification />
 
           <Switch>
-
             <Route exact path={ROUTES.ROOT} component={Root} />
 
             <Route path={ROUTES.SIGNIN} component={SignIn} />

@@ -6,16 +6,25 @@ import { getIsSignedInd } from '@store/selectors';
 import { AppThunk, Dispatch } from '@store/store';
 import { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, bindActionCreators } from '@reduxjs/toolkit';
+import {
+  ActionCreatorWithoutPayload,
+  ActionCreatorWithPayload,
+  bindActionCreators,
+} from '@reduxjs/toolkit';
 
-export const useAction =
-  <P>(action: undefined extends P ? ActionCreatorWithoutPayload : ActionCreatorWithPayload<P>) => {
-    const dispatch = useDispatch();
+export const useAction = <P>(
+  action: undefined extends P
+    ? ActionCreatorWithoutPayload
+    : ActionCreatorWithPayload<P>
+) => {
+  const dispatch = useDispatch();
 
-    return bindActionCreators(action, dispatch);
-  };
+  return bindActionCreators(action, dispatch);
+};
 
-export const useAsyncAction = <TParams, TResponse>(action: (params: Voidable<TParams>) => AppThunk<TResponse>) => {
+export const useAsyncAction = <TParams, TResponse>(
+  action: (params: Voidable<TParams>) => AppThunk<TResponse>
+) => {
   const dispatch = useDispatch<Dispatch>();
 
   return (params: Voidable<TParams>) => dispatch(action(params));

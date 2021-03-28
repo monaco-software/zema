@@ -14,3 +14,5 @@ export enum ROUTES {
 export interface RouteParams {
   topicId?: string;
 }
+
+export const AVATAR_FIELD_NAME = 'avatar';

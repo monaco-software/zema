@@ -40,10 +40,7 @@ interface Props {
 }
 
 export const Notification: FC<Props> = ({
-  notification: {
-    status = NotificationStatus.INFO,
-    message,
-  },
+  notification: { status = NotificationStatus.INFO, message },
   onClose,
 }) => {
   const closeIcon = <FormClose />;
@@ -55,19 +52,11 @@ export const Notification: FC<Props> = ({
       position="bottom-right"
       background={{ color: '#0000' }}
     >
-
-      <div
-        className={block({ 'status': status })}
-      >
-
-        <div
-          className={block('body')}
-        >
+      <div className={block({ status: status })}>
+        <div className={block('body')}>
           <StatusIcon status={status} />
 
-          <div className={block('message')}>
-            {message}
-          </div>
+          <div className={block('message')}>{message}</div>
 
           <Button
             icon={closeIcon}
@@ -80,4 +69,3 @@ export const Notification: FC<Props> = ({
     </Layer>
   );
 };
-

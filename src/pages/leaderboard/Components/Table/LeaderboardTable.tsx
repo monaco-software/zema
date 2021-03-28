@@ -13,17 +13,19 @@ interface LeaderboardTableRowProps {
   isCurrentUser: boolean;
 }
 
-const LeaderboardTableRow: FC<LeaderboardTableRowProps> = ({ record, place, isCurrentUser }) => {
+const LeaderboardTableRow: FC<LeaderboardTableRowProps> = ({
+  record,
+  place,
+  isCurrentUser,
+}) => {
   const name = getUserFullName(record);
   const points = record.points.toLocaleString();
 
   return (
     <tr className={block('row', { 'current-user': isCurrentUser })}>
-      <td className={block('cell', { 'type': 'place' })}>
-        {place}
-      </td>
+      <td className={block('cell', { type: 'place' })}>{place}</td>
 
-      <td className={block('cell', { 'type': 'name' })}>
+      <td className={block('cell', { type: 'name' })}>
         <AvatarWithFallback
           className={block('user-avatar')}
           url={record.avatar}
@@ -32,9 +34,7 @@ const LeaderboardTableRow: FC<LeaderboardTableRowProps> = ({ record, place, isCu
         {name}
       </td>
 
-      <td className={block('cell', { 'type': 'points' })}>
-        {points}
-      </td>
+      <td className={block('cell', { type: 'points' })}>{points}</td>
     </tr>
   );
 };
@@ -45,7 +45,11 @@ interface Props {
   startPlace: number;
 }
 
-export const LeaderboardTable: FC<Props> = ({ records, currentUserId, startPlace }) => {
+export const LeaderboardTable: FC<Props> = ({
+  records,
+  currentUserId,
+  startPlace,
+}) => {
   return (
     <table className={block()}>
       <tbody>

@@ -17,12 +17,12 @@ function bemSelector(block, presetOptions) {
 }
 
 module.exports = {
-  "extends": ["@vkontakte/stylelint-config"],
-  "rules": {
-    "plugin/selector-bem-pattern": {
-      "preset": "bem",
-      "componentSelectors": bemSelector,
-      'implicitComponents': true,
+  extends: ['@vkontakte/stylelint-config', 'stylelint-config-prettier'],
+  rules: {
+    'plugin/selector-bem-pattern': {
+      preset: 'bem',
+      componentSelectors: bemSelector,
+      implicitComponents: true,
     },
   },
-}
+};

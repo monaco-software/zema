@@ -12,23 +12,18 @@ interface Props {
   onChange: (value: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const AvatarForm: FC<Props> = ({
-  onChange,
-  avatarUrl,
-}) => {
+export const AvatarForm: FC<Props> = ({ onChange, avatarUrl }) => {
   const cameraIcon = <Camera size="15px" />;
-  const fileInputRef = useRef<HTMLInputElement| null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const onClick = () => {
-    if (!fileInputRef.current) { return; }
+    if (!fileInputRef.current) {
+      return;
+    }
     fileInputRef.current.click();
   };
 
   return (
-    <Box
-      align="center"
-      className={block('box')}
-      margin="small"
-    >
+    <Box align="center" className={block('box')} margin="small">
       <Button
         primary
         className={block('button')}
@@ -36,7 +31,7 @@ export const AvatarForm: FC<Props> = ({
         onClick={onClick}
       />
       <AvatarWithFallback
-        className={block('avatar', { 'dummy': !avatarUrl })}
+        className={block('avatar', { dummy: !avatarUrl })}
         url={avatarUrl}
         size={150}
       />

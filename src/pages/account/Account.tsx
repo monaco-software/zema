@@ -8,13 +8,18 @@ import { appActions } from '@store/reducer';
 import { getCurrentUser } from '@store/selectors';
 import { asyncAccountActions } from './asyncActions';
 import { AvatarForm } from './Components/AvatarForm';
+import { AVATAR_FIELD_NAME } from '@common/constants';
 import { AccountForm } from './Components/AccountForm';
 import { ChangePassword } from './Components/ChangePassword';
 import { Box, Button, FormExtendedEvent, Main } from 'grommet';
 import { useAction, useAsyncAction, useAuth } from '@common/hooks';
 import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
 import { NotificationStatus } from '@components/Notification/Notification';
-import { AccountFormFields, AvatarFormFields, PasswordFormFields } from './types';
+import {
+  AccountFormFields,
+  AvatarFormFields,
+  PasswordFormFields,
+} from './types';
 
 const block = b_.lock('account');
 
@@ -27,7 +32,7 @@ const initPasswordFormFields = {
 const prepareProfileFormFields = (user: UserObject): AccountFormFields => {
   const formFields = Object.assign({}, user) as AccountFormFields;
   // убираем из телефона все кроме цифр
-  let digits = formFields.phone.replace( /\D/g, '');
+  let digits = formFields.phone.replace(/\D/g, '');
   // форматируем для MaskedInput
   formFields.phone = digits.replace(/^(\d)(\d{3})(\d{3})/, '$1 ($2) $3-');
 
@@ -50,16 +55,25 @@ export const Account: FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = React.useState(false);
-  const [profileFormFields, setProfileFormFields] = useState<AccountFormFields>(prepareProfileFormFields(currentUser));
-  const [passwordFormFields, setPasswordFormFields] = useState<PasswordFormFields>(initPasswordFormFields);
+  const [profileFormFields, setProfileFormFields] = useState<AccountFormFields>(
+    prepareProfileFormFields(currentUser)
+  );
+  const [
+    passwordFormFields,
+    setPasswordFormFields,
+  ] = useState<PasswordFormFields>(initPasswordFormFields);
 
-  const onPasswordFieldsChange = (value: PasswordFormFields) => { setPasswordFormFields(value); };
+  const onPasswordFieldsChange = (value: PasswordFormFields) => {
+    setPasswordFormFields(value);
+  };
 
-  const onProfileFieldsChange = (value: AccountFormFields) => setProfileFormFields(value);
+  const onProfileFieldsChange = (value: AccountFormFields) =>
+    setProfileFormFields(value);
 
-  const onProfileReset = () => setProfileFormFields(prepareProfileFormFields(currentUser));
+  const onProfileReset = () =>
+    setProfileFormFields(prepareProfileFormFields(currentUser));
 
-  const onProfileSubmit = ({ value }: FormExtendedEvent<AccountFormFields>) =>{
+  const onProfileSubmit = ({ value }: FormExtendedEvent<AccountFormFields>) => {
     setIsLoading(true);
     updateProfile(value)
       .then(() => {
@@ -79,11 +93,13 @@ export const Account: FC = () => {
       });
   };
 
-  const saveAvatar = (value: AvatarFormFields) =>{
-    if (!value.avatarFileInput) { return; }
+  const saveAvatar = (value: AvatarFormFields) => {
+    if (!value.avatarFileInput) {
+      return;
+    }
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('avatar', value.avatarFileInput);
+    formData.append(AVATAR_FIELD_NAME, value.avatarFileInput);
     updateAvatar(formData)
       .then(() => {
         setIsLoading(false);
@@ -102,7 +118,9 @@ export const Account: FC = () => {
       });
   };
 
-  const onPasswordSubmit = ({ value }: FormExtendedEvent<PasswordFormFields>) =>{
+  const onPasswordSubmit = ({
+    value,
+  }: FormExtendedEvent<PasswordFormFields>) => {
     setIsLoading(true);
     updatePassword(value)
       .then(() => {
@@ -125,7 +143,10 @@ export const Account: FC = () => {
   };
 
   const onAvatarChange = (value: ChangeEvent<HTMLInputElement>) => {
-    if (!value.currentTarget.files || !(value.currentTarget.files[0] instanceof File)) {
+    if (
+      !value.currentTarget.files ||
+      !(value.currentTarget.files[0] instanceof File)
+    ) {
       throw new Error('Cant find file input');
     }
     // проверяем что это действительно изображение
@@ -133,7 +154,7 @@ export const Account: FC = () => {
     const file = value.currentTarget.files[0];
 
     testImage.onload = () => {
-      saveAvatar({ avatarFileInput: file } );
+      saveAvatar({ avatarFileInput: file });
     };
 
     testImage.onerror = () => {
@@ -183,13 +204,14 @@ export const Account: FC = () => {
             />
           </Box>
         </Main>
-        {showPasswordModal &&
+        {showPasswordModal && (
           <ChangePassword
             fields={passwordFormFields}
             onSubmit={onPasswordSubmit}
             onChange={onPasswordFieldsChange}
             closeModal={closePasswordModal}
-          />}
+          />
+        )}
       </LoadingOverlay>
     </div>
   );

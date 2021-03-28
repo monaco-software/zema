@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const NodemonPlugin = require('nodemon-webpack-plugin')
+const NodemonPlugin = require('nodemon-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 
 const stats = {
@@ -21,7 +21,7 @@ const stats = {
 const isProductionMode = process.env.NODE_ENV === 'production';
 
 const serverConfig = {
-  name: "server",
+  name: 'server',
   stats,
   mode: isProductionMode ? 'production' : 'development',
   target: 'node',
@@ -42,7 +42,7 @@ const serverConfig = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: [/node_modules/]
+        exclude: [/node_modules/],
       },
       {
         test: /\.css$/,
@@ -60,7 +60,7 @@ const serverConfig = {
           },
         ],
       },
-    ]
+    ],
   },
   plugins: [
     new ESLintPlugin({
@@ -70,7 +70,7 @@ const serverConfig = {
 };
 
 const clientConfig = {
-  name: "client",
+  name: 'client',
   stats,
   mode: isProductionMode ? 'production' : 'development',
   devtool: !isProductionMode && 'inline-source-map',
@@ -136,38 +136,38 @@ const clientConfig = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
-        { from: './src/pwa/favicon.ico' }
+        { from: './src/pwa/favicon.ico' },
       ],
     }),
-    isProductionMode ?
-      new CopyWebpackPlugin({
-        patterns: [{ from: './src/pwa/' }],
-      }) :
-      new CopyWebpackPlugin({
-        patterns: [{ from: './scripts/reload.js' }],
-      }),
-    isProductionMode ?
-      new WorkboxPlugin.GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        navigateFallback: '/index.html',
-      }) :
-      new NodemonPlugin({
-        script: './ssr/server/server.js',
-        watch: [
-          path.resolve('./ssr/server/server.js'),
-          path.resolve('./ssr/dist/stats.json'),
-        ],
-        delay: '2000',
-        verbose: false,
-      }),
+    isProductionMode
+      ? new CopyWebpackPlugin({
+          patterns: [{ from: './src/pwa/' }],
+        })
+      : new CopyWebpackPlugin({
+          patterns: [{ from: './scripts/reload.js' }],
+        }),
+    isProductionMode
+      ? new WorkboxPlugin.GenerateSW({
+          clientsClaim: true,
+          skipWaiting: true,
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+          navigateFallback: '/index.html',
+        })
+      : new NodemonPlugin({
+          script: './ssr/server/server.js',
+          watch: [
+            path.resolve('./ssr/server/server.js'),
+            path.resolve('./ssr/dist/stats.json'),
+          ],
+          delay: '2000',
+          verbose: false,
+        }),
     new StatsWriterPlugin({
       filename: 'stats.json',
       transform(data) {
         return JSON.stringify(
-          data.assetsByChunkName.index
-            .concat(data.assetsByChunkName.vendors));
+          data.assetsByChunkName.index.concat(data.assetsByChunkName.vendors)
+        );
       },
     }),
   ].filter(Boolean),

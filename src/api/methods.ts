@@ -1,3 +1,4 @@
+import { API_PATH, getProxyPath } from '@api/paths';
 import { createApiMethod, HTTP_METHODS } from './core';
 import {
   GetLeaderboardParams,
@@ -6,17 +7,20 @@ import {
   SignInResponse,
   SignOutResponse,
   SignUpParams,
-  SignUpResponse, UpdateAvatarParams, UpdateAvatarResponse,
+  SignUpResponse,
+  UpdateAvatarParams,
+  UpdateAvatarResponse,
   UpdateLeaderboardParams,
-  UpdateLeaderboardResponse, UpdatePasswordParams, UpdatePasswordResponse, UpdateProfileParams, UpdateProfileResponse,
+  UpdateLeaderboardResponse,
+  UpdatePasswordParams,
+  UpdatePasswordResponse,
+  UpdateProfileParams,
+  UpdateProfileResponse,
   UserObject,
 } from './schema';
 
-export const YANDEX_API_URL = 'https://ya-praktikum.tech';
-const getFullPath = (path: string) => `${YANDEX_API_URL}/api/v2${path}`;
-
 export const apiGetUser = createApiMethod<undefined, UserObject>(
-  getFullPath('/auth/user'),
+  getProxyPath(API_PATH.AUTH_USER),
   {
     method: HTTP_METHODS.GET,
     credentials: 'include',
@@ -24,7 +28,7 @@ export const apiGetUser = createApiMethod<undefined, UserObject>(
 );
 
 export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
-  getFullPath('/auth/signin'),
+  getProxyPath(API_PATH.AUTH_SIGNIN),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -35,7 +39,7 @@ export const apiPerformSignIn = createApiMethod<SignInParams, SignInResponse>(
 );
 
 export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
-  getFullPath('/auth/signup'),
+  getProxyPath(API_PATH.AUTH_SIGNUP),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
@@ -46,69 +50,70 @@ export const apiPerformSignUp = createApiMethod<SignUpParams, SignUpResponse>(
 );
 
 export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
-  getFullPath('/auth/logout'),
+  getProxyPath(API_PATH.AUTH_LOGOUT),
   {
     method: HTTP_METHODS.POST,
     credentials: 'include',
   }
 );
 
-export const apiGetUserById = (userId: number) => createApiMethod<undefined, UserObject>(
-  getFullPath(`/user/${userId}`),
-  {
-    method: HTTP_METHODS.GET,
-    credentials: 'include',
-  }
-);
+export const apiGetUserById = (userId: number) =>
+  createApiMethod<undefined, UserObject>(
+    `${getProxyPath(API_PATH.USER_BY_ID)}/${userId}`,
+    {
+      method: HTTP_METHODS.GET,
+      credentials: 'include',
+    }
+  );
 
-export const apiUpdateLeaderboard = createApiMethod<UpdateLeaderboardParams, UpdateLeaderboardResponse>(
-  getFullPath('/leaderboard'),
-  {
-    method: HTTP_METHODS.POST,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
+export const apiUpdateLeaderboard = createApiMethod<
+  UpdateLeaderboardParams,
+  UpdateLeaderboardResponse
+>(getProxyPath(API_PATH.LEADERBOARD_UPDATE), {
+  method: HTTP_METHODS.POST,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const apiGetLeaderboard = createApiMethod<GetLeaderboardParams, GetLeaderboardResponse>(
-  getFullPath('/leaderboard/all'),
-  {
-    method: HTTP_METHODS.POST,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
+export const apiGetLeaderboard = createApiMethod<
+  GetLeaderboardParams,
+  GetLeaderboardResponse
+>(getProxyPath(API_PATH.LEADERBOARD_ALL), {
+  method: HTTP_METHODS.POST,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const apiUpdateProfile = createApiMethod<UpdateProfileParams, UpdateProfileResponse>(
-  getFullPath('/user/profile'),
-  {
-    method: HTTP_METHODS.PUT,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
+export const apiUpdateProfile = createApiMethod<
+  UpdateProfileParams,
+  UpdateProfileResponse
+>(getProxyPath(API_PATH.USER_PROFILE), {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const apiUpdateAvatar = createApiMethod<UpdateAvatarParams, UpdateAvatarResponse>(
-  getFullPath('/user/profile/avatar'),
-  {
-    method: HTTP_METHODS.PUT,
-    credentials: 'include',
-  }
-);
+export const apiUpdateAvatar = createApiMethod<
+  UpdateAvatarParams,
+  UpdateAvatarResponse
+>(getProxyPath(API_PATH.USER_PROFILE_AVATAR), {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+});
 
-export const apiUpdatePassword = createApiMethod<UpdatePasswordParams, UpdatePasswordResponse>(
-  getFullPath('/user/password'),
-  {
-    method: HTTP_METHODS.PUT,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
+export const apiUpdatePassword = createApiMethod<
+  UpdatePasswordParams,
+  UpdatePasswordResponse
+>(getProxyPath(API_PATH.USER_PASSWORD), {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
