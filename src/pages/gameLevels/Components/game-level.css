@@ -24,7 +24,6 @@
   position: relative;
   overflow-y: hidden;
   height: var(--game-level-header-height);
-
 }
 
 .game-level__footer {

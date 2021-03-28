@@ -30,7 +30,10 @@ const app = createSlice({
     setIsSignedIn(state, { payload }: PayloadAction<AppState['isSignedIn']>) {
       state.isSignedIn = payload;
     },
-    setNotification(state, { payload }: PayloadAction<AppState['notification']>) {
+    setNotification(
+      state,
+      { payload }: PayloadAction<AppState['notification']>
+    ) {
       state.notification = payload;
     },
     setIsSSR(state, { payload }: PayloadAction<AppState['isSSR']>) {

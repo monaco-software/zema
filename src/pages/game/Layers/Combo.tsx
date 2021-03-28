@@ -6,8 +6,18 @@ import { useSelector } from 'react-redux';
 import { getText } from '@common/langUtils';
 import { FRAME, GAME_PHASE } from '../constants';
 import { decimalToHex, distort, fps } from '../lib/utils';
-import { COMBO_DISPLAY_PHASES, COMBO_FONT_SIZE, COMBO_MESSAGE_SPEED } from '../setup';
-import { getCombo, getCurrentLevel, getGamePhase, getMuteState, getVolume } from '../selectors';
+import {
+  COMBO_DISPLAY_PHASES,
+  COMBO_FONT_SIZE,
+  COMBO_MESSAGE_SPEED,
+} from '../setup';
+import {
+  getCombo,
+  getCurrentLevel,
+  getGamePhase,
+  getMuteState,
+  getVolume,
+} from '../selectors';
 
 export const ComboLayer: FC = () => {
   const combo = useSelector(getCombo);
@@ -24,17 +34,28 @@ export const ComboLayer: FC = () => {
   const comboGrow = useRef(false);
 
   const draw = () => {
-    if (!canvasRef.current) { return; }
+    if (!canvasRef.current) {
+      return;
+    }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
 
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     if (comboDisplayPhase.current < COMBO_DISPLAY_PHASES) {
-      const opacity = distort(208, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.8);
+      const opacity = distort(
+        208,
+        COMBO_DISPLAY_PHASES,
+        comboDisplayPhase.current,
+        0.8
+      );
       ctx.fillStyle = `#FFFF00${decimalToHex(opacity)}`;
 
-      let scaleRatio = distort(1200, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.7) / 1000;
+      let scaleRatio =
+        distort(1200, COMBO_DISPLAY_PHASES, comboDisplayPhase.current, 0.7) /
+        1000;
       if (comboGrow.current) {
         scaleRatio += combo * 0.1;
       }
@@ -42,14 +63,16 @@ export const ComboLayer: FC = () => {
       ctx.scale(scaleRatio, scaleRatio);
 
       let textWidth = ctx.measureText(messageRef.current).width;
-      ctx.fillText(messageRef.current, - textWidth / 2,
-        0);
-      ctx.setTransform(1, 0, 0, 1, 0, 0,);
+      ctx.fillText(messageRef.current, -textWidth / 2, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
     if (comboDisplayPhase.current <= COMBO_DISPLAY_PHASES) {
       comboDisplayPhase.current += 1;
-      if (messageRef.current === getText('game_messages_pause') && comboDisplayPhase.current === COMBO_DISPLAY_PHASES) {
+      if (
+        messageRef.current === getText('game_messages_pause') &&
+        comboDisplayPhase.current === COMBO_DISPLAY_PHASES
+      ) {
         // оставляем сообщение на экране
         return;
       }
@@ -60,7 +83,9 @@ export const ComboLayer: FC = () => {
   };
 
   useEffect(() => {
-    if (gamePhase === GAME_PHASE.PAUSED) { return; }
+    if (gamePhase === GAME_PHASE.PAUSED) {
+      return;
+    }
     if (combo >= 2) {
       comboGrow.current = true;
       messageRef.current = `x  ${combo}  ${getText('game_messages_combo')}`;
@@ -70,7 +95,9 @@ export const ComboLayer: FC = () => {
   }, [combo]);
 
   useEffect(() => {
-    if (gamePhase === GAME_PHASE.PAUSED) { return; }
+    if (gamePhase === GAME_PHASE.PAUSED) {
+      return;
+    }
     comboGrow.current = false;
     messageRef.current = `${getText('game_messages_volume')}  ${volume}`;
     comboDisplayPhase.current = 0;
@@ -78,11 +105,13 @@ export const ComboLayer: FC = () => {
   }, [volume]);
 
   useEffect(() => {
-    if (gamePhase === GAME_PHASE.PAUSED) { return; }
+    if (gamePhase === GAME_PHASE.PAUSED) {
+      return;
+    }
     comboGrow.current = false;
-    messageRef.current = muteState ?
-      getText('game_messages_mute') :
-      getText('game_messages_sound');
+    messageRef.current = muteState
+      ? getText('game_messages_mute')
+      : getText('game_messages_sound');
     comboDisplayPhase.current = 0;
     draw();
   }, [muteState]);

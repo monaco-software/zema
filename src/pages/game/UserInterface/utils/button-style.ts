@@ -1,7 +1,11 @@
 import React from 'react';
 import { BUTTON_RADIUS } from '@pages/game/Layers/utils/buttons';
 
-export const useButtonStyle = (x: number, y: number, ratio: number): React.CSSProperties => {
+export const useButtonStyle = (
+  x: number,
+  y: number,
+  ratio: number
+): React.CSSProperties => {
   const left = `${x * ratio}px`;
   const top = `${y * ratio}px`;
   const sideLength = `${BUTTON_RADIUS * 2 * ratio}px`;

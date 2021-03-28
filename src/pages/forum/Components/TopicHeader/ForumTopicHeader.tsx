@@ -12,7 +12,10 @@ interface Props {
   onMessageAddClick: VoidFunction;
 }
 
-export const ForumTopicHeader: FC<Props> = ({ topicName, onMessageAddClick }) => {
+export const ForumTopicHeader: FC<Props> = ({
+  topicName,
+  onMessageAddClick,
+}) => {
   return (
     <Box className={block()} direction="row" justify="between" align="start">
       <Heading className={block('name')} level={4} margin="none" fill>

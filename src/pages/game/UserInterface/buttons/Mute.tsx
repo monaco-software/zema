@@ -6,7 +6,12 @@ import { GAME_PHASE } from '@pages/game/constants';
 import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { mute, playSound, setVolume, SOUNDS } from '@pages/game/lib/sound';
 import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
-import { getGamePhase, getMuteButton, getMuteState, getVolume } from '../../selectors';
+import {
+  getGamePhase,
+  getMuteButton,
+  getMuteState,
+  getVolume,
+} from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -29,9 +34,14 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
 
   const setMute = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
     setMuteState(!muteState);
-    setMuteButton({ ...muteButton, icon: muteState ? ICONS.MUTE : ICONS.SOUND });
+    setMuteButton({
+      ...muteButton,
+      icon: muteState ? ICONS.MUTE : ICONS.SOUND,
+    });
     if (!muteState) {
       mute();
       return;
@@ -41,7 +51,9 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   const handleMouseEnter = () => {
-    if (disabled) { return; }
+    if (disabled) {
+      return;
+    }
     setMuteButton({ ...muteButton, hovered: true });
   };
 
@@ -50,7 +62,7 @@ export const MuteButton: FC<Props> = ({ ratio, x, y }) => {
   };
 
   useEffect(() => {
-    setMuteButton( {
+    setMuteButton({
       x,
       y,
       hovered: false,

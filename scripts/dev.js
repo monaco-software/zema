@@ -8,7 +8,7 @@ const webpack = require('webpack');
 const webpackConfig = require('../webpack.ssr.js');
 const cluster = require('cluster');
 
-const RELOAD_MESSAGE = 'restart sharply'
+const RELOAD_MESSAGE = 'restart sharply';
 
 const statsConfig = {
   all: false,
@@ -25,12 +25,14 @@ webpackConfig.forEach((config) => {
 });
 
 if (cluster.isMaster) {
-  console.log(`🔧\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`);
+  console.log(
+    `🔧\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`
+  );
 
   const wsConnections = [];
   let wsServer;
 
-  wsServer = new WebSocket.Server({port: 54321});
+  wsServer = new WebSocket.Server({ port: 54321 });
   wsServer.on('connection', (connection) => {
     wsConnections.push(connection);
     connection.on('message', (message) => {
@@ -61,13 +63,13 @@ if (cluster.isMaster) {
             connection.send('reload');
           }
         });
-      }, 2000)
+      }, 2000);
     }
-  }
+  };
 
   compilers.forEach((compiler, id) => {
-    const worker = cluster.fork({id, name: compiler.name});
-    worker.on("message", (msg) => messageListener(msg));
+    const worker = cluster.fork({ id, name: compiler.name });
+    worker.on('message', (msg) => messageListener(msg));
   });
 
   cluster.on('exit', (worker, code, signal) => {
@@ -75,22 +77,24 @@ if (cluster.isMaster) {
   });
   process.on('SIGTERM', () => shutDown());
   process.on('SIGINT', () => shutDown());
-
 } else {
-  compilers[process.env.id].watch({
-    ignored: /node_modules/,
-    aggregateTimeout: 500,
-    poll: 500,
-  }, (err, stats) => {
-    if (stats) {
-      console.log(stats.toString(statsConfig));
-      if (process.env.name === 'client') {
-        process.send({data: RELOAD_MESSAGE});
+  compilers[process.env.id].watch(
+    {
+      ignored: /node_modules/,
+      aggregateTimeout: 500,
+      poll: 500,
+    },
+    (err, stats) => {
+      if (stats) {
+        console.log(stats.toString(statsConfig));
+        if (process.env.name === 'client') {
+          process.send({ data: RELOAD_MESSAGE });
+        }
+      }
+      if (err) {
+        console.error(err);
       }
     }
-    if (err) {
-      console.error(err);
-    }
-  });
+  );
   console.log(`Worker '${process.env.name}' ${process.pid} started`);
 }

@@ -5,7 +5,18 @@ import { getText } from '@common/langUtils';
 import { SignInFormFields } from '../../types';
 import { GROMMET_COLORS } from '@components/App/grommetTheme';
 import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
-import { Button, Form, FormField, Grid, TextInput, TypedForm, Anchor, FormExtendedEvent, Box, Text } from 'grommet';
+import {
+  Button,
+  Form,
+  FormField,
+  Grid,
+  TextInput,
+  TypedForm,
+  Anchor,
+  FormExtendedEvent,
+  Box,
+  Text,
+} from 'grommet';
 
 const block = b_.lock('sign-in-form');
 
@@ -40,7 +51,10 @@ export const SignInForm: FC<Props> = ({
           <TextInput id="signin_login" name="login" autoFocus />
         </FormField>
 
-        <FormField label={getText('form_password_label')} htmlFor="signin_password">
+        <FormField
+          label={getText('form_password_label')}
+          htmlFor="signin_password"
+        >
           <TextInput id="signin_password" name="password" type="password" />
         </FormField>
 
@@ -51,7 +65,11 @@ export const SignInForm: FC<Props> = ({
         )}
 
         <Grid gap="small" margin={{ top: 'medium' }}>
-          <Button primary type="submit" label={getText('signin_form_submit_button')} />
+          <Button
+            primary
+            type="submit"
+            label={getText('signin_form_submit_button')}
+          />
           <Anchor
             className={block('no-account-button')}
             onClick={goToSignUp}

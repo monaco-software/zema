@@ -29,9 +29,7 @@ export const GameOver: FC = () => {
       <Grommet theme={theme}>
         <Main justify="center" align="center">
           <Box gap="small" className={block('box_game')}>
-            <Heading color={color}>
-              {getText('game_over_page_header')}
-            </Heading>
+            <Heading color={color}>{getText('game_over_page_header')}</Heading>
             <Box>
               <Image src={skullImage} />
             </Box>
@@ -58,4 +56,3 @@ export const GameOver: FC = () => {
     </div>
   );
 };
-

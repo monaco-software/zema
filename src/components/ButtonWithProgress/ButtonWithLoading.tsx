@@ -10,17 +10,15 @@ interface Props extends ButtonProps {
   spinnerColor?: SpinnerProps['color'];
 }
 
-export const ButtonWithLoading: FC<Props> = ({ isLoading, spinnerSize, spinnerColor, ...restProps }) => {
-  const spinnerIcon = isLoading
-    ? <Spinner size={spinnerSize} color={spinnerColor} />
-    : undefined;
+export const ButtonWithLoading: FC<Props> = ({
+  isLoading,
+  spinnerSize,
+  spinnerColor,
+  ...restProps
+}) => {
+  const spinnerIcon = isLoading ? (
+    <Spinner size={spinnerSize} color={spinnerColor} />
+  ) : undefined;
 
-  return (
-    <Button
-      disabled={isLoading}
-      icon={spinnerIcon}
-      {...restProps}
-    />
-  );
+  return <Button disabled={isLoading} icon={spinnerIcon} {...restProps} />;
 };
-

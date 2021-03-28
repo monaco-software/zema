@@ -15,7 +15,9 @@ import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
 const block = b_.lock('game-levels');
 
 export const GameLevels: FC = () => {
-  const fetchAllowedLevels = useAsyncAction(asyncGameLevelActions.fetchAllowedLevels);
+  const fetchAllowedLevels = useAsyncAction(
+    asyncGameLevelActions.fetchAllowedLevels
+  );
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,8 +34,7 @@ export const GameLevels: FC = () => {
 
   useEffect(() => {
     if (!allowedLevels.length) {
-      fetchAllowedLevels(undefined)
-        .finally(() => setIsLoading(false));
+      fetchAllowedLevels(undefined).finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);
     }
@@ -42,10 +43,7 @@ export const GameLevels: FC = () => {
   return (
     <LoadingOverlay isLoading={isLoading}>
       <div className={block()}>
-        <Heading
-          textAlign="center"
-          level="2"
-        >
+        <Heading textAlign="center" level="2">
           {getText('levels_page_header')}
         </Heading>
         <div className={block('box')}>

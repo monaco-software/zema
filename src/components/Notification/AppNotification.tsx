@@ -35,10 +35,5 @@ export const AppNotification: FC = ({}) => {
     return null;
   }
 
-  return (
-    <Notification
-      notification={notification}
-      onClose={onClose}
-    />
-  );
+  return <Notification notification={notification} onClose={onClose} />;
 };

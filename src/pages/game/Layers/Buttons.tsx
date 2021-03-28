@@ -30,9 +30,13 @@ export const ButtonsLayer: FC = () => {
   ];
 
   const draw = () => {
-    if (!canvasRef.current) { return; }
+    if (!canvasRef.current) {
+      return;
+    }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     ctx.lineWidth = 4;
@@ -64,8 +68,7 @@ export const ButtonsLayer: FC = () => {
 
   useEffect(() => {
     requestRef.current = window.requestAnimationFrame(draw);
-  },
-  [...buttons]);
+  }, [...buttons]);
 
   // init
   useEffect(() => {

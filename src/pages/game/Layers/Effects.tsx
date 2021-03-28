@@ -8,7 +8,13 @@ import { fps, random } from '../lib/utils';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import { BALL_EXPLODE_GAP, DEFAULT_FRAMERATE } from '../setup';
 import { getExplosion, getGamePhase, getGameResult } from '../selectors';
-import { BALL_DIAMETER, BALL_RADIUS, FRAME, GAME_PHASE, GAME_RESULT } from '../constants';
+import {
+  BALL_DIAMETER,
+  BALL_RADIUS,
+  FRAME,
+  GAME_PHASE,
+  GAME_RESULT,
+} from '../constants';
 
 type Effect = Explosion | Particle;
 
@@ -53,24 +59,30 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
             ctx.fillRect(
               effect.x + random(sparkExpansion) - random(sparkExpansion),
               effect.y + random(sparkExpansion) - random(sparkExpansion),
-              random(3), random(3)
+              random(3),
+              random(3)
             );
           }
         }
-        ctx.drawImage(effect.canvas, effect.x - BALL_RADIUS, effect.y - BALL_RADIUS, BALL_DIAMETER, BALL_DIAMETER);
+        ctx.drawImage(
+          effect.canvas,
+          effect.x - BALL_RADIUS,
+          effect.y - BALL_RADIUS,
+          BALL_DIAMETER,
+          BALL_DIAMETER
+        );
       } else {
         // предотвращает запуск Garbage Collector во время игры
-        deletedEffects.current.push(
-          effects.current.splice(index, 1)
-        );
+        deletedEffects.current.push(effects.current.splice(index, 1));
       }
     });
     if (effects.current.length) {
       drawn.current = true;
       effectTimeoutRef.current.push(
-        window.setTimeout(() =>
-          requestRef.current = window.requestAnimationFrame(draw),
-        fps(DEFAULT_FRAMERATE))
+        window.setTimeout(
+          () => (requestRef.current = window.requestAnimationFrame(draw)),
+          fps(DEFAULT_FRAMERATE)
+        )
       );
     } else {
       drawn.current = false;
@@ -79,9 +91,14 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
 
   const runParticles = () => {
     for (let i = 0; i < ballsPath.length; i += BALL_DIAMETER) {
-      effectTimeoutRef.current.push(window.setTimeout(
-        () => effects.current.push(new Particle(ballsPath[i][0], ballsPath[i][1])),
-        Math.floor(i / 2))
+      effectTimeoutRef.current.push(
+        window.setTimeout(
+          () =>
+            effects.current.push(
+              new Particle(ballsPath[i][0], ballsPath[i][1])
+            ),
+          Math.floor(i / 2)
+        )
       );
     }
     drawTimeoutRef.current = window.setTimeout(() => {
@@ -91,9 +108,14 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
 
   const runFirework = () => {
     for (let i = 0; i < 150; i += 1) {
-      effectTimeoutRef.current.push(window.setTimeout(
-        () => effects.current.push(new Particle(random(FRAME.WIDTH), random(FRAME.HEIGHT))),
-        i * 15)
+      effectTimeoutRef.current.push(
+        window.setTimeout(
+          () =>
+            effects.current.push(
+              new Particle(random(FRAME.WIDTH), random(FRAME.HEIGHT))
+            ),
+          i * 15
+        )
       );
     }
     drawTimeoutRef.current = window.setTimeout(() => {
@@ -102,23 +124,30 @@ export const EffectsLayer: FC<Props> = ({ ballsPath }) => {
   };
 
   useEffect(() => {
-    if (!explosion.length) { return; }
+    if (!explosion.length) {
+      return;
+    }
     playSound(SOUNDS.BOOM);
-    explosion.slice().reverse().forEach((exp: number, index: number) => {
-      if (exp < 0 || exp >= ballsPath.length) {
-        return;
-      }
-      effectTimeoutRef.current.push(window.setTimeout(
-        () => {
-          effects.current.push(new Explosion(ballsPath[exp][0], ballsPath[exp][1]));
-        },
-        index * BALL_EXPLODE_GAP)
-      );
-    });
+    explosion
+      .slice()
+      .reverse()
+      .forEach((exp: number, index: number) => {
+        if (exp < 0 || exp >= ballsPath.length) {
+          return;
+        }
+        effectTimeoutRef.current.push(
+          window.setTimeout(() => {
+            effects.current.push(
+              new Explosion(ballsPath[exp][0], ballsPath[exp][1])
+            );
+          }, index * BALL_EXPLODE_GAP)
+        );
+      });
     if (!drawn.current) {
-      drawTimeoutRef.current = window.setTimeout(() =>
-        requestRef.current = window.requestAnimationFrame(draw),
-      fps(DEFAULT_FRAMERATE));
+      drawTimeoutRef.current = window.setTimeout(
+        () => (requestRef.current = window.requestAnimationFrame(draw)),
+        fps(DEFAULT_FRAMERATE)
+      );
     }
   }, [explosion]);
 
