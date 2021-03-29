@@ -60,7 +60,7 @@ export const GameLevel: FC<Props> = ({
         </span>
       </CardHeader>
       <CardBody>
-        <Image src={levelObject.thumbnail} />
+        <Image src={levelObject.thumbnail} width="192px" height="144px" />
       </CardBody>
       <CardFooter pad="x-small" className={block('footer')}>
         <div style={{ margin: 'auto', alignContent: 'center' }}>

@@ -7,8 +7,8 @@ import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
-import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
+import { fps, random, randomFresh } from '../lib/utils';
 import { playSound, SOUNDS } from '@pages/game/lib/sound';
 import {
   BULLET_ARMED_POSITION,
@@ -77,10 +77,6 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
   };
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     if (bulletState === BULLET_STATE.ARMING) {
       // выкатываем шар из брюха
       if (bulletPosition === BULLET_ARMED_POSITION - 5) {
@@ -102,12 +98,14 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
   }, [angle]);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     if (bulletState === BULLET_STATE.ARMING && remainColors.length) {
-      bullet.color = remainColors[random(remainColors.length)];
+      const lastColorIndex = remainColors.indexOf(bullet.color);
+      if (lastColorIndex >= 0) {
+        bullet.color =
+          remainColors[randomFresh(remainColors.length, lastColorIndex, 10)];
+      } else {
+        bullet.color = remainColors[random(remainColors.length)];
+      }
       bullet.rotationOffset = random(bullet.numberOfFrames);
       setBulletColor(bullet.color);
       setBulletPosition(BULLET_START_POSITION + 1);

@@ -121,6 +121,7 @@ export const Game: FC = () => {
     });
 
     return () => {
+      setTitle('');
       resetScore();
       resetCombo();
       setBulletState(BULLET_STATE.IDLE);
