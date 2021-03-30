@@ -9,22 +9,27 @@ import React, { FC } from 'react';
 import enforce from 'express-sslify';
 import cookieParser from 'cookie-parser';
 import { Provider } from 'react-redux';
+import { HTTP_METHODS } from '@api/core';
 import { App } from '@components/App/App';
 import { ROUTES } from '@common/constants';
 import { StaticRouter } from 'react-router';
 import { appActions } from '@store/reducer';
 import { isProduction } from '@common/utils';
 import { cspHeader } from './middlewares/csp';
-import { RootState, store } from '@store/store';
 import { renderToString } from 'react-dom/server';
 import { API_PATH, getFullPath } from '@api/paths';
-import { getCookies } from './middlewares/helpers';
+import { RootState, createStore } from '@store/store';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
 import { yandexApiProxy } from './middlewares/yandexApiProxy';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
+import {
+  getCookies,
+  getCookiesFromApiResponse,
+  setCookies,
+} from './middlewares/helpers';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000; // yandex OAuth работает только на 5000
 
 const sheet = new ServerStyleSheet();
 const app = express();
@@ -75,6 +80,8 @@ const getStyles = () => {
   // sheet наполняется классами, использованными на страницах
   // в принципе можно вынести в мидлварю и
   // делать каждый раз перед рендерингом без forEach
+  const store = createStore();
+
   Object.keys(ROUTES).forEach((route) => {
     renderToString(
       <Provider store={store}>
@@ -133,13 +140,16 @@ const Html: FC<Props> = ({ children, serverState }) => {
   );
 };
 
-const getAppHtml = (reduxStore: typeof store, locationUrl: string) => {
+const getAppHtml = (
+  reduxStore: ReturnType<typeof createStore>,
+  locationUrl: string
+) => {
   const serverState = reduxStore.getState();
 
   return renderToString(
     <Html serverState={serverState}>
       <AppErrorBoundary>
-        <Provider store={store}>
+        <Provider store={reduxStore}>
           <StyleSheetManager sheet={sheet.instance}>
             <StaticRouter location={locationUrl || '/'}>
               {sheet.getStyleElement()}
@@ -159,27 +169,56 @@ app.get('*', (req, res) => {
   }
   console.info(req.method, req.hostname, req.url, res.statusCode);
 
-  fetch(getFullPath(API_PATH.AUTH_USER), {
-    method: 'GET',
-    headers: {
-      ...getCookies(req),
-    },
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        const userData = await response.json();
-        const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
-        store.dispatch(appActions.setUser(userDataWithFullAvatar));
-        store.dispatch(appActions.setIsSignedIn(true));
-      }
-    })
-    .catch(console.log)
-    .finally(() => {
-      store.dispatch(appActions.setIsSSR(true));
+  const store = createStore();
 
-      const html = getAppHtml(store, req.url);
-      res.send(html);
-    });
+  const fetchUser = (headers: Record<string, string>) => {
+    fetch(getFullPath(API_PATH.AUTH_USER), {
+      method: HTTP_METHODS.GET,
+      headers: {
+        ...headers,
+      },
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          const userData = await response.json();
+          const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
+          store.dispatch(appActions.setUser(userDataWithFullAvatar));
+          store.dispatch(appActions.setIsSignedIn(true));
+        }
+      })
+      .catch(console.error)
+      .finally(() => {
+        store.dispatch(appActions.setIsSSR(true));
+
+        const html = getAppHtml(store, req.url);
+        res.send(html);
+      });
+  };
+
+  const { code } = req.query;
+  // Если есть code, значит происходит Yandex OAuth
+  if (code && typeof code === 'string') {
+    fetch(getFullPath(API_PATH.OAUTH_YANDEX_SIGN_IN), {
+      method: HTTP_METHODS.POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+    })
+      .then((apiResponse) => {
+        setCookies(apiResponse, res);
+
+        fetchUser(getCookiesFromApiResponse(apiResponse));
+      })
+      .catch((error) => {
+        console.error(error);
+        fetchUser(getCookies(req));
+      });
+
+    return;
+  }
+
+  fetchUser(getCookies(req));
 });
 
 if (!isProduction) {

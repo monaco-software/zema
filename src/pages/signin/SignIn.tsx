@@ -18,6 +18,7 @@ export const SignIn: FC = () => {
   useAuth(false);
 
   const signInUser = useAsyncAction(asyncAppActions.signInUser);
+  const oAuthYandexStart = useAsyncAction(asyncAppActions.oAuthYandexStart);
 
   const history = useHistory();
 
@@ -51,6 +52,9 @@ export const SignIn: FC = () => {
 
   const onYandexOAuth = () => {
     setIsLoading(true);
+    oAuthYandexStart().catch(() => {
+      setIsLoading(false);
+    });
   };
 
   return (

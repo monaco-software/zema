@@ -32,7 +32,7 @@ const initPasswordFormFields = {
 const prepareProfileFormFields = (user: UserObject): AccountFormFields => {
   const formFields = Object.assign({}, user) as AccountFormFields;
   // убираем из телефона все кроме цифр
-  let digits = formFields.phone.replace(/\D/g, '');
+  let digits = (formFields.phone || '').replace(/\D/g, '');
   // форматируем для MaskedInput
   formFields.phone = digits.replace(/^(\d)(\d{3})(\d{3})/, '$1 ($2) $3-');
 

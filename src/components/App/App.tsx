@@ -13,12 +13,12 @@ import { SignIn } from '@pages/signin/SignIn';
 import { SignUp } from '@pages/signup/SignUp';
 import { grommetTheme } from './grommetTheme';
 import { useAsyncAction } from '@common/hooks';
-import { Switch, Route } from 'react-router-dom';
 import { Forum } from '@pages/forum/Forum/Forum';
 import { Account } from '@pages/account/Account';
 import { GameOver } from '@pages/gameOver/GameOver';
 import { asyncAppActions } from '@store/asyncActions';
 import { GameLevels } from '@pages/gameLevels/GameLevels';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { Leaderboard } from '@pages/leaderboard/Leaderboard';
 import { ForumTopic } from '@pages/forum/ForumTopic/ForumTopic';
 import { AppNotification } from '../Notification/AppNotification';
@@ -39,11 +39,22 @@ const onLoad = () => {
 };
 
 export const App: FC = () => {
+  const history = useHistory();
+
   const isSSR = useSelector(getIsSSR);
 
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
   const [isLoading, setIsLoading] = useState(!isSSR);
+
+  useEffect(() => {
+    // Чистим code который остается от yandex OAuth
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.has('code')) {
+      history.replace(ROUTES.ROOT);
+    }
+  }, []);
 
   useEffect(() => {
     if (isSSR) {
