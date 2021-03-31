@@ -16,7 +16,13 @@ import { UserInterface } from './UserInterface/UserInterface';
 import { asyncGameLevelActions } from '../gameLevels/asyncActions';
 import { BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 import { initSound, playSound, SOUNDS } from '@pages/game/lib/sound';
-import { getCurrentLevel, getGamePhase, getGameResult } from './selectors';
+import { asyncLeaderboardActions } from '@pages/leaderboard/asyncActions';
+import {
+  getCurrentLevel,
+  getGamePhase,
+  getGameResult,
+  getScore,
+} from './selectors';
 
 const block = b_.lock('game');
 
@@ -36,11 +42,15 @@ export const Game: FC = () => {
   const gamePhase = useSelector(getGamePhase);
   const gameResult = useSelector(getGameResult);
   const allowedLevels = useSelector(getAllowedLevels);
+  const score = useSelector(getScore);
 
   const sendAllowedLevels = useAsyncAction(
     asyncGameLevelActions.sendAllowedLevels
   );
   const fetchVolume = useAsyncAction(asyncGameActions.fetchVolume);
+  const updateLeaderboard = useAsyncAction(
+    asyncLeaderboardActions.updateLeaderboard
+  );
 
   const timeoutRef = useRef<number>();
 
@@ -66,6 +76,8 @@ export const Game: FC = () => {
             () => setGamePhase(GAME_PHASE.ENDED),
             GAME_PHASE_TIMEOUTS.ENDING
           );
+
+          updateLeaderboard({ points: score });
         }
         break;
       case GAME_PHASE.ENDED:
