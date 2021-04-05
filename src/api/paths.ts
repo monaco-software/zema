@@ -23,6 +23,9 @@ export const API_PATH = {
   AUTH_SIGNUP: '/auth/signup',
   AUTH_LOGOUT: '/auth/logout',
 
+  OAUTH_YANDEX_SERVICE_ID: '/oauth/yandex/service-id',
+  OAUTH_YANDEX_SIGN_IN: '/oauth/yandex',
+
   USER_PROFILE: '/user/profile',
   USER_PROFILE_AVATAR: '/user/profile/avatar',
   USER_PASSWORD: '/user/password',

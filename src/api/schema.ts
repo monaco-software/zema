@@ -7,7 +7,7 @@ export interface UserObject {
   display_name: string | null;
   login: string;
   email: string;
-  phone: string;
+  phone: string | null;
   avatar: string | null;
 }
 
@@ -29,6 +29,10 @@ export interface SignUpParams extends SignInParams {
 
 export interface SignUpResponse {
   id: number;
+}
+
+export interface OAuthYandexGetServiceIdResponse {
+  service_id: string;
 }
 
 export interface LeaderboardRecordObject {
