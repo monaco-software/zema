@@ -3,18 +3,17 @@ import React from 'react';
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import { App } from '@components/App/App';
-import { createStore } from '@store/store';
-import { PreloadedState } from '@store/types';
 import { BrowserRouter } from 'react-router-dom';
+import { createStore, RootState } from '@store/store';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
 
 declare global {
   interface Window {
-    __SERVER_STATE__?: string;
+    __SERVER_STATE__?: RootState;
   }
 }
 
-const state = window.__SERVER_STATE__ as PreloadedState;
+const state = window.__SERVER_STATE__;
 delete window.__SERVER_STATE__;
 
 const store = createStore(state);

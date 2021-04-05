@@ -31,7 +31,6 @@ const authProxy = (app: Express) => {
         method: req.method,
         headers: {
           'Content-Type': 'application/json',
-          ...getCookies(req),
         },
         body: JSON.stringify(req.body),
       })

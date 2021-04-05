@@ -16,6 +16,29 @@ export const getCookies = (
   return {};
 };
 
+export const getCookiesFromApiResponse = (apiResponse: FetchResponse) => {
+  const cookies = setCookie.parse(apiResponse.headers.raw()['set-cookie'], {
+    decodeValues: true,
+  });
+
+  const cookiesSet = new Set<string>();
+
+  const cookieString = cookies
+    .reduceRight((acc: string[], { name, value }) => {
+      if (!cookiesSet.has(name)) {
+        acc.push(`${name}=${value}`);
+        cookiesSet.add(name);
+      }
+
+      return acc;
+    }, [])
+    .join('; ');
+
+  return {
+    cookie: cookieString,
+  };
+};
+
 export const setCookies = (apiResponse: FetchResponse, res: Response) => {
   const cookies = setCookie.parse(apiResponse.headers.raw()['set-cookie'], {
     decodeValues: true,

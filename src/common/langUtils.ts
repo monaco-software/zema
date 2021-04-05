@@ -14,6 +14,7 @@ const langPack = {
   signin_form_submit_button: 'Войти',
   signup_form_submit_button: 'Зарегистрироваться',
   signin_form_no_account_button: 'Нет аккаунта?',
+  signin_oauth_title: 'Войти через:',
   signup_form_no_account_button: 'Уже есть аккаунт?',
   form_email_label: 'Email',
   form_email_input_error: 'Некорректный email',

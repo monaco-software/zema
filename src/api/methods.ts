@@ -1,8 +1,9 @@
-import { API_PATH, getProxyPath } from '@api/paths';
 import { createApiMethod, HTTP_METHODS } from './core';
+import { API_PATH, getFullPath, getProxyPath } from '@api/paths';
 import {
   GetLeaderboardParams,
   GetLeaderboardResponse,
+  OAuthYandexGetServiceIdResponse,
   SignInParams,
   SignInResponse,
   SignOutResponse,
@@ -56,6 +57,13 @@ export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
     credentials: 'include',
   }
 );
+
+export const apiOAuthYandexGetServiceId = createApiMethod<
+  undefined,
+  OAuthYandexGetServiceIdResponse
+>(getFullPath(API_PATH.OAUTH_YANDEX_SERVICE_ID), {
+  method: HTTP_METHODS.GET,
+});
 
 export const apiGetUserById = (userId: number) =>
   createApiMethod<undefined, UserObject>(

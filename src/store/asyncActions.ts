@@ -4,6 +4,7 @@ import { SignInParams, SignUpParams } from '@api/schema';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
 import {
   apiGetUser,
+  apiOAuthYandexGetServiceId,
   apiPerformSignIn,
   apiPerformSignOut,
   apiPerformSignUp,
@@ -50,6 +51,17 @@ export const asyncAppActions = {
 
       dispatch(appActions.resetUser());
       dispatch(appActions.setIsSignedIn(false));
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  oAuthYandexStart: (): AppThunk<Promise<void>> => async (dispatch) => {
+    try {
+      const response = await dispatch(apiOAuthYandexGetServiceId());
+
+      // eslint-disable-next-line max-len
+      window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${response.service_id}&redirect_uri=${window.location.origin}`;
     } catch (error) {
       throw error;
     }
