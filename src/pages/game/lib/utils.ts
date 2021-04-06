@@ -10,6 +10,20 @@ export function random(number: number): number {
   return Math.floor(Math.random() * number);
 }
 
+// рэндом со сниженной вероятностью появления unwanted
+export function randomFresh(
+  number: number,
+  unwanted: number,
+  retry = 1
+): number {
+  let res = random(number);
+  while (retry > 0 && res === unwanted) {
+    res = random(number);
+    retry -= 1;
+  }
+  return res;
+}
+
 export function createFilledConsistentlyArray(size: number): number[] {
   return [...Array(size).keys()];
 }

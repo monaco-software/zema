@@ -1,8 +1,8 @@
 import Ball from '../../lib/ball';
 import levels from '../../levels';
 import { Physics } from '../../types';
-import { random } from '../../lib/utils';
 import { uniqAndSort } from '@common/utils';
+import { random, randomFresh } from '../../lib/utils';
 import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 
 export const gameBalls: Ball[] = [];
@@ -62,9 +62,12 @@ export const createBalls = (level: number): Ball[] => {
   const pusherPosition = -1 * levelData.balls * BALL_DIAMETER;
 
   gameBalls.length = 0;
+  let lastIndex = 0;
 
   for (let i = 0; i < levelData.balls; i += 1) {
-    const randomIndex = random(levelData.ballColors.length);
+    // предотвращает появление слишком длинных участков одинаковых шаров
+    const randomIndex = randomFresh(levelData.ballColors.length, lastIndex);
+    lastIndex = randomIndex;
     const ball = new Ball(levelData.ballColors[randomIndex]);
     ball.position = pusherPosition + i * BALL_DIAMETER;
     gameBalls.push(ball);

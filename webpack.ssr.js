@@ -159,7 +159,7 @@ const clientConfig = {
             path.resolve('./ssr/server/server.js'),
             path.resolve('./ssr/dist/stats.json'),
           ],
-          delay: '2000',
+          delay: '1000',
           verbose: false,
         }),
     new StatsWriterPlugin({
