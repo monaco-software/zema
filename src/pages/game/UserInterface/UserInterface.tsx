@@ -1,9 +1,6 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
-// слушает мышь и рассчитывает путь пули
-// слушает мышь и рассчитывает путь пули
-// слушает мышь и рассчитывает путь пули
 import levels from '../levels';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { gameActions } from '../reducer';
@@ -21,9 +18,9 @@ import { ScoreLayer } from '../Layers/Score';
 import { TitleLayer } from '../Layers/Title';
 import { BulletLayer } from '../Layers/Bullet';
 import { EffectsLayer } from '../Layers/Effects';
+import { ButtonsLayer } from '../Layers/Buttons';
 import { BlackoutLayer } from '../Layers/Blackout';
 import { FullscreenButton } from './buttons/Fullscreen';
-import { ButtonsLayer } from '@pages/game/Layers/Buttons';
 import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../setup';
 import { MuteButton } from '@pages/game/UserInterface/buttons/Mute';
 import { PauseButton } from '@pages/game/UserInterface/buttons/Pause';
@@ -126,6 +123,14 @@ export const UserInterface: FC = () => {
     setBulletState(BULLET_STATE.SHOT);
   };
 
+  const mouseRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    if (bulletState !== BULLET_STATE.ARMED || gamePhase === GAME_PHASE.PAUSED) {
+      return;
+    }
+    setBulletState(BULLET_STATE.ARMING);
+  };
+
   const onFullScreenChange = () => {
     setFullscreenState(!!document.fullscreenElement);
   };
@@ -183,6 +188,7 @@ export const UserInterface: FC = () => {
         ref={boxRef}
         onMouseMove={mouseMove}
         onClick={mouseClick}
+        onContextMenu={mouseRightClick}
         style={{
           position: 'relative',
           margin: 'auto',

@@ -2,9 +2,7 @@ import './game-levels.css';
 import b_ from 'b_';
 import levels from '../game/levels';
 import React, { FC, useEffect, useState } from 'react';
-import { Heading } from 'grommet';
 import { useSelector } from 'react-redux';
-import { getText } from '@common/langUtils';
 import { getAllowedLevels } from './selectors';
 import { useAsyncAction } from '@common/hooks';
 import { GameLevel } from './Components/GameLevel';
@@ -43,9 +41,6 @@ export const GameLevels: FC = () => {
   return (
     <LoadingOverlay isLoading={isLoading}>
       <div className={block()}>
-        <Heading textAlign="center" level="2">
-          {getText('levels_page_header')}
-        </Heading>
         <div className={block('box')}>
           {levels.map((levelObject, index) => {
             return (

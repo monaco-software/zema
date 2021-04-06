@@ -1,3 +1,4 @@
+// prettier-ignore
 const langPack = {
   navbar_root: 'Главная',
   navbar_game: 'Играть',
@@ -35,8 +36,7 @@ const langPack = {
   game_over_to_game_button: 'Попробовать еще раз',
   game_over_to_levels_button: 'К списку уровней',
   leaderboard_page_header: 'Рейтинг',
-  leaderboard_table_placeholder_message:
-    'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
+  leaderboard_table_placeholder_message: 'В таблице пока что нет данных 😔️.\nПоставьте рекорд первым!',
   leaderboard_table_placeholder_cta: 'Играть',
   levels_page_header: 'Уровни игры',
   levels_page_level_word: 'Уровень',
@@ -52,7 +52,6 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
-
   account_form_submit_button: 'Сохранить',
   account_form_reset_button: 'Сбросить',
   account_form_display_name_label: 'Ник',
@@ -79,10 +78,15 @@ const langPack = {
   game_messages_play: 'play',
   game_messages_mute: 'mute',
   game_messages_sound: 'sound',
-  game_level_title_1:
-    'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  game_level_title_1: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
   game_level_title_2: 'Events are developing rapidly.\nNeed to do something.',
   game_level_title_3: 'Untangle\nentangled tracks\nin the desert',
+  game_level_title_4: 'Swirling\nwhirlwind\nsurrounded',
+  game_level_title_5: 'Land of\ngiant monuments',
+  game_level_title_6: 'It’s a dark night,\nbullets whistling\nthroughout the steppe',
+  game_level_title_7: 'Across\nthe deep blue\nsea',
+  game_level_title_8: 'In the ancient\ntriangle pyramid',
+  game_level_title_9: 'Enigma of\nNazca Lines',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];
