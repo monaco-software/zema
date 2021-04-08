@@ -7,6 +7,7 @@ const WebSocket = require('ws');
 const webpack = require('webpack');
 const webpackConfig = require('../webpack.ssr.js');
 const cluster = require('cluster');
+const { spawn } = require('child_process');
 
 const RELOAD_MESSAGE = 'restart sharply';
 
@@ -20,14 +21,27 @@ const statsConfig = {
 };
 
 const compilers = [];
+let postgres;
 webpackConfig.forEach((config) => {
   compilers.push(webpack(config));
 });
+
+const spawnPostgres = () => {
+  return spawn('docker-compose', ['up', 'postgres'], {
+    stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+  });
+};
 
 if (cluster.isMaster) {
   console.log(
     `🔧\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`
   );
+
+  postgres = spawnPostgres();
+  postgres.stderr.on('data', (data) => {
+    process.stdout.write(`⚡ ${data}`);
+    // console.log(`⚡ ${data.toString()}`);
+  });
 
   const wsConnections = [];
   let wsServer;
@@ -36,13 +50,12 @@ if (cluster.isMaster) {
   wsServer.on('connection', (connection) => {
     wsConnections.push(connection);
     connection.on('message', (message) => {
-      console.log(`📜️received: ${message}`);
+      console.log(`📜 ️received: ${message}`);
     });
     connection.send('🛠 Reload WebSocket connected 🛠');
   });
 
   const shutDown = () => {
-    console.log('\nexiting');
     if (wsConnections.length) {
       wsConnections.forEach((connection) => {
         if (connection && connection.readyState === 1) {
@@ -51,7 +64,11 @@ if (cluster.isMaster) {
         }
       });
     }
-    process.exit(0);
+    setInterval(() => {
+      if (!postgres.connected) {
+        process.exit(0);
+      }
+    }, 100);
   };
 
   const messageListener = (msg) => {

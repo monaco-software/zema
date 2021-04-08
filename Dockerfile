@@ -1,9 +1,14 @@
-FROM node:14-slim
+FROM node:14-alpine
 
 WORKDIR /app
 
+COPY package*.json ./
+
+RUN npm ci
+
 COPY . .
 
-RUN npm ci && npm run build
+RUN npx prisma generate
+RUN npm run build
 
-CMD node server
+CMD npm start

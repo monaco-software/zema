@@ -35,6 +35,7 @@
   align-items: center;
   justify-content: center;
   transition: opacity .4s ease-in-out;
+  min-width: 38px;
 }
 
 .navbar__link {
@@ -50,7 +51,7 @@
 }
 
 .navbar__button:focus {
-  outline: 1px solid var(--white);
+  outline: 0;
 }
 
 .navbar_hidden .navbar__link,

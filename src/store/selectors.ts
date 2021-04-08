@@ -18,4 +18,11 @@ export const getAppNotification = createSelector(
   (state) => state.notification
 );
 
+export const getThemes = createSelector(getAppState, (state) => state.themes);
+
+export const getCurrentTheme = createSelector(
+  getAppState,
+  (state) => state.currentTheme
+);
+
 export const getIsSSR = createSelector(getAppState, (state) => state.isSSR);

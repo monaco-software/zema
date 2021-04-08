@@ -23,7 +23,8 @@ a {
 :root {
   --brand: #7d4cdb;
   --brand-light-1: #cfb6ee;
-  --brand-light-2: #e0d6f4;
+
+  /*--brand-light-2: #e0d6f4;*/
   --brand-light-3: #f3eeff;
 
   --yellow-light-1: #ffeac1;

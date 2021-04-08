@@ -3,4 +3,6 @@ node_modules/
 dist/
 ssr/server/
 ssr/dist/
-
+.env
+postgres/
+prisma/.initialized

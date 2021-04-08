@@ -17,6 +17,8 @@ import {
   UpdatePasswordResponse,
   UpdateProfileParams,
   UpdateProfileResponse,
+  UpdateThemeParams,
+  UpdateThemeResponse,
   UserObject,
 } from './schema';
 
@@ -119,6 +121,17 @@ export const apiUpdatePassword = createApiMethod<
   UpdatePasswordParams,
   UpdatePasswordResponse
 >(getProxyPath(API_PATH.USER_PASSWORD), {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiUpdateTheme = createApiMethod<
+  UpdateThemeParams,
+  UpdateThemeResponse
+>(API_PATH.USER_THEME_UPDATE, {
   method: HTTP_METHODS.PUT,
   credentials: 'include',
   headers: {
