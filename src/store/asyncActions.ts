@@ -58,7 +58,9 @@ export const asyncAppActions = {
 
   oAuthYandexStart: (): AppThunk<Promise<void>> => async (dispatch) => {
     try {
-      const response = await dispatch(apiOAuthYandexGetServiceId());
+      const response = await dispatch(
+        apiOAuthYandexGetServiceId(window.location.origin)()
+      );
 
       // eslint-disable-next-line max-len
       window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${response.service_id}&redirect_uri=${window.location.origin}`;
