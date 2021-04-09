@@ -1,14 +1,16 @@
-FROM node:14-alpine
+FROM node:14-buster
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY . .
+
+RUN apt-get update && apt-get install -y netcat
 
 RUN npm ci
 
-COPY . .
+RUN npm config set script-shell bash
+RUN until npx prisma generate; do echo ...; sleep 1; done
 
-RUN npx prisma generate
 RUN npm run build
 
 CMD npm start

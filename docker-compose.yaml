@@ -2,7 +2,7 @@ version: '3'
 services:
   postgres:
     container_name: postgres
-    image: postgres:13.2-alpine
+    image: postgres:13.2
     ports:
       - '6543:6543'
     expose:
@@ -13,8 +13,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - /var/docker/zooma_pgdata:/var/lib/postgresql/data
     networks:
-      - docker.local
+      - docker_local
 
   zooma-app:
     container_name: zooma
@@ -24,6 +26,7 @@ services:
       - postgres
     environment:
       NODE_ENV: production
+      HUSKY: 0
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -33,27 +36,11 @@ services:
     ports:
       - '3443:3443'
     restart: always
+    volumes:
+      - /var/docker/zooma_appdata:/shared
     networks:
-      - docker.local
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4:5.1
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-      PGADMIN_LISTEN_PORT: 80
-    ports:
-      - '7654:80'
-    depends_on:
-      - postgres
-    networks:
-      - docker.local
-
-volumes:
-  pgadmin-data:
+      - docker_local
 
 networks:
-  docker.local:
+  docker_local:
     driver: bridge

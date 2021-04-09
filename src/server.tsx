@@ -169,7 +169,6 @@ const getAppHtml = (
 };
 
 const getThemes = async () => {
-  console.log('getThemes()');
   return await prisma.theme.findMany({
     orderBy: {
       id: 'asc',
@@ -194,11 +193,15 @@ const getUserTheme = async (userId: number) => {
 };
 
 const setUserTheme = async (userId: number, themeId: number) => {
-  await prisma.user.update({
+  await prisma.user.upsert({
     where: {
       id: userId,
     },
-    data: {
+    update: {
+      themeId,
+    },
+    create: {
+      id: userId,
       themeId,
     },
   });
@@ -250,13 +253,11 @@ app.get('*', (req, res) => {
       },
     })
       .then(async (response) => {
-        if (!themes || !isProduction) {
+        if (!themes.length || !isProduction) {
           themes = await getThemes();
         }
-        console.log(themes);
         themes.forEach((theme) => {
           store.dispatch(appActions.addTheme(theme));
-          console.log(theme);
         });
         if (response.ok) {
           const userData = await response.json();

@@ -29,6 +29,7 @@ webpackConfig.forEach((config) => {
 const spawnPostgres = () => {
   return spawn('docker-compose', ['up', 'postgres'], {
     stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+    env: { ...process.env },
   });
 };
 
