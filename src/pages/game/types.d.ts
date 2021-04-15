@@ -1,3 +1,5 @@
+import { BULLET_STATE } from '@pages/game/constants';
+
 export interface spriteOptions {
   image: HTMLImageElement;
   frameIndex: number;
@@ -12,10 +14,6 @@ export interface BulletState {
   state: number;
   angle: number;
   color: number;
-}
-
-export interface RemainingColorsState {
-  colors: number[];
 }
 
 export interface Point {
@@ -43,3 +41,39 @@ export interface Physics {
   impacts: number[];
 }
 
+export interface GameButton {
+  icon: string;
+  x: number;
+  y: number;
+  hovered: boolean;
+}
+
+export interface Game {
+  phase: number;
+  bullet: {
+    state: BULLET_STATE;
+    color: number;
+    angle: number;
+    position: number;
+  };
+  remainColors: number[];
+  currentLevel: number;
+  openedLevel: number;
+  explosion: number[];
+  particle: number;
+  pusher: number;
+  shotPath: number[][];
+  shotPosition: number;
+  gameResult: number;
+  title: string;
+  score: number;
+  combo: number;
+  fullscreenState: boolean;
+  fullscreenButton: GameButton;
+  pauseButton: GameButton;
+  muteState: boolean;
+  muteButton: GameButton;
+  volume: number;
+  increaseVolumeButton: GameButton;
+  decreaseVolumeButton: GameButton;
+}

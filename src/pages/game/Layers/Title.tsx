@@ -12,22 +12,31 @@ export const TitleLayer: FC = () => {
   const requestRef = useRef<number>();
 
   const draw = () => {
-    if (!canvasRef.current) { return; }
+    if (!canvasRef.current) {
+      return;
+    }
     const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) { return; }
+    if (!ctx) {
+      return;
+    }
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
 
     if (title) {
       ctx.fillStyle = '#FFFFFFDD';
       ctx.textBaseline = 'top';
       const lineHeight = TITLE_FONT_SIZE + 10;
-      ctx.font = `${TITLE_FONT_SIZE}px Bangers2, Arial`;
+      ctx.font = `${TITLE_FONT_SIZE}px BangersLocal, Arial`;
 
       const lines = title.split('\n');
       lines.forEach((line: string, index: number) => {
         const textWidth = ctx.measureText(line).width;
-        ctx.fillText(line, (canvasRef.current as HTMLCanvasElement).width / 2 - textWidth / 2,
-          (canvasRef.current as HTMLCanvasElement).height / 2 + index * lineHeight - lines.length * lineHeight / 2);
+        ctx.fillText(
+          line,
+          (canvasRef.current as HTMLCanvasElement).width / 2 - textWidth / 2,
+          (canvasRef.current as HTMLCanvasElement).height / 2 +
+            index * lineHeight -
+            (lines.length * lineHeight) / 2
+        );
       });
     }
   };

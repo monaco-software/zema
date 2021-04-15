@@ -24,9 +24,7 @@ const Topic: FC<TopicProps> = ({ name, url, createTimestamp }) => {
       <Heading className={block('topic-name')} level={4} margin="none" fill>
         {name}
       </Heading>
-      <p className={block('create-date')}>
-        {dateFullString}
-      </p>
+      <p className={block('create-date')}>{dateFullString}</p>
     </Link>
   );
 };
@@ -41,13 +39,7 @@ export const ForumTopicsList: FC<Props> = ({ topics }) => {
       {topics.map((topic) => {
         const url = ROUTES.FORUM_TOPIC.replace(':topicId', String(topic.id));
 
-        return (
-          <Topic
-            key={topic.id}
-            url={url}
-            {...topic}
-          />
-        );
+        return <Topic key={topic.id} url={url} {...topic} />;
       })}
     </Grid>
   );

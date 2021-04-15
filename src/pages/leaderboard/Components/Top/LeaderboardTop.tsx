@@ -14,13 +14,21 @@ interface LeaderboardTopUserProps {
   isCurrentUser: boolean;
 }
 
-const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, record, isCurrentUser }) => {
+const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({
+  place,
+  record,
+  isCurrentUser,
+}) => {
   const name = getUserFullName(record);
 
   const points = record.points.toLocaleString();
 
   return (
-    <Box className={block('user', { 'current': isCurrentUser })} justify="center" align="center">
+    <Box
+      className={block('user', { current: isCurrentUser })}
+      justify="center"
+      align="center"
+    >
       <span className={block('user-place')}>{place}</span>
 
       <AvatarWithFallback
@@ -29,9 +37,13 @@ const LeaderboardTopUser: FC<LeaderboardTopUserProps> = ({ place, record, isCurr
         size={64}
       />
 
-      <div className={block('user-name')} title={name}>{name}</div>
+      <div className={block('user-name')} title={name}>
+        {name}
+      </div>
 
-      <div className={block('user-points')} title={points}>{points}</div>
+      <div className={block('user-points')} title={points}>
+        {points}
+      </div>
     </Box>
   );
 };

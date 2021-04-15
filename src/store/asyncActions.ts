@@ -2,7 +2,17 @@ import { AppThunk } from './store';
 import { appActions } from './reducer';
 import { SignInParams, SignUpParams } from '@api/schema';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
+<<<<<<< HEAD
 import { apiGetUser, apiPerformSignIn, apiPerformSignOut, apiPerformSignUp } from '@api/methods';
+=======
+import {
+  apiGetUser,
+  apiOAuthYandexGetServiceId,
+  apiPerformSignIn,
+  apiPerformSignOut,
+  apiPerformSignUp,
+} from '@api/methods';
+>>>>>>> dev
 
 export const asyncAppActions = {
   fetchUser: (): AppThunk<Promise<void>> => async (dispatch) => {
@@ -17,7 +27,9 @@ export const asyncAppActions = {
     }
   },
 
-  signInUser: (params: SignInParams): AppThunk<Promise<void>> => async (dispatch) => {
+  signInUser: (params: SignInParams): AppThunk<Promise<void>> => async (
+    dispatch
+  ) => {
     try {
       await dispatch(apiPerformSignIn(params, false));
       await dispatch(asyncAppActions.fetchUser());
@@ -26,7 +38,9 @@ export const asyncAppActions = {
     }
   },
 
-  signUpUser: (params: SignUpParams): AppThunk<Promise<void>> => async (dispatch) => {
+  signUpUser: (params: SignUpParams): AppThunk<Promise<void>> => async (
+    dispatch
+  ) => {
     try {
       await dispatch(apiPerformSignUp(params, false));
       await dispatch(asyncAppActions.fetchUser());
@@ -34,6 +48,7 @@ export const asyncAppActions = {
       throw error;
     }
   },
+<<<<<<< HEAD
 
   signOutUser: (): AppThunk<Promise<void>> => async (dispatch) => {
     try {
@@ -46,4 +61,30 @@ export const asyncAppActions = {
     }
   },
 };
+=======
+>>>>>>> dev
 
+  signOutUser: (): AppThunk<Promise<void>> => async (dispatch) => {
+    try {
+      await dispatch(apiPerformSignOut());
+
+      dispatch(appActions.resetUser());
+      dispatch(appActions.setIsSignedIn(false));
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  oAuthYandexStart: (): AppThunk<Promise<void>> => async (dispatch) => {
+    try {
+      const response = await dispatch(
+        apiOAuthYandexGetServiceId(window.location.origin)()
+      );
+
+      // eslint-disable-next-line max-len
+      window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${response.service_id}&redirect_uri=${window.location.origin}`;
+    } catch (error) {
+      throw error;
+    }
+  },
+};

@@ -1,6 +1,6 @@
 .game-level {
   margin: 10px;
-  --game-level-header-height: 44px;
+  --game-level-header-height: 36px;
   --game-level-horizontal-padding: 15px;
   --game-level-triangle-width: 12px;
   cursor: pointer;
@@ -20,18 +20,18 @@
 }
 
 .game-level__header {
-  background-color: #e0d6f4;
+  background-color: var(--brand-light-2);
   position: relative;
   overflow-y: hidden;
   height: var(--game-level-header-height);
-
 }
 
 .game-level__footer {
-  padding: 5px;
   text-align: center;
-  height: 80px;
-  background-color: #e0d6f4;
+  height: 55px;
+  background-color: var(--brand-light-2);
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .game-level__header-status {
@@ -40,7 +40,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  padding: 9px 1px 5px 7px;
+  padding: 7px 1px 5px 7px;
   height: var(--game-level-header-height);
 }
 

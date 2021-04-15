@@ -23,26 +23,22 @@ export const InfoLayer: FC = () => {
     ctx.fillStyle = '#00000050';
     ctx.fillRect(0, FRAME.HEIGHT - 15, FRAME.WIDTH, FRAME.HEIGHT);
 
-    const renderValue = Math.floor(Ball.updateTime / Ball.updates * 1000 );
+    const renderValue = Math.floor((Ball.updateTime / Ball.updates) * 1000);
 
-    const render = padWithSpaces(
-      `one ball render:${renderValue} µs`, 30);
+    const render = padWithSpaces(`one ball render:${renderValue} µs`, 30);
 
     const updates = padWithSpaces(`updates:${Ball.updates}`, 20);
 
-    const cpusValue = Math.floor(Ball.updates / Ball.updateTime * 1000);
+    const cpusValue = Math.floor((Ball.updates / Ball.updateTime) * 1000);
     const cpus = padWithSpaces(`updates/CPU second:${cpusValue}`, 30);
 
-    const message =
-      render +
-      updates +
-      cpus;
+    const message = render + updates + cpus;
 
     print({
       ctx,
       color: '#FF0000',
       text: message,
-      x: Math.floor(FRAME.WIDTH / 2 - message.length / 2 * 6),
+      x: Math.floor(FRAME.WIDTH / 2 - (message.length / 2) * 6),
       y: FRAME.HEIGHT - 10,
     });
   };
@@ -57,8 +53,10 @@ export const InfoLayer: FC = () => {
     canvas.height = FRAME.HEIGHT;
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) {
-      intervalRef.current = window.setInterval(() =>
-        requestRef.current = requestAnimationFrame(draw), 200);
+      intervalRef.current = window.setInterval(
+        () => (requestRef.current = requestAnimationFrame(draw)),
+        200
+      );
     }
 
     return () => {
@@ -70,7 +68,14 @@ export const InfoLayer: FC = () => {
   }, []);
 
   return (
+<<<<<<< HEAD
     <canvas style={{ position: 'absolute', height: '100%', width: '100%' }}
       ref={canvasRef} />
+=======
+    <canvas
+      style={{ position: 'absolute', height: '100%', width: '100%' }}
+      ref={canvasRef}
+    />
+>>>>>>> dev
   );
 };

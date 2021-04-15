@@ -7,7 +7,7 @@ export interface UserObject {
   display_name: string | null;
   login: string;
   email: string;
-  phone: string;
+  phone: string | null;
   avatar: string | null;
 }
 
@@ -20,7 +20,11 @@ export type SignInResponse = string;
 
 export type SignOutResponse = string;
 
+<<<<<<< HEAD
 export interface SignUpParams extends SignInParams{
+=======
+export interface SignUpParams extends SignInParams {
+>>>>>>> dev
   first_name: string;
   second_name: string;
   email: string;
@@ -29,6 +33,10 @@ export interface SignUpParams extends SignInParams{
 
 export interface SignUpResponse {
   id: number;
+}
+
+export interface OAuthYandexGetServiceIdResponse {
+  service_id: string;
 }
 
 export interface LeaderboardRecordObject {
@@ -56,7 +64,9 @@ export type GetLeaderboardResponse = Array<{
   data: LeaderboardRecordObject;
 }>;
 
-export type UpdateProfileParams = NonNullable<Omit<UserObject, 'id' | 'avatar'>>;
+export type UpdateProfileParams = NonNullable<
+  Omit<UserObject, 'id' | 'avatar'>
+>;
 
 export type UpdateProfileResponse = string;
 

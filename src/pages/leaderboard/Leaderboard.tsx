@@ -36,8 +36,9 @@ export const Leaderboard: FC = () => {
 
   useEffect(() => {
     // TODO: поддержать пагинацию
-    getLeaderboard({ cursor: 0, limit: 100 })
-      .finally(() => setIsLoading(false));
+    getLeaderboard({ cursor: 0, limit: 100 }).finally(() =>
+      setIsLoading(false)
+    );
   }, []);
 
   return (
@@ -46,22 +47,19 @@ export const Leaderboard: FC = () => {
         {getText('leaderboard_page_header')}
       </Heading>
 
-      {isLoading &&
+      {isLoading && (
         <Box align="center">
           <Spinner />
         </Box>
-      }
+      )}
 
-      {!isLoading &&
+      {!isLoading && (
         <>
-          {needTopUsers &&
-            <LeaderboardTop
-              records={topUsers}
-              currentUserId={currentUser.id}
-            />
-          }
+          {needTopUsers && (
+            <LeaderboardTop records={topUsers} currentUserId={currentUser.id} />
+          )}
 
-          {needTable &&
+          {needTable && (
             <div className={block('table-wrap')}>
               <LeaderboardTable
                 records={tableUsers}
@@ -69,11 +67,11 @@ export const Leaderboard: FC = () => {
                 startPlace={tableStartPlace}
               />
             </div>
-          }
+          )}
 
           {!needTable && <LeaderboardTablePlaceholder />}
         </>
-      }
+      )}
     </Container>
   );
 };

@@ -21,19 +21,15 @@ export const ForumTopic: FC = () => {
   useAuth();
 
   const history = useHistory();
-  const {
-    topicId: topicIdFromRoute,
-  } = useParams<RouteParams>();
+  const { topicId: topicIdFromRoute } = useParams<RouteParams>();
 
   const addMessage = useAction(forumActions.addMessage);
 
   const currentUser = useSelector(getCurrentUser);
 
-  const {
-    id: topicId,
-    name: topicName,
-    messages: topicMessages,
-  } = useSelector(getForumTopicById(Number(topicIdFromRoute)));
+  const { id: topicId, name: topicName, messages: topicMessages } = useSelector(
+    getForumTopicById(Number(topicIdFromRoute))
+  );
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -77,10 +73,7 @@ export const ForumTopic: FC = () => {
 
   return (
     <Container className={block()}>
-      <ForumTopicHeader
-        topicName={topicName}
-        onMessageAddClick={onModalOpen}
-      />
+      <ForumTopicHeader topicName={topicName} onMessageAddClick={onModalOpen} />
 
       <div className={block('messages-list-wrap')}>
         <ForumTopicMessageList
@@ -89,7 +82,7 @@ export const ForumTopic: FC = () => {
         />
       </div>
 
-      {showInputModal &&
+      {showInputModal && (
         <ForumTopicMessageModal
           value={messageText}
           isLoading={isLoading}
@@ -97,8 +90,7 @@ export const ForumTopic: FC = () => {
           onSend={onMessageSend}
           onClose={onModalClose}
         />
-      }
+      )}
     </Container>
   );
 };
-

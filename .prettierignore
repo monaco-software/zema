@@ -1,0 +1,7 @@
+.idea/
+node_modules/
+dist/
+ssr/server/
+ssr/dist/
+*.css
+*.md

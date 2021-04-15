@@ -7,19 +7,35 @@ import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { gameActions } from '../reducer';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
-import { fps, random } from '../lib/utils';
 import { coverWithLip } from './utils/frog';
+<<<<<<< HEAD
 import { BULLET_ARMING_SPEED } from '../setup';
 import { getBulletPosition, getBulletState, getCurrentLevel, getGamePhase, getRemainColors } from '../selectors';
 import {
   BALL_RADIUS,
+=======
+import { fps, random, randomFresh } from '../lib/utils';
+import { playSound, SOUNDS } from '@pages/game/lib/sound';
+import {
+>>>>>>> dev
   BULLET_ARMED_POSITION,
+  BULLET_ARMING_SPEED,
   BULLET_START_POSITION,
+} from '../setup';
+import {
+  BALL_RADIUS,
   BULLET_STATE,
   FRAME,
   FROG_RADIUS,
   GAME_PHASE,
 } from '../constants';
+import {
+  getBulletPosition,
+  getBulletState,
+  getCurrentLevel,
+  getGamePhase,
+  getRemainColors,
+} from '../selectors';
 
 interface Props {
   angle: number;
@@ -54,7 +70,10 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     ctx.translate(-FROG_RADIUS, -FROG_RADIUS);
     ctx.drawImage(frog.image, 0, 0, FROG_RADIUS * 2, FROG_RADIUS * 2);
 
-    if (bulletState === BULLET_STATE.ARMING || bulletState === BULLET_STATE.ARMED) {
+    if (
+      bulletState === BULLET_STATE.ARMING ||
+      bulletState === BULLET_STATE.ARMED
+    ) {
       if (bulletState === BULLET_STATE.ARMING) {
         bullet.update(bulletPosition + bullet.rotationOffset, Math.PI * 1.5);
       }
@@ -65,12 +84,11 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
   };
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     if (bulletState === BULLET_STATE.ARMING) {
       // выкатываем шар из брюха
+      if (bulletPosition === BULLET_ARMED_POSITION - 5) {
+        playSound(SOUNDS.GULP);
+      }
       if (bulletPosition < BULLET_ARMED_POSITION) {
         timeoutRef.current = window.setTimeout(() => {
           setBulletPosition(bulletPosition + 1);
@@ -83,25 +101,27 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
   }, [bulletPosition]);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     requestRef.current = window.requestAnimationFrame(drawFrog);
   }, [angle]);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
     if (bulletState === BULLET_STATE.ARMING && remainColors.length) {
-      bullet.color = remainColors[random(remainColors.length)];
+      const lastColorIndex = remainColors.indexOf(bullet.color);
+      if (lastColorIndex >= 0) {
+        bullet.color =
+          remainColors[randomFresh(remainColors.length, lastColorIndex, 10)];
+      } else {
+        bullet.color = remainColors[random(remainColors.length)];
+      }
       bullet.rotationOffset = random(bullet.numberOfFrames);
       setBulletColor(bullet.color);
       setBulletPosition(BULLET_START_POSITION + 1);
     }
-    if (gamePhase === GAME_PHASE.STARTED && bulletState !== BULLET_STATE.ARMED && bulletState !== BULLET_STATE.ARMING) {
+    if (
+      gamePhase === GAME_PHASE.STARTED &&
+      bulletState !== BULLET_STATE.ARMED &&
+      bulletState !== BULLET_STATE.ARMING
+    ) {
       setBulletPosition(BULLET_START_POSITION);
     }
     if (gamePhase === GAME_PHASE.STARTED) {
@@ -113,7 +133,10 @@ export const FrogLayer: FC<Props> = ({ angle }) => {
     if (gamePhase === GAME_PHASE.ENDING) {
       setBulletState(BULLET_STATE.IDLE);
     }
-    if (gamePhase === GAME_PHASE.STARTED) {
+    if (
+      gamePhase === GAME_PHASE.STARTED &&
+      bulletState !== BULLET_STATE.ARMED
+    ) {
       setBulletState(BULLET_STATE.ARMING);
     }
     requestRef.current = window.requestAnimationFrame(drawFrog);

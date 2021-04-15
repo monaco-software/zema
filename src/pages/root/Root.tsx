@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
-import { useAuth } from '@common/hooks';
-import { ROUTES } from '@common/constants';
-import { Redirect } from 'react-router-dom';
+import { Main } from 'grommet';
 
-export const Root: FC = ({}) => {
-  useAuth();
-
+export const Root: FC = () => {
   return (
-    <Redirect to={ROUTES.GAME_LEVELS} />
+    <div>
+      <Main justify="center" height="100vh" align="center">
+        Здесь скоро будет красивый лэндинг
+      </Main>
+    </div>
   );
 };
-

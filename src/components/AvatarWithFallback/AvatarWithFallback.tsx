@@ -22,14 +22,14 @@ export const AvatarWithFallback: FC<Props> = ({
   const iconSize = Math.floor(size * 0.4).toString();
 
   if (url) {
-    return (
-      <Avatar src={url} size={avatarSize} {...restProps} />
-    );
+    return <Avatar src={url} size={avatarSize} {...restProps} />;
   }
 
   return (
     <Avatar size={avatarSize} background={GROMMET_COLORS.BRAND} {...restProps}>
-      {placeholderNode ?? <User color={GROMMET_COLORS.LIGHT_1} size={iconSize} />}
+      {placeholderNode ?? (
+        <User color={GROMMET_COLORS.LIGHT_1} size={iconSize} />
+      )}
     </Avatar>
   );
 };

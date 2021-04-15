@@ -1,24 +1,28 @@
 import './navbar.css';
 import b_ from 'b_';
 import React, { FC, HTMLAttributes, useEffect, useRef, useState } from 'react';
+<<<<<<< HEAD
+=======
+import { isMobile } from '@common/utils';
+>>>>>>> dev
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@common/constants';
-import { Icon } from 'grommet-icons/icons';
-import { Gamepad } from 'grommet-icons/es6';
 import { getText } from '@common/langUtils';
 import { useAsyncAction } from '@common/hooks';
 import { getIsSignedInd } from '@store/selectors';
 import { GROMMET_COLORS } from '../App/grommetTheme';
 import { asyncAppActions } from '@store/asyncActions';
+<<<<<<< HEAD
 import { Chat, Home, Trophy, User, Logout } from 'grommet-icons';
+=======
+import { Chat, Gamepad, Home, Icon, Logout, Trophy, User } from 'grommet-icons';
+>>>>>>> dev
 
 const block = b_.lock('navbar');
 
 const Separator = () => {
-  return (
-    <div className={block('separator')} />
-  );
+  return <div className={block('separator')} />;
 };
 
 interface NavbarLinkItemProps {
@@ -27,6 +31,7 @@ interface NavbarLinkItemProps {
   IconComponent: Icon;
   text?: string;
 }
+<<<<<<< HEAD
 const NavbarLinkItem: FC<NavbarLinkItemProps> = ({ route, exact, IconComponent, text }) => {
   return (
     <NavLink exact={exact} to={route} className={block('link')} activeClassName={block('link', { active: true })}>
@@ -35,11 +40,34 @@ const NavbarLinkItem: FC<NavbarLinkItemProps> = ({ route, exact, IconComponent, 
       </div>
       <div className={block('item-text')}>
         {text}
+=======
+const NavbarLinkItem: FC<NavbarLinkItemProps> = ({
+  route,
+  exact,
+  IconComponent,
+  text,
+}) => {
+  return (
+    <NavLink
+      exact={exact}
+      to={route}
+      className={block('link')}
+      activeClassName={block('link', { active: true })}
+    >
+      <div className={block('item-icon-wrap')}>
+        <IconComponent
+          color={GROMMET_COLORS.LIGHT_1}
+          size="18"
+          className={block('item-icon')}
+        />
+>>>>>>> dev
       </div>
+      <div className={block('item-text')}>{text}</div>
     </NavLink>
   );
 };
 
+<<<<<<< HEAD
 interface NavbarButtonItemProps extends HTMLAttributes<HTMLButtonElement>{
   IconComponent: Icon;
   text?: string;
@@ -47,15 +75,41 @@ interface NavbarButtonItemProps extends HTMLAttributes<HTMLButtonElement>{
 const NavbarButtonItem: FC<NavbarButtonItemProps> = ({ IconComponent, text, className, ...restProps }) => {
   const baseClassName = block('button');
   const fullClassName = className ? `${baseClassName} ${className}` : baseClassName;
+=======
+interface NavbarButtonItemProps extends HTMLAttributes<HTMLButtonElement> {
+  IconComponent: Icon;
+  text?: string;
+}
+const NavbarButtonItem: FC<NavbarButtonItemProps> = ({
+  IconComponent,
+  text,
+  className,
+  ...restProps
+}) => {
+  const baseClassName = block('button');
+  const fullClassName = className
+    ? `${baseClassName} ${className}`
+    : baseClassName;
+>>>>>>> dev
 
   return (
     <button className={fullClassName} {...restProps}>
       <div className={block('item-icon-wrap')}>
+<<<<<<< HEAD
         <IconComponent color={GROMMET_COLORS.LIGHT_1} size="18" className={block('item-icon')} />
       </div>
       <div className={block('item-text')}>
         {text}
       </div>
+=======
+        <IconComponent
+          color={GROMMET_COLORS.LIGHT_1}
+          size="18"
+          className={block('item-icon')}
+        />
+      </div>
+      <div className={block('item-text')}>{text}</div>
+>>>>>>> dev
     </button>
   );
 };
@@ -103,7 +157,11 @@ export const Navbar: FC = () => {
 
   return (
     <nav
-      className={block({ 'hidden': isHidden, 'with-transition': withTransition })}
+      className={
+        isMobile
+          ? block()
+          : block({ hidden: isHidden, 'with-transition': withTransition })
+      }
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -145,13 +203,21 @@ export const Navbar: FC = () => {
         text={getText('navbar_account')}
       />
 
+<<<<<<< HEAD
       {isSignedIn &&
+=======
+      {isSignedIn && (
+>>>>>>> dev
         <NavbarButtonItem
           text={getText('navbar_signout')}
           IconComponent={Logout}
           onClick={onSignOutClick}
         />
+<<<<<<< HEAD
       }
+=======
+      )}
+>>>>>>> dev
     </nav>
   );
 };

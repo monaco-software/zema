@@ -1,4 +1,8 @@
+import { Game } from '@pages/game/types';
+import { DEFAULT_VOLUME } from '@pages/game/setup';
+import { ICONS } from '@pages/game/Layers/utils/buttons';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+<<<<<<< HEAD
 import { BALL_COLORS, BULLET_STATE, GAME_PHASE, GAME_RESULT } from './constants';
 
 interface Game {
@@ -23,6 +27,16 @@ interface Game {
   combo: number;
   fullscreenState: boolean;
 }
+=======
+import {
+  BALL_COLORS,
+  BULLET_STATE,
+  GAME_PHASE,
+  GAME_RESULT,
+  MAX_VOLUME,
+  MIN_VOLUME,
+} from './constants';
+>>>>>>> dev
 
 const initialGame: Game = {
   phase: GAME_PHASE.LOADING,
@@ -40,11 +54,35 @@ const initialGame: Game = {
   pusher: Number.MIN_SAFE_INTEGER,
   shotPath: [],
   shotPosition: 0,
+<<<<<<< HEAD
   gameResult: GAME_RESULT.WIN,
+=======
+  gameResult: GAME_RESULT.UNKNOWN,
+>>>>>>> dev
   title: '',
   score: 0,
   combo: 0,
   fullscreenState: false,
+<<<<<<< HEAD
+=======
+  fullscreenButton: { x: 0, y: 0, icon: ICONS.EXPAND, hovered: false },
+  pauseButton: { x: 0, y: 0, icon: ICONS.PAUSE, hovered: false },
+  muteState: false,
+  muteButton: { x: 0, y: 0, icon: ICONS.MUTE, hovered: false },
+  volume: DEFAULT_VOLUME,
+  increaseVolumeButton: {
+    x: 0,
+    y: 0,
+    icon: ICONS.INCREASE_VOLUME,
+    hovered: false,
+  },
+  decreaseVolumeButton: {
+    x: 0,
+    y: 0,
+    icon: ICONS.DECREASE_VOLUME,
+    hovered: false,
+  },
+>>>>>>> dev
 };
 
 const game = createSlice({
@@ -54,7 +92,10 @@ const game = createSlice({
     setBullet(state, { payload }: PayloadAction<Game['bullet']>) {
       state.bullet = payload;
     },
-    setBulletPosition(state, { payload }: PayloadAction<Game['bullet']['position']>) {
+    setBulletPosition(
+      state,
+      { payload }: PayloadAction<Game['bullet']['position']>
+    ) {
       state.bullet.position = payload;
     },
     setBulletState(state, { payload }: PayloadAction<Game['bullet']['state']>) {
@@ -96,9 +137,50 @@ const game = createSlice({
     setTitle(state, { payload }: PayloadAction<Game['title']>) {
       state.title = payload;
     },
+<<<<<<< HEAD
     setFullscreenState(state, { payload }: PayloadAction<Game['fullscreenState']>) {
       state.fullscreenState = payload;
     },
+=======
+    setFullscreenState(
+      state,
+      { payload }: PayloadAction<Game['fullscreenState']>
+    ) {
+      state.fullscreenState = payload;
+    },
+    setFullscreenButton(
+      state,
+      { payload }: PayloadAction<Game['fullscreenButton']>
+    ) {
+      state.fullscreenButton = payload;
+    },
+    setPauseButton(state, { payload }: PayloadAction<Game['pauseButton']>) {
+      state.pauseButton = payload;
+    },
+    setMuteState(state, { payload }: PayloadAction<Game['muteState']>) {
+      state.muteState = payload;
+    },
+    setMuteButton(state, { payload }: PayloadAction<Game['muteButton']>) {
+      state.muteButton = payload;
+    },
+    setIncreaseVolumeButton(
+      state,
+      { payload }: PayloadAction<Game['increaseVolumeButton']>
+    ) {
+      state.increaseVolumeButton = payload;
+    },
+    setDecreaseVolumeButton(
+      state,
+      { payload }: PayloadAction<Game['decreaseVolumeButton']>
+    ) {
+      state.decreaseVolumeButton = payload;
+    },
+    setVolume(state, { payload }: PayloadAction<Game['volume']>) {
+      if (payload >= MIN_VOLUME && payload <= MAX_VOLUME) {
+        state.volume = payload;
+      }
+    },
+>>>>>>> dev
     increaseScore(state, { payload }: PayloadAction<Game['score']>) {
       state.score += payload;
     },

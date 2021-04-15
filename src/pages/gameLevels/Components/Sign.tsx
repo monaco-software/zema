@@ -5,13 +5,9 @@ interface SignProps {
   isAllowed: boolean;
 }
 
-export const Sign: FC<SignProps> = ( { isAllowed } ) => {
+export const Sign: FC<SignProps> = ({ isAllowed }) => {
   if (isAllowed) {
-    return (
-      <Star color="accent-4" />
-    );
+    return <Star color="accent-4" />;
   }
-  return (
-    <Lock color="dark-4" />
-  );
+  return <Lock color="dark-4" />;
 };

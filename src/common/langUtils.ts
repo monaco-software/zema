@@ -1,3 +1,4 @@
+// prettier-ignore
 const langPack = {
   navbar_root: 'Главная',
   navbar_game: 'Играть',
@@ -14,6 +15,7 @@ const langPack = {
   signin_form_submit_button: 'Войти',
   signup_form_submit_button: 'Зарегистрироваться',
   signin_form_no_account_button: 'Нет аккаунта?',
+  signin_oauth_title: 'Войти через:',
   signup_form_no_account_button: 'Уже есть аккаунт?',
   form_email_label: 'Email',
   form_email_input_error: 'Некорректный email',
@@ -50,7 +52,6 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
-
   account_form_submit_button: 'Сохранить',
   account_form_reset_button: 'Сбросить',
   account_form_display_name_label: 'Ник',
@@ -68,6 +69,24 @@ const langPack = {
   change_password_button: 'Поменять пароль',
   global_error: 'Что-то пошло не так 😔️',
   error_boundary_go_to_main_page: 'Вернуться на главную',
+
+  game_messages_win: 'You are a winner',
+  game_messages_fail: 'You are a looser',
+  game_messages_combo: 'combo',
+  game_messages_volume: 'volume',
+  game_messages_pause: 'pause',
+  game_messages_play: 'play',
+  game_messages_mute: 'mute',
+  game_messages_sound: 'sound',
+  game_level_title_1: 'A long, long time ago\nsomewhere in\nsouth, south\nAmerica',
+  game_level_title_2: 'Events are developing rapidly.\nNeed to do something.',
+  game_level_title_3: 'Untangle\nentangled tracks\nin the desert',
+  game_level_title_4: 'Swirling\nwhirlwind\nsurrounded',
+  game_level_title_5: 'Land of\ngiant monuments',
+  game_level_title_6: 'It’s a dark night,\nbullets whistling\nthroughout the steppe',
+  game_level_title_7: 'Across\nthe deep blue\nsea',
+  game_level_title_8: 'In the ancient\ntriangle pyramid',
+  game_level_title_9: 'Enigma of\nNazca Lines',
 };
 
 export const getText = (key: keyof typeof langPack): string => langPack[key];

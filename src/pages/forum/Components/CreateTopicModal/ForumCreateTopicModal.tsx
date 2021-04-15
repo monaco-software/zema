@@ -2,7 +2,17 @@ import React, { FC } from 'react';
 import { getText } from '@common/langUtils';
 import { CreateTopicFormFields } from '../../types';
 import { LoadingOverlay } from '@components/LoadingOverlay/LoadingOverlay';
-import { Box, Button, Form, FormExtendedEvent, FormField, Heading, Layer, TextInput, TypedForm } from 'grommet';
+import {
+  Box,
+  Button,
+  Form,
+  FormExtendedEvent,
+  FormField,
+  Heading,
+  Layer,
+  TextInput,
+  TypedForm,
+} from 'grommet';
 
 const TypedForm = Form as TypedForm<CreateTopicFormFields>;
 
@@ -18,7 +28,13 @@ interface Props {
   isLoading: boolean;
 }
 
-export const ForumCreateTopicModal: FC<Props> = ({ onClose, formValue, onChange, onSubmit, isLoading }) => {
+export const ForumCreateTopicModal: FC<Props> = ({
+  onClose,
+  formValue,
+  onChange,
+  onSubmit,
+  isLoading,
+}) => {
   return (
     <Layer position="center" onClickOutside={onClose} onEsc={onClose}>
       <LoadingOverlay isLoading={isLoading}>
@@ -39,7 +55,12 @@ export const ForumCreateTopicModal: FC<Props> = ({ onClose, formValue, onChange,
               name="topicName"
               required
             >
-              <TextInput id="forum_create_topic_name" name="topicName" maxLength={140} autoFocus />
+              <TextInput
+                id="forum_create_topic_name"
+                name="topicName"
+                maxLength={140}
+                autoFocus
+              />
             </FormField>
 
             <Button

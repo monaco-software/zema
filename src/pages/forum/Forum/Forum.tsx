@@ -32,9 +32,14 @@ export const Forum: FC = () => {
 
   const [isFormLoading, setIsFormLoading] = useState(false);
 
-  const [formFields, setFormFields] = useState<CreateTopicFormFields>(createTopicFormInitValue);
-  const onCreateTopicFormChange = (value: CreateTopicFormFields) => setFormFields(value);
-  const onCreateTopicFormSubmit = ({ value }: FormExtendedEvent<CreateTopicFormFields>) => {
+  const [formFields, setFormFields] = useState<CreateTopicFormFields>(
+    createTopicFormInitValue
+  );
+  const onCreateTopicFormChange = (value: CreateTopicFormFields) =>
+    setFormFields(value);
+  const onCreateTopicFormSubmit = ({
+    value,
+  }: FormExtendedEvent<CreateTopicFormFields>) => {
     // TODO: запрос в апи
     console.log(value);
     setIsFormLoading(true);
@@ -60,7 +65,7 @@ export const Forum: FC = () => {
         <ForumTopicsList topics={topics} />
       </div>
 
-      {isModalOpen &&
+      {isModalOpen && (
         <ForumCreateTopicModal
           formValue={formFields}
           onClose={onCreateTopicModalClose}
@@ -68,7 +73,7 @@ export const Forum: FC = () => {
           onSubmit={onCreateTopicFormSubmit}
           isLoading={isFormLoading}
         />
-      }
+      )}
     </Container>
   );
 };

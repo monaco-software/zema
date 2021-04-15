@@ -1,0 +1,16 @@
+.sign-in-oauth__buttons-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-in-oauth__button {
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+.sign-in-oauth__button + .sign-in-oauth__button {
+  margin-left: 10px;
+}

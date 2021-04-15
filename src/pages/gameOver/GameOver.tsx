@@ -1,8 +1,7 @@
 import './game-over.css';
 import b_ from 'b_';
 import React, { FC } from 'react';
-import skullImage from '../game/assets/images/skull.png';
-import { useAuth } from '@common/hooks';
+import skullImage from '../game/assets/images/skull.webp';
 import { ROUTES } from '@common/constants';
 import { getText } from '@common/langUtils';
 import { useHistory } from 'react-router-dom';
@@ -19,8 +18,6 @@ const theme = {
 };
 
 export const GameOver: FC = () => {
-  useAuth();
-
   const history = useHistory();
 
   const goToHome = () => history.push(ROUTES.ROOT);
@@ -32,9 +29,7 @@ export const GameOver: FC = () => {
       <Grommet theme={theme}>
         <Main justify="center" align="center">
           <Box gap="small" className={block('box_game')}>
-            <Heading color={color}>
-              {getText('game_over_page_header')}
-            </Heading>
+            <Heading color={color}>{getText('game_over_page_header')}</Heading>
             <Box>
               <Image src={skullImage} />
             </Box>
@@ -61,4 +56,3 @@ export const GameOver: FC = () => {
     </div>
   );
 };
-
