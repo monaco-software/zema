@@ -57,7 +57,7 @@
   background-color: var(--silver);
 }
 
-.leaderboard-top__user:nth-child(3)  .leaderboard-top__user-place {
+.leaderboard-top__user:nth-child(3) .leaderboard-top__user-place {
   background-color: var(--bronze);
 }
 

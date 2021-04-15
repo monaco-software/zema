@@ -1,14 +1,16 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
-console.log(`\u{1F527}\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`)
+console.log(
+  `\u{1F527}\x1b[1m\x1b[33m process.env.NODE_ENV = '\x1b[96m${process.env.NODE_ENV}\x1b[33m'\x1b[0m\n`
+);
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -22,7 +24,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
   resolve: {
     plugins: [new TsconfigPathsPlugin()],
@@ -33,17 +35,17 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.png$/,
+        test: /\.webp|\.mp3$/,
         use: ['file-loader'],
       },
-    ]
+    ],
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -88,13 +90,13 @@ module.exports = {
         { from: './src/pwa/' },
       ],
     }),
-    isProductionMode ?
-      new WorkboxPlugin.GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 10*1024*1024,
-        navigateFallback: '/index.html',
-      })
+    isProductionMode
+      ? new WorkboxPlugin.GenerateSW({
+          clientsClaim: true,
+          skipWaiting: true,
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+          navigateFallback: '/index.html',
+        })
       : false,
   ].filter(Boolean),
-}
+};

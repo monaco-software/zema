@@ -6,12 +6,11 @@ const getForumState = (state: RootState) => state.forum;
 
 export const getForumTopics = createSelector(
   getForumState,
-  (state) => state.topics,
+  (state) => state.topics
 );
 
-export const getForumTopicById = (topicId: number) => createSelector(
-  getForumTopics,
-  (topics) => {
+export const getForumTopicById = (topicId: number) =>
+  createSelector(getForumTopics, (topics) => {
     const topic = topics.find((topic) => topic.id === topicId);
     const defaultValue = {
       id: DEFAULT_TOPIC_ID,
@@ -21,5 +20,4 @@ export const getForumTopicById = (topicId: number) => createSelector(
     };
 
     return topic ?? defaultValue;
-  },
-);
+  });

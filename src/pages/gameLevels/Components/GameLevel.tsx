@@ -20,7 +20,12 @@ interface Props {
   isSelected: boolean;
 }
 
-export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSelected }) => {
+export const GameLevel: FC<Props> = ({
+  levelIndex,
+  levelObject,
+  isAllowed,
+  isSelected,
+}) => {
   const history = useHistory();
   const setCurrentLevel = useAction(gameActions.setCurrentLevel);
 
@@ -30,7 +35,9 @@ export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSel
   // показывал pointer курсор
   // над недоступным элементом
   const goToLevel = () => {
-    if (!isAllowed) { return undefined; }
+    if (!isAllowed) {
+      return undefined;
+    }
     return () => {
       setCurrentLevel(levelIndex);
       history.push(ROUTES.GAME);
@@ -39,7 +46,7 @@ export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSel
 
   return (
     <Card
-      className={block( { 'disallowed': !isAllowed, 'selected': isSelected })}
+      className={block({ disallowed: !isAllowed, selected: isSelected })}
       onClick={goToLevel()}
       width="small"
       elevation={isSelected ? 'medium' : 'xsmall'}
@@ -53,10 +60,12 @@ export const GameLevel: FC<Props> = ({ levelIndex, levelObject, isAllowed, isSel
         </span>
       </CardHeader>
       <CardBody>
-        <Image src= {levelObject.thumbnail} />
+        <Image src={levelObject.thumbnail} width="192px" height="144px" />
       </CardBody>
-      <CardFooter className={block('footer')}>
-        {levelObject.title}
+      <CardFooter pad="x-small" className={block('footer')}>
+        <div style={{ margin: 'auto', alignContent: 'center' }}>
+          {levelObject.title}
+        </div>
       </CardFooter>
     </Card>
   );

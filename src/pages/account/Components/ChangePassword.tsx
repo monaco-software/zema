@@ -76,14 +76,20 @@ export const ChangePassword: FC<Props> = ({
               onChange={onChange}
               validate="blur"
             >
-              <Box pad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}>
+              <Box
+                pad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}
+              >
                 <FormField
                   label={getText('form_old_password_label')}
                   htmlFor="change_password_old_password"
                   name="oldPassword"
                   required
                 >
-                  <TextInput id="change_password_old_password" name="oldPassword" type="password" />
+                  <TextInput
+                    id="change_password_old_password"
+                    name="oldPassword"
+                    type="password"
+                  />
                 </FormField>
                 <FormField
                   label={getText('form_new_password_label')}
@@ -92,7 +98,11 @@ export const ChangePassword: FC<Props> = ({
                   required
                   validate={passwordValidate}
                 >
-                  <TextInput id="change_password_password" name="newPassword" type="password" />
+                  <TextInput
+                    id="change_password_password"
+                    name="newPassword"
+                    type="password"
+                  />
                 </FormField>
                 <FormField
                   label={getText('form_new_password_again_label')}
@@ -101,7 +111,11 @@ export const ChangePassword: FC<Props> = ({
                   required
                   validate={passwordConfirmValidate}
                 >
-                  <TextInput id="change_password_confirm_password" name="confirmPassword" type="password" />
+                  <TextInput
+                    id="change_password_confirm_password"
+                    name="confirmPassword"
+                    type="password"
+                  />
                 </FormField>
 
                 <Button

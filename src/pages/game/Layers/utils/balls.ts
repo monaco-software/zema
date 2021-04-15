@@ -1,14 +1,18 @@
 import Ball from '../../lib/ball';
 import levels from '../../levels';
 import { Physics } from '../../types';
-import { random } from '../../lib/utils';
 import { uniqAndSort } from '@common/utils';
+import { random, randomFresh } from '../../lib/utils';
 import { BALL_DIAMETER, BALL_RADIUS } from '../../constants';
 
 export const gameBalls: Ball[] = [];
 
 // возвращает массив индексов одинаковых шаров рядом с заданным
-export const findSame = (balls: Ball[], index: number, both = false): number[] => {
+export const findSame = (
+  balls: Ball[],
+  index: number,
+  both = false
+): number[] => {
   const left = [];
   const right = [];
   if (!balls || !balls[index]) {
@@ -36,14 +40,16 @@ export const findSame = (balls: Ball[], index: number, both = false): number[] =
   if (both && (left.length < 2 || right.length < 1)) {
     return [index];
   }
-  const res = left.concat(right);
-  return uniqAndSort(res);
+  left.push(...right);
+  return uniqAndSort(left);
 };
 
 export const getBallsRemainColors = (): number[] => {
-  return gameBalls.reduce((memo: number[], ball) =>
-    memo.includes(ball.color) ? memo : [...memo, ball.color],
-  []);
+  return gameBalls.reduce(
+    (memo: number[], ball) =>
+      memo.includes(ball.color) ? memo : [...memo, ball.color],
+    []
+  );
 };
 
 export const getRandomColorFromRemains = () => {
@@ -51,34 +57,17 @@ export const getRandomColorFromRemains = () => {
   return colors[random(colors.length)];
 };
 
-// высчитыват оставшиеся на поле цвета
-// после попадания и всех столкновений
-// принимает массив шаров и индекс вставки
-// возвращает массив индексов цветов
-export const calculateRemainColors = (b: Ball[], i: number): number[] => {
-  const balls = b.slice();
-  let index = i;
-  let sameBalls = findSame(balls, index);
-  while (sameBalls.length >= 3) {
-    index = sameBalls[0];
-    balls.splice(index, sameBalls.length);
-    sameBalls = findSame(balls, index, true);
-  }
-  const remainColors: number[] = [];
-  balls.forEach((ball) => {
-    remainColors.push(ball.color);
-  });
-  return uniqAndSort(remainColors);
-};
-
 export const createBalls = (level: number): Ball[] => {
   const levelData = levels[level];
   const pusherPosition = -1 * levelData.balls * BALL_DIAMETER;
 
   gameBalls.length = 0;
+  let lastIndex = 0;
 
   for (let i = 0; i < levelData.balls; i += 1) {
-    const randomIndex = random(levelData.ballColors.length);
+    // предотвращает появление слишком длинных участков одинаковых шаров
+    const randomIndex = randomFresh(levelData.ballColors.length, lastIndex);
+    lastIndex = randomIndex;
     const ball = new Ball(levelData.ballColors[randomIndex]);
     ball.position = pusherPosition + i * BALL_DIAMETER;
     gameBalls.push(ball);
@@ -118,7 +107,10 @@ export const applyPhysic = (pusherPosition: number): Physics => {
         // разрыв. придаем шарам ускорение
         ball.acceleration += 1;
         for (let i = ballIndex; i < gameBalls.length; i += 1) {
-          gameBalls[i].position -= ball.acceleration > BALL_DIAMETER ? BALL_DIAMETER : ball.acceleration;
+          gameBalls[i].position -=
+            ball.acceleration > BALL_DIAMETER
+              ? BALL_DIAMETER
+              : ball.acceleration;
         }
       } else {
         // столкновение. чем сильнее разгон, тем дальше отлетают шары
@@ -128,7 +120,7 @@ export const applyPhysic = (pusherPosition: number): Physics => {
             gameBalls[i].position -= moveDistance;
             gameBalls[i].rotationOffset -= 1;
           }
-          // толькатель отлетает дальше
+          // толкатель отлетает дальше
           pusherOffset -= moveDistance + 4;
           ball.acceleration = 0;
           impacts.push(ballIndex);
@@ -138,4 +130,3 @@ export const applyPhysic = (pusherPosition: number): Physics => {
   });
   return { pusherOffset, impacts };
 };
-

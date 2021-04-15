@@ -14,7 +14,8 @@ import {
   FormExtendedEvent,
   FormField,
   Grid,
-  MaskedInput, Text,
+  MaskedInput,
+  Text,
   TextInput,
   TypedForm,
 } from 'grommet';
@@ -129,7 +130,11 @@ export const SignUpForm: FC<Props> = ({
           required
           validate={passwordConfirmValidate}
         >
-          <TextInput id="signup_password_confirm" name="password_confirm" type="password" />
+          <TextInput
+            id="signup_password_confirm"
+            name="password_confirm"
+            type="password"
+          />
         </FormField>
 
         {errorMessage && (
@@ -139,7 +144,11 @@ export const SignUpForm: FC<Props> = ({
         )}
 
         <Grid gap="small" margin={{ top: 'medium' }}>
-          <Button primary type="submit" label={getText('signup_form_submit_button')} />
+          <Button
+            primary
+            type="submit"
+            label={getText('signup_form_submit_button')}
+          />
           <Anchor
             className={block('no-account-button')}
             onClick={goToSignIn}

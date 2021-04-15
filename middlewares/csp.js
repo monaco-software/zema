@@ -8,7 +8,10 @@ const CSPHeader = `
 
 module.exports = {
   cspHeader: function (req, res, next) {
-    res.setHeader('Content-Security-Policy', CSPHeader.replace(/(\r\n|\n|\r| {2})/gm, ''));
+    res.setHeader(
+      'Content-Security-Policy',
+      CSPHeader.replace(/(\r\n|\n|\r| {2})/gm, '')
+    );
     next();
-  }
-}
+  },
+};

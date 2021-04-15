@@ -9,5 +9,5 @@ module.exports = {
   }),
   transform: {
     '\\.(css|png|jpg|jpeg|svg)$': 'jest-raw-loader',
-  }
+  },
 };

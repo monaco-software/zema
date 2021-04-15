@@ -5,18 +5,20 @@ import { Game } from '@pages/game/Game';
 import { Grommet, Main } from 'grommet';
 import { Root } from '@pages/root/Root';
 import { Navbar } from '../Navbar/Navbar';
+import { useSelector } from 'react-redux';
 import { ROUTES } from '@common/constants';
+import { getIsSSR } from '@store/selectors';
 import { Spinner } from '../Spinner/Spinner';
 import { SignIn } from '@pages/signin/SignIn';
 import { SignUp } from '@pages/signup/SignUp';
 import { grommetTheme } from './grommetTheme';
 import { useAsyncAction } from '@common/hooks';
-import { Switch, Route } from 'react-router-dom';
 import { Forum } from '@pages/forum/Forum/Forum';
 import { Account } from '@pages/account/Account';
 import { GameOver } from '@pages/gameOver/GameOver';
 import { asyncAppActions } from '@store/asyncActions';
 import { GameLevels } from '@pages/gameLevels/GameLevels';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { Leaderboard } from '@pages/leaderboard/Leaderboard';
 import { ForumTopic } from '@pages/forum/ForumTopic/ForumTopic';
 import { AppNotification } from '../Notification/AppNotification';
@@ -25,22 +27,44 @@ const block = b_.lock('app');
 
 const onLoad = () => {
   if (process.env.NODE_ENV === 'production') {
-    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-      console.info('SW registered: ', registration);
-    }).catch((error) => {
-      console.error('SW registration failed: ', error);
-    });
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.info('SW registered: ', registration);
+      })
+      .catch((error) => {
+        console.error('SW registration failed: ', error);
+      });
   }
 };
 
 export const App: FC = () => {
+  const history = useHistory();
+
+  const isSSR = useSelector(getIsSSR);
+
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!isSSR);
 
   useEffect(() => {
-    fetchUser()
-      .finally(() => setIsLoading(false));
+    // Чистим code который остается от yandex OAuth
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.has('code')) {
+      history.replace(ROUTES.ROOT);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSSR) {
+      return;
+    }
+
+    fetchUser().finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', onLoad);
     }

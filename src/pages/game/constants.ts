@@ -2,10 +2,10 @@ export const BALL_RADIUS = 15;
 export const BALL_DIAMETER = BALL_RADIUS * 2;
 export const FROG_RADIUS = 50;
 export const SKULL_RADIUS = 52;
-export const BULLET_START_POSITION = 0;
-export const BULLET_ARMED_POSITION = 18;
-export const COMBO_DISPLAY_PHASES = 16;
 export const BLACKOUT_INCREMENT = 4;
+export const MIN_VOLUME = 0;
+export const MAX_VOLUME = 100;
+export const VOLUME_STEP = 10;
 
 export enum BALL_COLORS {
   BLUE,
@@ -21,7 +21,7 @@ export enum BULLET_STATE {
   ARMING,
   ARMED,
   SHOT,
-  INSERTING
+  INSERTING,
 }
 
 export enum GAME_PHASE {
@@ -29,9 +29,10 @@ export enum GAME_PHASE {
   LOADED,
   STARTING,
   STARTED,
+  PAUSED,
   ENDING,
   ENDED,
-  EXITING
+  EXITING,
 }
 
 export enum FRAME {
@@ -40,7 +41,14 @@ export enum FRAME {
 }
 
 export enum GAME_RESULT {
+  UNKNOWN,
   WIN,
-  FAIL
+  FAIL,
 }
 
+export enum BUTTONS {
+  FULLSCREEN,
+}
+
+export const LOCALSTORAGE_VOLUME = '__monaco-software-zooma_volume_key_v1__';
+export const LOCALSTORAGE_MUTE = '__monaco-software-zooma_mute_key_v1__';

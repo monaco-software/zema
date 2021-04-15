@@ -1,20 +1,30 @@
 import { ROUTES } from './constants';
-import { useLayoutEffect } from 'react';
+import { isServer } from '@common/utils';
 import { Voidable } from '@common/types';
 import { useHistory } from 'react-router-dom';
 import { getIsSignedInd } from '@store/selectors';
 import { AppThunk, Dispatch } from '@store/store';
+import { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload, bindActionCreators } from '@reduxjs/toolkit';
+import {
+  ActionCreatorWithoutPayload,
+  ActionCreatorWithPayload,
+  bindActionCreators,
+} from '@reduxjs/toolkit';
 
-export const useAction =
-  <P>(action: undefined extends P ? ActionCreatorWithoutPayload : ActionCreatorWithPayload<P>) => {
-    const dispatch = useDispatch();
+export const useAction = <P>(
+  action: undefined extends P
+    ? ActionCreatorWithoutPayload
+    : ActionCreatorWithPayload<P>
+) => {
+  const dispatch = useDispatch();
 
-    return bindActionCreators(action, dispatch);
-  };
+  return bindActionCreators(action, dispatch);
+};
 
-export const useAsyncAction = <TParams, TResponse>(action: (params: Voidable<TParams>) => AppThunk<TResponse>) => {
+export const useAsyncAction = <TParams, TResponse>(
+  action: (params: Voidable<TParams>) => AppThunk<TResponse>
+) => {
   const dispatch = useDispatch<Dispatch>();
 
   return (params: Voidable<TParams>) => dispatch(action(params));
@@ -23,9 +33,9 @@ export const useAsyncAction = <TParams, TResponse>(action: (params: Voidable<TPa
 export const useAuth = (needAuth = true) => {
   const history = useHistory();
   const isSignedIn = useSelector(getIsSignedInd);
-
   // useLayoutEffect чтобы не мигал контент компонента, в котором используется useNeedAuth
-  useLayoutEffect(() => {
+  const dependentEffect = isServer ? useEffect : useLayoutEffect;
+  dependentEffect(() => {
     if (isSignedIn && needAuth) {
       return;
     }
