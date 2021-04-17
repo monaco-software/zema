@@ -20,6 +20,7 @@ module.exports = {
     Promise: true,
     Set: true,
     Map: true,
+    JSX: true,
   },
   plugins: ['pretty-imports'],
   rules: {

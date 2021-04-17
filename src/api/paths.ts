@@ -33,4 +33,5 @@ export const API_PATH = {
 
   LEADERBOARD_ALL: '/leaderboard/all',
   LEADERBOARD_UPDATE: '/leaderboard',
+  USER_THEME_UPDATE: '/user/theme',
 } as const;

@@ -6,8 +6,8 @@ import { Grommet, Main } from 'grommet';
 import { Root } from '@pages/root/Root';
 import { Navbar } from '../Navbar/Navbar';
 import { useSelector } from 'react-redux';
+import { deepMerge } from 'grommet/utils';
 import { ROUTES } from '@common/constants';
-import { getIsSSR } from '@store/selectors';
 import { Spinner } from '../Spinner/Spinner';
 import { SignIn } from '@pages/signin/SignIn';
 import { SignUp } from '@pages/signup/SignUp';
@@ -18,10 +18,11 @@ import { Account } from '@pages/account/Account';
 import { GameOver } from '@pages/gameOver/GameOver';
 import { asyncAppActions } from '@store/asyncActions';
 import { GameLevels } from '@pages/gameLevels/GameLevels';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Leaderboard } from '@pages/leaderboard/Leaderboard';
 import { ForumTopic } from '@pages/forum/ForumTopic/ForumTopic';
 import { AppNotification } from '../Notification/AppNotification';
+import { getCurrentTheme, getIsSSR, getThemes } from '@store/selectors';
 
 const block = b_.lock('app');
 
@@ -42,6 +43,8 @@ export const App: FC = () => {
   const history = useHistory();
 
   const isSSR = useSelector(getIsSSR);
+  const currentTheme = useSelector(getCurrentTheme);
+  const themes = useSelector(getThemes);
 
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
 
@@ -74,7 +77,12 @@ export const App: FC = () => {
   }, []);
 
   return (
-    <Grommet className={block()} theme={grommetTheme} cssVars>
+    <Grommet
+      className={block()}
+      theme={deepMerge(grommetTheme, themes[currentTheme].data)}
+      themeMode={themes[currentTheme].dark ? 'dark' : 'light'}
+      cssVars
+    >
       {isLoading && (
         <Main justify="center" align="center">
           <Spinner size={48} />

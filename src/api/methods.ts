@@ -17,6 +17,8 @@ import {
   UpdatePasswordResponse,
   UpdateProfileParams,
   UpdateProfileResponse,
+  UpdateThemeParams,
+  UpdateThemeResponse,
   UserObject,
 } from './schema';
 
@@ -58,15 +60,12 @@ export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
   }
 );
 
-export const apiOAuthYandexGetServiceId = (redirectUri: string) =>
-  createApiMethod<undefined, OAuthYandexGetServiceIdResponse>(
-    `${getFullPath(
-      API_PATH.OAUTH_YANDEX_SERVICE_ID
-    )}?redirect_uri=${redirectUri}`,
-    {
-      method: HTTP_METHODS.GET,
-    }
-  );
+export const apiOAuthYandexGetServiceId = createApiMethod<
+  undefined,
+  OAuthYandexGetServiceIdResponse
+>(getFullPath(API_PATH.OAUTH_YANDEX_SERVICE_ID), {
+  method: HTTP_METHODS.GET,
+});
 
 export const apiGetUserById = (userId: number) =>
   createApiMethod<undefined, UserObject>(
@@ -122,6 +121,17 @@ export const apiUpdatePassword = createApiMethod<
   UpdatePasswordParams,
   UpdatePasswordResponse
 >(getProxyPath(API_PATH.USER_PASSWORD), {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiUpdateTheme = createApiMethod<
+  UpdateThemeParams,
+  UpdateThemeResponse
+>(API_PATH.USER_THEME_UPDATE, {
   method: HTTP_METHODS.PUT,
   credentials: 'include',
   headers: {

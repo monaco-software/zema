@@ -6,6 +6,7 @@ const langPack = {
   navbar_forum: 'Форум',
   navbar_account: 'Профиль',
   navbar_signout: 'Выйти',
+  navbar_theme: 'Цвет',
   required_field: 'Обязательное поле',
   signin_page_header: 'Вход',
   signup_page_header: 'Регистрация',

@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+enum Role {
+  USER
+  THEME_MANAGER
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+model Theme {
+  id   Int     @id @default(autoincrement())
+  name String  @unique @db.VarChar(255)
+  icon String  @db.VarChar(4096)
+  data Json
+  dark Boolean @default(false)
+  user User[]
+}
+
+model User {
+  id      Int   @id
+  role    Role  @default(USER)
+  themeId Int   @default(1)
+  ThemeId Theme @relation(references: [id], fields: [themeId])
+}
