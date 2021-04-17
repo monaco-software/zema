@@ -15,6 +15,8 @@ const initialState: AppState = {
   isSignedIn: false,
   notification: null,
   isSSR: false,
+  themes: { 1: { id: 1, name: 'dummy', data: {}, dark: false, icon: '' } },
+  currentTheme: 1,
 };
 
 const app = createSlice({
@@ -38,6 +40,15 @@ const app = createSlice({
     },
     setIsSSR(state, { payload }: PayloadAction<AppState['isSSR']>) {
       state.isSSR = payload;
+    },
+    addTheme(state, { payload }) {
+      state.themes[payload.id] = payload;
+    },
+    setCurrentTheme(
+      state,
+      { payload }: PayloadAction<AppState['currentTheme']>
+    ) {
+      state.currentTheme = payload;
     },
   },
 });

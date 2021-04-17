@@ -42,6 +42,19 @@ export const grommetTheme: ThemeType = deepMerge(grommet, {
     font: {
       size: '16px',
     },
+    colors: {
+      brand: '#7d4cdb',
+      'brand-light-1': '#cfb6ee',
+      'brand-light-2': '#e0d6f4',
+      'brand-light-3': '#f3eeff',
+      'yellow-light-1': '#ffeac1',
+      'status-error-light-3': '#ffc8c8',
+      'status-ok-light-3': '#99d9c1',
+      white: '#ffffff',
+      gold: 'f9de7c',
+      silver: '#e0e3e6',
+      bronze: '#e8c19b',
+    },
   },
   formField: {
     border: {

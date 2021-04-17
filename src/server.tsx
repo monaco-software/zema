@@ -6,7 +6,7 @@ import express from 'express';
 import fetch from 'node-fetch';
 import root from 'app-root-path';
 import React, { FC } from 'react';
-import enforce from 'express-sslify';
+// import enforce from 'express-sslify';
 import cookieParser from 'cookie-parser';
 import { Provider } from 'react-redux';
 import { HTTP_METHODS } from '@api/core';
@@ -18,7 +18,8 @@ import { isProduction } from '@common/utils';
 import { cspHeader } from './middlewares/csp';
 import { renderToString } from 'react-dom/server';
 import { API_PATH, getFullPath } from '@api/paths';
-import { RootState, createStore } from '@store/store';
+import { PrismaClient, Theme } from '@prisma/client';
+import { createStore, RootState } from '@store/store';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
 import { yandexApiProxy } from './middlewares/yandexApiProxy';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
@@ -29,17 +30,21 @@ import {
   setCookies,
 } from './middlewares/helpers';
 
+const prisma = new PrismaClient();
+
 const port = process.env.PORT || 5000; // yandex OAuth работает только на 5000
 
 const sheet = new ServerStyleSheet();
 const app = express();
 if (isProduction) {
   // перенаправляет HTTP в HTTPS
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  // app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 app.use(cspHeader);
 
 app.use(cookieParser());
+
+app.use(express.json());
 
 app.use(express.static(root.resolve('ssr/dist')));
 
@@ -48,6 +53,7 @@ yandexApiProxy(app);
 const jsFiles: string[] = [];
 const cssFiles: string[] = [];
 const manifestFiles: string[] = [];
+let themes: Theme[] = [];
 
 const updateChunks = () => {
   jsFiles.length = 0;
@@ -162,11 +168,78 @@ const getAppHtml = (
   );
 };
 
+const getThemes = async () => {
+  return await prisma.theme.findMany({
+    orderBy: {
+      id: 'asc',
+    },
+  });
+};
+
+const getUserTheme = async (userId: number) => {
+  let user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        id: userId,
+      },
+    });
+  }
+  return user.themeId;
+};
+
+const setUserTheme = async (userId: number, themeId: number) => {
+  await prisma.user.upsert({
+    where: {
+      id: userId,
+    },
+    update: {
+      themeId,
+    },
+    create: {
+      id: userId,
+      themeId,
+    },
+  });
+};
+
+app.put(API_PATH.USER_THEME_UPDATE, (req, res) => {
+  const fetchUser = (headers: Record<string, string>) => {
+    fetch(getFullPath(API_PATH.AUTH_USER), {
+      method: HTTP_METHODS.GET,
+      headers: {
+        ...headers,
+      },
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          const userData = await response.json();
+          if (!themes || !isProduction) {
+            themes = await getThemes();
+          }
+          setUserTheme(userData.id, req.body.themeId).then(() =>
+            res.sendStatus(200)
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(400).send(error);
+      });
+  };
+  fetchUser(getCookies(req));
+});
+
 app.get('*', (req, res) => {
   if (!isProduction) {
     getStyles();
     updateChunks();
   }
+
   console.info(req.method, req.hostname, req.url, res.statusCode);
 
   const store = createStore();
@@ -179,11 +252,19 @@ app.get('*', (req, res) => {
       },
     })
       .then(async (response) => {
+        if (!themes.length || !isProduction) {
+          themes = await getThemes();
+        }
+        themes.forEach((theme) => {
+          store.dispatch(appActions.addTheme(theme));
+        });
         if (response.ok) {
           const userData = await response.json();
           const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
           store.dispatch(appActions.setUser(userDataWithFullAvatar));
           store.dispatch(appActions.setIsSignedIn(true));
+          const currentTheme = await getUserTheme(userData.id);
+          store.dispatch(appActions.setCurrentTheme(currentTheme));
         }
       })
       .catch(console.error)

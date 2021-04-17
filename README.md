@@ -116,15 +116,23 @@ game
 git clone https://github.com/monaco-software/zooma.git
 cd zooma
 ```
+**обязательно**
+```
+cp env.sample .env
+```
 установите пакеты
 ```shell script
 npm install # или yarn
+```
+подготовьте базу данных
+```
+npm run db:postinstall
 ```
 запуск локального сервера
 ```shell script
 npm start
 ```
-запуск сервера разработкаи
+запуск сервера разработки
 ```shell script
 npm run dev
 ```

@@ -76,3 +76,9 @@ export interface UpdatePasswordParams {
 }
 
 export type UpdatePasswordResponse = string;
+
+export interface UpdateThemeParams {
+  themeId: number;
+}
+
+export type UpdateThemeResponse = string;
