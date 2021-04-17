@@ -208,7 +208,6 @@ const setUserTheme = async (userId: number, themeId: number) => {
 };
 
 app.put(API_PATH.USER_THEME_UPDATE, (req, res) => {
-  console.info(req.method, req.hostname, req.url, res.statusCode);
   const fetchUser = (headers: Record<string, string>) => {
     fetch(getFullPath(API_PATH.AUTH_USER), {
       method: HTTP_METHODS.GET,
@@ -223,7 +222,7 @@ app.put(API_PATH.USER_THEME_UPDATE, (req, res) => {
             themes = await getThemes();
           }
           setUserTheme(userData.id, req.body.themeId).then(() =>
-            res.send(JSON.stringify('ok'))
+            res.sendStatus(200)
           );
         }
       })

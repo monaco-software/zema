@@ -91,12 +91,12 @@ export const Navbar: FC = () => {
   const onSignOutClick = () => signOut();
 
   const setNextTheme = () => {
-    let keys = Object.keys(themes).map(Number);
-    let nextIndex = keys.indexOf(currentTheme) + 1;
-    if (nextIndex >= keys.length) {
+    const themeKeys = Object.keys(themes).map(Number);
+    let nextIndex = themeKeys.indexOf(currentTheme) + 1;
+    if (nextIndex >= themeKeys.length) {
       nextIndex = 0;
     }
-    updateTheme({ themeId: keys[nextIndex] }).catch(console.error);
+    updateTheme({ themeId: themeKeys[nextIndex] }).catch(console.error);
   };
 
   const onMouseEnter = () => {
