@@ -36,12 +36,14 @@ export const ForumModel = {
     text,
     topicId,
     userId,
+    parentId,
   }: ParamsWithUserId<CreateForumMessageParams>): Promise<ForumTopicMessage> {
     return await prisma.forumTopicMessage.create({
       data: {
         text,
         topicId,
         userId,
+        parentId,
       },
     });
   },

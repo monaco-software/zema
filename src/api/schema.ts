@@ -101,6 +101,7 @@ export type GetForumMessagesResponse = ForumTopicMessage[];
 export interface CreateForumMessageParams {
   text: string;
   topicId: number;
+  parentId?: number;
 }
 
 export type CreateForumMessageResponse = ForumTopicMessage;

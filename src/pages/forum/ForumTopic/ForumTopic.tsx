@@ -1,6 +1,6 @@
 import './forum-topic.css';
 import b_ from 'b_';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { Box } from 'grommet';
 import { useSelector } from 'react-redux';
 import { DEFAULT_TOPIC_ID } from '../constants';
@@ -38,8 +38,15 @@ export const ForumTopic: FC = () => {
   const [isModalLoading, setIsModalLoading] = useState(false);
 
   const [showInputModal, setShowInputModal] = useState(false);
-  const onModalOpen = () => setShowInputModal(true);
-  const onModalClose = () => setShowInputModal(false);
+  const messageParentIdRef = useRef<number>();
+  const onModalOpen = (parentId?: number) => {
+    messageParentIdRef.current = parentId;
+    setShowInputModal(true);
+  };
+  const onModalClose = () => {
+    messageParentIdRef.current = undefined;
+    setShowInputModal(false);
+  };
 
   const [messageText, setMessageText] = useState('');
   const onMessageTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -54,7 +61,11 @@ export const ForumTopic: FC = () => {
 
     setIsModalLoading(true);
 
-    createMessage({ topicId, text: clearedInputText })
+    createMessage({
+      topicId,
+      text: clearedInputText,
+      parentId: messageParentIdRef.current,
+    })
       .then(() => {
         setMessageText('');
         setShowInputModal(false);
@@ -94,6 +105,7 @@ export const ForumTopic: FC = () => {
             messages={messageTrees}
             users={users}
             currentUserId={currentUser.id}
+            openInputModal={onModalOpen}
           />
         )}
       </div>

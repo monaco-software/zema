@@ -56,13 +56,14 @@ export const forumApi = (app: Express) => {
     auth,
     (req, res) => {
       (async () => {
-        const { topicId, text } = req.body;
+        const { topicId, text, parentId } = req.body;
         const userId = res.locals.user.id;
 
         const result = await ForumModel.createMessage({
           text,
           topicId,
           userId,
+          parentId,
         });
 
         res.status(200).json(result);

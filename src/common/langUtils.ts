@@ -53,6 +53,7 @@ const langPack = {
   forum_topic_input_markdown: 'Markdown',
   forum_topic_input_submit: 'Отправить',
   forum_topic_send_message_button: 'Написать сообщение',
+  forum_topic_reply_to_message_button: 'Ответить',
   account_form_submit_button: 'Сохранить',
   account_form_reset_button: 'Сбросить',
   account_form_display_name_label: 'Ник',
