@@ -1,5 +1,5 @@
-import { prisma } from '@server/server';
 import { Theme } from '@prisma/client';
+import { prisma } from '@server/server';
 
 export const ThemeModel = {
   async getThemes(): Promise<Theme[]> {

@@ -1,8 +1,8 @@
 import { Express } from 'express';
+import { ResLocals } from '../types';
 import { API_PATH } from '../router/paths';
 import { auth } from '../middlewares/auth';
 import { StringifyKeys } from '@common/types';
-import { ResLocals } from '../types';
 import { ForumModel } from '../models/ForumModel';
 import {
   CreateForumMessageParams,

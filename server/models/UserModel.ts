@@ -1,5 +1,5 @@
-import { prisma } from '@server/server';
 import { User } from '@prisma/client';
+import { prisma } from '@server/server';
 
 interface GetUserThemeParams {
   userId: number;

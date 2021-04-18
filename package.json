@@ -18,7 +18,7 @@
     "ssr:start": "export POSTGRES_HOST=postgres; if [ ! -f /shared/.initialized ]; then npm run db:init && touch /shared/.initialized; fi && node ssr/server/server.js",
     "ssr:build": "npx webpack -c webpack.ssr.js --node-env='production'",
     "typecheck": "npx tsc --noEmit",
-    "lint:ts": "npx eslint --ext .tsx,.ts src/",
+    "lint:ts": "npx eslint --ext .tsx,.ts src/ server/",
     "lint:style": "npx stylelint \"src/**/*.css\"",
     "lint": "npm-run-all lint:*",
     "prettier:write": "npx prettier --write \"src/.\" \"server/.\"",

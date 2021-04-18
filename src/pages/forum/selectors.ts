@@ -1,8 +1,8 @@
 import { RootState } from '@store/store';
-import { ForumTopic, ForumTopicMessage } from '@prisma/client';
 import { createSelector } from '@reduxjs/toolkit';
-import { DEFAULT_TOPIC_ID } from '@pages/forum/constants';
 import { ForumMessagesTree } from '@pages/forum/types';
+import { DEFAULT_TOPIC_ID } from '@pages/forum/constants';
+import { ForumTopic, ForumTopicMessage } from '@prisma/client';
 
 const getForumState = (state: RootState) => state.forum;
 
