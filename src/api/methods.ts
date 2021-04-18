@@ -1,5 +1,5 @@
 import { createApiMethod, HTTP_METHODS } from './core';
-import { API_PATH, getFullPath, getProxyPath } from '@api/paths';
+import { API_PATH, getFullPath, getProxyPath } from '@server/router/paths';
 import {
   CreateForumMessageParams,
   CreateForumMessageResponse,
@@ -137,7 +137,7 @@ export const apiUpdatePassword = createApiMethod<
 export const apiUpdateTheme = createApiMethod<
   UpdateThemeParams,
   UpdateThemeResponse
->(API_PATH.USER_THEME_UPDATE, {
+>(API_PATH.USER_THEME, {
   method: HTTP_METHODS.PUT,
   credentials: 'include',
   headers: {

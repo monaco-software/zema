@@ -1,4 +1,4 @@
-import { prisma } from '../server';
+import { prisma } from '@server/server';
 import { ParamsWithUserId } from './types';
 import { ForumTopic, ForumTopicMessage } from '@prisma/client';
 import {

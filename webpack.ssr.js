@@ -27,7 +27,7 @@ const serverConfig = {
   target: 'node',
   externals: [nodeExternals()],
   entry: {
-    server: './src/server.tsx',
+    server: './server/server.tsx',
   },
   output: {
     filename: 'server.js',
@@ -76,7 +76,7 @@ const clientConfig = {
   devtool: !isProductionMode && 'inline-source-map',
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
   entry: {
-    index: './src/client.tsx',
+    index: './server/client.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',

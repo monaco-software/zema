@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 import { HTTP_METHODS } from '@api/core';
-import { API_PATH, getFullPath } from '@api/paths';
-import { getCookies, handleApiError } from './helpers';
+import { API_PATH, getFullPath } from '../router/paths';
 import { NextFunction, Response, Request } from 'express';
+import { getCookies, handleApiError } from '@server/lib/cookies';
 
 export const auth = (
   req: Request<any, any, any, any, any>,

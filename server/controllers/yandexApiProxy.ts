@@ -3,8 +3,8 @@ import fetch from 'node-fetch';
 import FormData from 'form-data';
 import express, { Express } from 'express';
 import { AVATAR_FIELD_NAME } from '@common/constants';
-import { getCookies, handleApiError, setCookies } from './helpers';
-import { API_PATH, getFullPathFromProxy, getProxyPath } from '@api/paths';
+import { getCookies, handleApiError, setCookies } from '@server/lib/cookies';
+import { API_PATH, getFullPathFromProxy, getProxyPath } from '../router/paths';
 
 const jsonParser = express.json();
 const upload = multer();
