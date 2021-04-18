@@ -30,4 +30,26 @@ model User {
   role    Role  @default(USER)
   themeId Int   @default(1)
   ThemeId Theme @relation(references: [id], fields: [themeId])
+  topics   ForumTopic[]
+  messages ForumTopicMessage[]
+}
+
+model ForumTopic {
+  id        Int                 @id @default(autoincrement())
+  userId    Int
+  user      User                @relation(fields: [userId], references: [id])
+  title     String              @db.VarChar(140)
+  createdAt DateTime            @default(now())
+  messages  ForumTopicMessage[]
+}
+
+model ForumTopicMessage {
+  id        Int        @id @default(autoincrement())
+  parentId  Int?
+  topicId   Int
+  topic     ForumTopic @relation(fields: [topicId], references: [id])
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  text      String
+  createdAt DateTime   @default(now())
 }

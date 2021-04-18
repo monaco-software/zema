@@ -17,6 +17,7 @@ import { appActions } from '@store/reducer';
 import { isProduction } from '@common/utils';
 import { cspHeader } from './middlewares/csp';
 import { renderToString } from 'react-dom/server';
+import { forumApi } from './controllers/forumApi';
 import { API_PATH, getFullPath } from '@api/paths';
 import { PrismaClient, Theme } from '@prisma/client';
 import { createStore, RootState } from '@store/store';
@@ -30,7 +31,7 @@ import {
   setCookies,
 } from './middlewares/helpers';
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 const port = process.env.PORT || 5000; // yandex OAuth работает только на 5000
 
@@ -49,6 +50,8 @@ app.use(express.json());
 app.use(express.static(root.resolve('ssr/dist')));
 
 yandexApiProxy(app);
+
+forumApi(app);
 
 const jsFiles: string[] = [];
 const cssFiles: string[] = [];
