@@ -24,6 +24,7 @@
     "prettier:write": "npx prettier --write \"src/.\" \"server/.\"",
     "prettier:check": "npx prettier --check \"src/.\" \"server/.\"",
     "test": "npx jest",
+    "db:generate": "npx prisma generate",
     "db:init": "until npx prisma migrate dev && npx prisma db seed --preview-feature; do echo ...; sleep 1; done",
     "db:postinstall": "export POSTGRES_HOST=localhost; docker-compose up -d postgres && npm run db:init; docker-compose down"
   },
