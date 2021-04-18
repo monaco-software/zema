@@ -1,16 +1,17 @@
 import './forum-topic.css';
 import b_ from 'b_';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import { Box } from 'grommet';
 import { useSelector } from 'react-redux';
-import { forumActions } from '../reducer';
-import { random } from '../../game/lib/utils';
 import { DEFAULT_TOPIC_ID } from '../constants';
-import { getForumTopicById } from '../selectors';
-import { getCurrentUser } from '@store/selectors';
-import { useAction, useAuth } from '@common/hooks';
+import { Spinner } from '@components/Spinner/Spinner';
+import { useAsyncAction, useAuth } from '@common/hooks';
 import { RouteParams, ROUTES } from '@common/constants';
 import { useHistory, useParams } from 'react-router-dom';
+import { getCurrentUser, getUsers } from '@store/selectors';
 import { Container } from '@components/Container/Container';
+import { asyncForumActions } from '@pages/forum/asyncActions';
+import { getForumTopicById, getForumTopicMessages } from '../selectors';
 import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
 import { ForumTopicMessageModal } from '../Components/MessageModal/ForumTopicMessageModal';
 import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
@@ -22,16 +23,19 @@ export const ForumTopic: FC = () => {
 
   const history = useHistory();
   const { topicId: topicIdFromRoute } = useParams<RouteParams>();
+  const topicId = Number(topicIdFromRoute);
 
-  const addMessage = useAction(forumActions.addMessage);
+  const getMessages = useAsyncAction(asyncForumActions.getMessages);
+  const createMessage = useAsyncAction(asyncForumActions.createMessage);
 
   const currentUser = useSelector(getCurrentUser);
 
-  const { id: topicId, name: topicName, messages: topicMessages } = useSelector(
-    getForumTopicById(Number(topicIdFromRoute))
-  );
+  const { title: topicName } = useSelector(getForumTopicById(topicId));
+  const topicMessages = useSelector(getForumTopicMessages(topicId));
 
-  const [isLoading, setIsLoading] = useState(false);
+  const users = useSelector(getUsers);
+
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
   const [showInputModal, setShowInputModal] = useState(false);
   const onModalOpen = () => setShowInputModal(true);
@@ -43,32 +47,36 @@ export const ForumTopic: FC = () => {
   };
 
   const onMessageSend = () => {
-    // TODO: запрос в апи
     const clearedInputText = messageText.trim();
     if (!clearedInputText) {
       return;
     }
 
-    setIsLoading(true);
+    setIsModalLoading(true);
 
-    setTimeout(() => {
-      setMessageText('');
-      const message = {
-        id: random(10000),
-        text: messageText,
-        user: currentUser,
-        createTimestamp: Date.now(),
-      };
-      addMessage({ topicId: topicId, message });
-      setShowInputModal(false);
-      setIsLoading(false);
-    }, 1000);
+    createMessage({ topicId, text: clearedInputText })
+      .then(() => {
+        setMessageText('');
+        setShowInputModal(false);
+      })
+      .finally(() => {
+        setIsModalLoading(false);
+      });
   };
 
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   useEffect(() => {
     if (topicId === DEFAULT_TOPIC_ID) {
       history.replace(ROUTES.FORUM);
+      return;
     }
+
+    if (topicMessages.length) {
+      return;
+    }
+
+    setIsMessagesLoading(true);
+    getMessages({ topicId }).finally(() => setIsMessagesLoading(false));
   }, [topicId]);
 
   return (
@@ -76,16 +84,24 @@ export const ForumTopic: FC = () => {
       <ForumTopicHeader topicName={topicName} onMessageAddClick={onModalOpen} />
 
       <div className={block('messages-list-wrap')}>
-        <ForumTopicMessageList
-          messages={topicMessages}
-          currentUserId={currentUser.id}
-        />
+        {isMessagesLoading && (
+          <Box justify="center" direction="row" fill="horizontal">
+            <Spinner />
+          </Box>
+        )}
+        {!isMessagesLoading && (
+          <ForumTopicMessageList
+            messages={topicMessages}
+            users={users}
+            currentUserId={currentUser.id}
+          />
+        )}
       </div>
 
       {showInputModal && (
         <ForumTopicMessageModal
           value={messageText}
-          isLoading={isLoading}
+          isLoading={isModalLoading}
           onChange={onMessageTextChange}
           onSend={onMessageSend}
           onClose={onModalClose}

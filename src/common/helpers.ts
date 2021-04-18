@@ -22,3 +22,16 @@ export const getUserFullName = ({
 
   return `${first_name} ${second_name}`;
 };
+
+export const getDeletedUser = (userId: number): UserObject => {
+  return {
+    id: userId,
+    email: '',
+    login: `deleted_user${userId}`,
+    phone: null,
+    avatar: null,
+    display_name: '[DELETED USER]',
+    first_name: 'DELETED',
+    second_name: 'USER',
+  };
+};

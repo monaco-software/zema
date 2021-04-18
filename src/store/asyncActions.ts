@@ -17,7 +17,7 @@ export const asyncAppActions = {
       const user = await dispatch(apiGetUser(undefined, false));
       const userWithFullAvatarUrl = getUserWithFullAvatarUrl(user);
 
-      dispatch(appActions.setUser(userWithFullAvatarUrl));
+      dispatch(appActions.setCurrentUser(userWithFullAvatarUrl));
       dispatch(appActions.setIsSignedIn(true));
     } catch (error) {
       throw error;
@@ -50,7 +50,7 @@ export const asyncAppActions = {
     try {
       await dispatch(apiPerformSignOut());
 
-      dispatch(appActions.resetUser());
+      dispatch(appActions.resetUsers());
       dispatch(appActions.setIsSignedIn(false));
     } catch (error) {
       throw error;

@@ -26,7 +26,8 @@ interface Themes {
 }
 
 export interface AppState {
-  user: UserObject;
+  currentUserId: number;
+  users: Record<number, UserObject>;
   isSignedIn: boolean;
   notification: Notification | null;
   isSSR: boolean;

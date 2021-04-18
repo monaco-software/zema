@@ -1,6 +1,12 @@
 import { createApiMethod, HTTP_METHODS } from './core';
 import { API_PATH, getFullPath, getProxyPath } from '@api/paths';
 import {
+  CreateForumMessageParams,
+  CreateForumMessageResponse,
+  CreateForumTopicParams,
+  CreateForumTopicResponse,
+  GetForumMessagesResponse,
+  GetForumTopicResponse,
   GetLeaderboardParams,
   GetLeaderboardResponse,
   OAuthYandexGetServiceIdResponse,
@@ -133,6 +139,45 @@ export const apiUpdateTheme = createApiMethod<
   UpdateThemeResponse
 >(API_PATH.USER_THEME_UPDATE, {
   method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetForumTopics = createApiMethod<
+  undefined,
+  GetForumTopicResponse
+>(API_PATH.FORUM_TOPICS, {
+  method: HTTP_METHODS.GET,
+  credentials: 'include',
+});
+
+export const apiCreateForumTopic = createApiMethod<
+  CreateForumTopicParams,
+  CreateForumTopicResponse
+>(API_PATH.FORUM_TOPICS, {
+  method: HTTP_METHODS.POST,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetForumTopicMessages = (topicId: number) =>
+  createApiMethod<undefined, GetForumMessagesResponse>(
+    `${API_PATH.FORUM_MESSAGES}?topicId=${topicId}`,
+    {
+      method: HTTP_METHODS.GET,
+      credentials: 'include',
+    }
+  );
+
+export const apiCreateForumMessage = createApiMethod<
+  CreateForumMessageParams,
+  CreateForumMessageResponse
+>(API_PATH.FORUM_MESSAGES, {
+  method: HTTP_METHODS.POST,
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',

@@ -264,7 +264,7 @@ app.get('*', (req, res) => {
         if (response.ok) {
           const userData = await response.json();
           const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
-          store.dispatch(appActions.setUser(userDataWithFullAvatar));
+          store.dispatch(appActions.setCurrentUser(userDataWithFullAvatar));
           store.dispatch(appActions.setIsSignedIn(true));
           const currentTheme = await getUserTheme(userData.id);
           store.dispatch(appActions.setCurrentTheme(currentTheme));
