@@ -118,7 +118,7 @@ cd zooma
 ```
 **обязательно**
 ```
-cp env.sample .env
+cp .env.sample .env
 ```
 установите пакеты
 ```shell script
