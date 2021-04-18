@@ -11,7 +11,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getCurrentUser, getUsers } from '@store/selectors';
 import { Container } from '@components/Container/Container';
 import { asyncForumActions } from '@pages/forum/asyncActions';
-import { getForumTopicById, getForumTopicMessages } from '../selectors';
+import { getForumTopicById, getForumTopicMessageTrees } from '../selectors';
 import { ForumTopicHeader } from '../Components/TopicHeader/ForumTopicHeader';
 import { ForumTopicMessageModal } from '../Components/MessageModal/ForumTopicMessageModal';
 import { ForumTopicMessageList } from '../Components/TopicMessageList/ForumTopicMessageList';
@@ -31,7 +31,7 @@ export const ForumTopic: FC = () => {
   const currentUser = useSelector(getCurrentUser);
 
   const { title: topicName } = useSelector(getForumTopicById(topicId));
-  const topicMessages = useSelector(getForumTopicMessages(topicId));
+  const messageTrees = useSelector(getForumTopicMessageTrees(topicId));
 
   const users = useSelector(getUsers);
 
@@ -71,7 +71,7 @@ export const ForumTopic: FC = () => {
       return;
     }
 
-    if (topicMessages.length) {
+    if (messageTrees.length) {
       return;
     }
 
@@ -91,7 +91,7 @@ export const ForumTopic: FC = () => {
         )}
         {!isMessagesLoading && (
           <ForumTopicMessageList
-            messages={topicMessages}
+            messages={messageTrees}
             users={users}
             currentUserId={currentUser.id}
           />
