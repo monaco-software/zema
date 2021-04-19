@@ -151,7 +151,7 @@ const clientConfig = {
           clientsClaim: true,
           skipWaiting: true,
           maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-          navigateFallback: '/index.html',
+          navigateFallback: '/',
         })
       : new NodemonPlugin({
           script: './ssr/server/server.js',
