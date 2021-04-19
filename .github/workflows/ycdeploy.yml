@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - master
+      - sdemidov/cloud-deploy
+
+name: Yandex Cloud deploy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Copy repository contents via scp
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.ZOOMA_YC_SSH_HOST }}
+          PORT: ${{ secrets.ZOOMA_YC_SSH_PORT }}
+          USERNAME: ${{ secrets.ZOOMA_YC_SSH_USERNAME }}
+          KEY: ${{ secrets.ZOOMA_YC_SSH_KEY }}
+        with:
+          source: '.'
+          target: '/home/ci/zooma'
+
+      - name: Executing remote command
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.ZOOMA_YC_SSH_HOST }}
+          PORT: ${{ secrets.ZOOMA_YC_SSH_PORT }}
+          USERNAME: ${{ secrets.ZOOMA_YC_SSH_USERNAME }}
+          KEY: ${{ secrets.ZOOMA_YC_SSH_KEY }}
+          envs: POSTGRES_HOST,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,POSTGRES_URL
+          script: |
+            cp .env.production zooma/.env
+            cd zooma
+            docker-compose up -d --build
