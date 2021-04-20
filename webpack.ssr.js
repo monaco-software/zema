@@ -27,7 +27,7 @@ const serverConfig = {
   target: 'node',
   externals: [nodeExternals()],
   entry: {
-    server: './server/server.tsx',
+    server: './server/server.ts',
   },
   output: {
     filename: 'server.js',

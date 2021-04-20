@@ -8,7 +8,7 @@ import { cspHeader } from './middlewares/csp';
 import { PrismaClient } from '@prisma/client';
 import { forumApi } from './controllers/forumApi';
 import { ssrHandler } from '@server/ssr/ssrHandler';
-import { userApi } from '@server/controllers/userApi';
+import { themeApi } from '@server/controllers/themeApi';
 import { yandexApiProxy } from './controllers/yandexApiProxy';
 
 export const prisma = new PrismaClient();
@@ -29,7 +29,7 @@ yandexApiProxy(app);
 
 forumApi(app);
 
-userApi(app);
+themeApi(app);
 
 ssrHandler(app);
 
