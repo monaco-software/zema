@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const stats = {
   all: false,
@@ -151,7 +152,7 @@ const clientConfig = {
           clientsClaim: true,
           skipWaiting: true,
           maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-          navigateFallback: '/',
+          navigateFallback: '/pwa.html',
         })
       : new NodemonPlugin({
           script: './ssr/server/server.js',
@@ -169,6 +170,12 @@ const clientConfig = {
           data.assetsByChunkName.index.concat(data.assetsByChunkName.vendors)
         );
       },
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'pwa.html',
+      inject: 'head',
+      scriptLoading: 'defer',
     }),
   ].filter(Boolean),
 };
