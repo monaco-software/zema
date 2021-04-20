@@ -34,4 +34,5 @@ jobs:
           script: |
             cp .env.production zooma/.env
             cd zooma
+            docker-compose down
             docker-compose up -d --build
