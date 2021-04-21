@@ -148,13 +148,7 @@ const clientConfig = {
         );
       },
     }),
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'pwa.html',
-      inject: 'head',
-      scriptLoading: 'defer',
-    }),
-  ].filter(Boolean),
+  ],
 };
 
 if (!isProductionMode) {
