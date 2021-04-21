@@ -137,8 +137,8 @@ const clientConfig = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/pages/game/assets/fonts/Bangers.ttf' },
-        { from: './src/pwa/favicon.ico' }
-      ]
+        { from: './src/pwa/favicon.ico' },
+      ],
     }),
     new StatsWriterPlugin({
       filename: 'stats.json',
@@ -152,15 +152,15 @@ const clientConfig = {
       template: './src/index.html',
       filename: 'pwa.html',
       inject: 'head',
-      scriptLoading: 'defer'
-    })
+      scriptLoading: 'defer',
+    }),
   ].filter(Boolean),
 };
 
 if (!isProductionMode) {
   clientConfig.plugins.push(
     new CopyWebpackPlugin({
-      patterns: [{ from: './scripts/reload.js' }]
+      patterns: [{ from: './scripts/reload.js' }],
     })
   );
   clientConfig.plugins.push(
@@ -168,10 +168,10 @@ if (!isProductionMode) {
       script: './ssr/server/server.js',
       watch: [
         path.resolve('./ssr/server/server.js'),
-        path.resolve('./ssr/dist/stats.json')
+        path.resolve('./ssr/dist/stats.json'),
       ],
       delay: '1000',
-      verbose: false
+      verbose: false,
     })
   );
 }
