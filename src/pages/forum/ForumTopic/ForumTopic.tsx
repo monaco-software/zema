@@ -95,12 +95,11 @@ export const ForumTopic: FC = () => {
       <ForumTopicHeader topicName={topicName} onMessageAddClick={onModalOpen} />
 
       <div className={block('messages-list-wrap')}>
-        {isMessagesLoading && (
+        {isMessagesLoading ? (
           <Box justify="center" direction="row" fill="horizontal">
             <Spinner />
           </Box>
-        )}
-        {!isMessagesLoading && (
+        ) : (
           <ForumTopicMessageList
             messages={messageTrees}
             users={users}

@@ -31,26 +31,21 @@ const getTrees = (
   messages: ForumTopicMessage[],
   allMessages: ForumTopicMessage[]
 ): ForumMessagesTree[] => {
-  const messageTrees: ForumMessagesTree[] = [];
-
-  messages.forEach((message) => {
+  return messages.map((message) => {
     const children = allMessages.filter((item) => item.parentId === message.id);
-    const tree: ForumMessagesTree = {
+    return {
       ...message,
       children: children.length ? getTrees(children, allMessages) : undefined,
     };
-
-    messageTrees.push(tree);
   });
-
-  return messageTrees;
 };
 
 export const getForumTopicMessageTrees = (topicId: number) =>
   createSelector(
     getForumTopicMessages(topicId),
     (messages): ForumMessagesTree[] => {
-      const messageTrees = getTrees(messages, messages);
-      return messageTrees.filter((item) => item.parentId === null);
+      return getTrees(messages, messages).filter(
+        (item) => item.parentId === null
+      );
     }
   );

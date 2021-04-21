@@ -85,7 +85,7 @@ interface Props {
 
 const Html: FC<Props> = ({ children, serverState }) => {
   return (
-    <html>
+    <html lang="ru">
       <head>
         <meta charSet="UTF-8" />
         <meta
@@ -93,7 +93,7 @@ const Html: FC<Props> = ({ children, serverState }) => {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        <title>Zooma</title>
+        <title>Zooma Deluxe</title>
 
         {cssFiles.map((css, index) => (
           <link rel="stylesheet" href={css} key={index} />
