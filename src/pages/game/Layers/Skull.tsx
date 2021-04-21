@@ -2,14 +2,14 @@
 
 import levels from '../levels';
 import Skull from '../lib/skull';
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrentLevel } from '../selectors';
 import { FRAME, SKULL_RADIUS } from '../constants';
 
 export const SkullLayer: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const skull = useRef(new Skull());
+  const skull = useMemo(() => new Skull(), []);
   const requestRef = useRef<number>();
 
   const level = useSelector(getCurrentLevel);
@@ -24,7 +24,7 @@ export const SkullLayer: FC = () => {
 
     ctx.clearRect(0, 0, FRAME.WIDTH, FRAME.HEIGHT);
     ctx.drawImage(
-      skull.current.image,
+      skull.image,
       levels[level].skullPosition.x - SKULL_RADIUS,
       levels[level].skullPosition.y - SKULL_RADIUS
     );
@@ -38,7 +38,7 @@ export const SkullLayer: FC = () => {
     }
     canvas.width = FRAME.WIDTH;
     canvas.height = FRAME.HEIGHT;
-    skull.current.image.onload = () => {
+    skull.image.onload = () => {
       requestRef.current = window.requestAnimationFrame(draw);
     };
 
