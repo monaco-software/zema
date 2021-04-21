@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const stats = {
   all: false,
@@ -139,29 +140,6 @@ const clientConfig = {
         { from: './src/pwa/favicon.ico' },
       ],
     }),
-    isProductionMode
-      ? new CopyWebpackPlugin({
-          patterns: [{ from: './src/pwa/' }],
-        })
-      : new CopyWebpackPlugin({
-          patterns: [{ from: './scripts/reload.js' }],
-        }),
-    isProductionMode
-      ? new WorkboxPlugin.GenerateSW({
-          clientsClaim: true,
-          skipWaiting: true,
-          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-          navigateFallback: '/index.html',
-        })
-      : new NodemonPlugin({
-          script: './ssr/server/server.js',
-          watch: [
-            path.resolve('./ssr/server/server.js'),
-            path.resolve('./ssr/dist/stats.json'),
-          ],
-          delay: '1000',
-          verbose: false,
-        }),
     new StatsWriterPlugin({
       filename: 'stats.json',
       transform(data) {
@@ -170,7 +148,26 @@ const clientConfig = {
         );
       },
     }),
-  ].filter(Boolean),
+  ],
 };
+
+if (!isProductionMode) {
+  clientConfig.plugins.push(
+    new CopyWebpackPlugin({
+      patterns: [{ from: './scripts/reload.js' }],
+    })
+  );
+  clientConfig.plugins.push(
+    new NodemonPlugin({
+      script: './ssr/server/server.js',
+      watch: [
+        path.resolve('./ssr/server/server.js'),
+        path.resolve('./ssr/dist/stats.json'),
+      ],
+      delay: '1000',
+      verbose: false,
+    })
+  );
+}
 
 module.exports = [serverConfig, clientConfig];
