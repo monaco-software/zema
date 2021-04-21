@@ -16,7 +16,7 @@ async function main() {
             'brand-light-1': '#cfb6ee',
             'brand-light-2': '#e0d6f4',
             'brand-light-3': '#f3eeff',
-            'light-1': '#cbcbcb',
+            'light-1': '#f8f8f8',
             'light-2': '#F2F2F2',
             gold: '#f9de7c',
             silver: '#e0e3e6',

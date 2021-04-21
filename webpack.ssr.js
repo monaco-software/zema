@@ -76,7 +76,7 @@ const clientConfig = {
   devtool: !isProductionMode && 'inline-source-map',
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
   entry: {
-    index: './server/client.tsx',
+    index: './src/index.ssr.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',
