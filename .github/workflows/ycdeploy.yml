@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - sdemidov/cloud-deploy
+      - sdemidov/cloud-deploy-fix
 
 name: Yandex Cloud deploy
 
@@ -30,9 +30,9 @@ jobs:
           PORT: ${{ secrets.ZOOMA_YC_SSH_PORT }}
           USERNAME: ${{ secrets.ZOOMA_YC_SSH_USERNAME }}
           KEY: ${{ secrets.ZOOMA_YC_SSH_KEY }}
-          envs: POSTGRES_HOST,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,POSTGRES_URL
           script: |
             cp .env.production zooma/.env
             cd zooma
             docker-compose down
             docker-compose up -d --build
+            docker system prune --force

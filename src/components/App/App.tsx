@@ -68,7 +68,7 @@ export const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if (!isSSR && 'serviceWorker' in navigator) {
       window.addEventListener('load', onLoad);
     }
     return () => {
