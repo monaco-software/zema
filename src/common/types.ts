@@ -4,6 +4,10 @@ import { NotificationStatus } from '@components/Notification/Notification';
 
 export type Voidable<T> = undefined extends T ? void : T;
 
+export type StringifyKeys<T> = {
+  [P in keyof T]: string;
+};
+
 interface Notification {
   status: NotificationStatus;
   message: string;
@@ -22,7 +26,8 @@ interface Themes {
 }
 
 export interface AppState {
-  user: UserObject;
+  currentUserId: number;
+  users: Record<number, UserObject>;
   isSignedIn: boolean;
   notification: Notification | null;
   isSSR: boolean;

@@ -1,14 +1,14 @@
 import './forum.css';
 import b_ from 'b_';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { forumActions } from '../reducer';
-import { FormExtendedEvent } from 'grommet';
 import { getForumTopics } from '../selectors';
-import { random } from '../../game/lib/utils';
+import { Box, FormExtendedEvent } from 'grommet';
 import { CreateTopicFormFields } from '../types';
-import { useAction, useAuth } from '@common/hooks';
+import { Spinner } from '@components/Spinner/Spinner';
+import { useAsyncAction, useAuth } from '@common/hooks';
 import { Container } from '@components/Container/Container';
+import { asyncForumActions } from '@pages/forum/asyncActions';
 import { ForumHead } from '../Components/ForumHeader/ForumHead';
 import { ForumTopicsList } from '../Components/TopicsList/ForumTopicsList';
 import { ForumCreateTopicModal } from '../Components/CreateTopicModal/ForumCreateTopicModal';
@@ -24,7 +24,20 @@ export const Forum: FC = () => {
 
   const topics = useSelector(getForumTopics);
 
-  const addTopic = useAction(forumActions.addTopic);
+  const getTopics = useAsyncAction(asyncForumActions.getTopics);
+  const createForumTopic = useAsyncAction(asyncForumActions.createTopic);
+
+  const [isTopicsLoading, setIsTopicsLoading] = useState(false);
+
+  useEffect(() => {
+    if (topics.length !== 0) {
+      return;
+    }
+
+    setIsTopicsLoading(true);
+
+    getTopics().finally(() => setIsTopicsLoading(false));
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onTopicCreateClick = () => setIsModalOpen(true);
@@ -40,21 +53,16 @@ export const Forum: FC = () => {
   const onCreateTopicFormSubmit = ({
     value,
   }: FormExtendedEvent<CreateTopicFormFields>) => {
-    // TODO: запрос в апи
-    console.log(value);
     setIsFormLoading(true);
 
-    setTimeout(() => {
-      addTopic({
-        id: random(10000),
-        name: value.topicName,
-        createTimestamp: Date.now(),
-        messages: [],
+    createForumTopic({ title: value.topicName })
+      .then(() => {
+        setIsModalOpen(false);
+        setFormFields(createTopicFormInitValue);
+      })
+      .finally(() => {
+        setIsFormLoading(false);
       });
-      setIsFormLoading(false);
-      setIsModalOpen(false);
-      setFormFields(createTopicFormInitValue);
-    }, 1000);
   };
 
   return (
@@ -62,7 +70,12 @@ export const Forum: FC = () => {
       <ForumHead onTopicCreateClick={onTopicCreateClick} />
 
       <div className={block('topics-wrap')}>
-        <ForumTopicsList topics={topics} />
+        {isTopicsLoading && (
+          <Box justify="center" direction="row" fill="horizontal">
+            <Spinner />
+          </Box>
+        )}
+        {!isTopicsLoading && <ForumTopicsList topics={topics} />}
       </div>
 
       {isModalOpen && (

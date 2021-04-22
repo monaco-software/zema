@@ -12,7 +12,15 @@ async function main() {
       data: {
         global: {
           colors: {
+            'text-primary': '#444444',
+            'brand-light-1': '#cfb6ee',
             'brand-light-2': '#e0d6f4',
+            'brand-light-3': '#f3eeff',
+            'light-1': '#f8f8f8',
+            'light-2': '#F2F2F2',
+            gold: '#f9de7c',
+            silver: '#e0e3e6',
+            bronze: '#e8c19b',
           },
         },
       },
@@ -29,7 +37,15 @@ async function main() {
       data: {
         global: {
           colors: {
-            'brand-light-2': '#8f68db',
+            'text-primary': '#f8f8f8',
+            'brand-light-1': '#8151c8',
+            'brand-light-2': '#6b49b0',
+            'brand-light-3': '#462f69',
+            'light-1': '#cbcbcb',
+            'light-2': '#878787',
+            gold: '#e6c241',
+            silver: '#c1c1c1',
+            bronze: '#deb083',
           },
         },
       },

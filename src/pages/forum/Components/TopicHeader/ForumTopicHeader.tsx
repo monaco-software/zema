@@ -9,13 +9,15 @@ const block = b_.lock('forum-topic-header');
 
 interface Props {
   topicName: string;
-  onMessageAddClick: VoidFunction;
+  onMessageAddClick: (parentId?: number) => void;
 }
 
 export const ForumTopicHeader: FC<Props> = ({
   topicName,
   onMessageAddClick,
 }) => {
+  const openModal = () => onMessageAddClick();
+
   return (
     <Box className={block()} direction="row" justify="between" align="start">
       <Heading className={block('name')} level={4} margin="none" fill>
@@ -29,7 +31,7 @@ export const ForumTopicHeader: FC<Props> = ({
         size="small"
         margin={{ left: 'medium' }}
         label={getText('forum_topic_send_message_button')}
-        onClick={onMessageAddClick}
+        onClick={openModal}
       />
     </Box>
   );
