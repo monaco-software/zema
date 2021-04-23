@@ -1,4 +1,5 @@
 import multer from 'multer';
+import request from 'request';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
 import express, { Express } from 'express';
@@ -118,6 +119,10 @@ const userProxy = (app: Express) => {
         .catch((error) => handleApiError(error, res));
     }
   );
+
+  app.get(`${getProxyPath(API_PATH.USER_AVATAR_SRC)}/*`, (req, res) => {
+    req.pipe(request(getFullPathFromProxy(req.url))).pipe(res);
+  });
 };
 
 const leaderboardProxy = (app: Express) => {
