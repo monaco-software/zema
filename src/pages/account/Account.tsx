@@ -190,7 +190,7 @@ export const Account: FC = () => {
   return (
     <div className={block()}>
       <LoadingOverlay isLoading={isLoading}>
-        <Main justify="center" align="center" pad={{ top: 'large' }}>
+        <Main justify="center" align="center" pad="small">
           <AvatarForm
             onChange={onAvatarChange}
             avatarUrl={currentUser.avatar || ''}
