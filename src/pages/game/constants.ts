@@ -46,8 +46,10 @@ export enum GAME_RESULT {
   FAIL,
 }
 
-export enum BUTTONS {
-  FULLSCREEN,
+export enum CONSOLE_MODE {
+  HIDDEN,
+  STAT,
+  HELP,
 }
 
 export const LOCALSTORAGE_VOLUME = '__monaco-software-zooma_volume_key_v1__';

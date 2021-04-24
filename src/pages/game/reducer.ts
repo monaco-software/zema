@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   BALL_COLORS,
   BULLET_STATE,
+  CONSOLE_MODE,
   GAME_PHASE,
   GAME_RESULT,
   MAX_VOLUME,
@@ -49,6 +50,7 @@ const initialGame: Game = {
     icon: ICONS.DECREASE_VOLUME,
     hovered: false,
   },
+  consoleMode: CONSOLE_MODE.HELP,
 };
 
 const game = createSlice({
@@ -152,6 +154,9 @@ const game = createSlice({
     },
     resetScore(state) {
       state.score = 0;
+    },
+    setConsoleMode(state, { payload }: PayloadAction<Game['consoleMode']>) {
+      state.consoleMode = payload;
     },
   },
 });

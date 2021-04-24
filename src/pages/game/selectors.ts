@@ -36,3 +36,5 @@ export const getIncreaseVolumeButton = (state: RootState) =>
 export const getDecreaseVolumeButton = (state: RootState) =>
   getAppState(state).decreaseVolumeButton;
 export const getVolume = (state: RootState) => getAppState(state).volume;
+export const getConsoleMode = (state: RootState) =>
+  getAppState(state).consoleMode;
