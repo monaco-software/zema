@@ -62,8 +62,9 @@ export const UserInterface: FC = () => {
   const [angle, setAngle] = useState(0);
 
   const performanceRef = useRef(performance.now());
-  const mouseTimeoutRef = useRef<number>();
+  const mouseTimeoutRef = useRef(0);
   const angleRef = useRef(0);
+  const keyboardTimeoutRef = useRef(0);
 
   const ballsPath = useMemo(
     () => getPath(levels[level].start, levels[level].curve),
@@ -164,6 +165,12 @@ export const UserInterface: FC = () => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (keyboardTimeoutRef.current) {
+      return;
+    }
+    keyboardTimeoutRef.current = window.setTimeout(() => {
+      keyboardTimeoutRef.current = 0;
+    }, 500);
     const keyName = event.key;
     switch (keyName) {
       case keyName.match(/^[Hh]$/)?.input:
