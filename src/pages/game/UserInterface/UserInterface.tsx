@@ -234,6 +234,8 @@ export const UserInterface: FC = () => {
     window.addEventListener('resize', onResize);
     boxRef.current?.focus();
     return () => {
+      clearTimeout(mouseTimeoutRef.current);
+      clearTimeout(keyboardTimeoutRef.current);
       document.removeEventListener('fullscreenchange', onFullScreenChange);
       window.removeEventListener('resize', onResize);
     };
