@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Game } from '@pages/game/Game';
 import { Grommet, Main } from 'grommet';
 import { Root } from '@pages/root/Root';
+import { isServer } from '@common/utils';
 import { Navbar } from '../Navbar/Navbar';
 import { useSelector } from 'react-redux';
 import { deepMerge } from 'grommet/utils';
@@ -22,7 +23,12 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { Leaderboard } from '@pages/leaderboard/Leaderboard';
 import { ForumTopic } from '@pages/forum/ForumTopic/ForumTopic';
 import { AppNotification } from '../Notification/AppNotification';
-import { getCurrentTheme, getIsSSR, getThemes } from '@store/selectors';
+import {
+  getCurrentTheme,
+  getCurrentUserId,
+  getIsSSR,
+  getThemes,
+} from '@store/selectors';
 
 const block = b_.lock('app');
 
@@ -45,8 +51,11 @@ export const App: FC = () => {
   const isSSR = useSelector(getIsSSR);
   const currentTheme = useSelector(getCurrentTheme);
   const themes = useSelector(getThemes);
+  const currentUserId = useSelector(getCurrentUserId);
 
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
+  const fetchThemes = useAsyncAction(asyncAppActions.fetchThemes);
+  const fetchUserTheme = useAsyncAction(asyncAppActions.fetchUserTheme);
 
   const [isLoading, setIsLoading] = useState(!isSSR);
 
@@ -63,11 +72,30 @@ export const App: FC = () => {
     if (isSSR) {
       return;
     }
-
-    fetchUser().finally(() => setIsLoading(false));
+    fetchThemes()
+      .then(() => {
+        fetchUser().finally(() => setIsLoading(false));
+      })
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
+    if (isSSR) {
+      return;
+    }
+    fetchUserTheme({ userId: currentUserId }).catch(console.error);
+  }, [currentUserId]);
+
+  useEffect(() => {
+    if (isSSR) {
+      return;
+    }
+  }, [currentTheme]);
+
+  useEffect(() => {
+    if (isServer) {
+      return;
+    }
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', onLoad);
     }
@@ -79,8 +107,8 @@ export const App: FC = () => {
   return (
     <Grommet
       className={block()}
-      theme={deepMerge(grommetTheme, themes[currentTheme].data)}
-      themeMode={themes[currentTheme].dark ? 'dark' : 'light'}
+      theme={deepMerge(grommetTheme, themes[currentTheme]?.data || {})}
+      themeMode={themes[currentTheme]?.dark ? 'dark' : 'light'}
       cssVars
     >
       {isLoading && (

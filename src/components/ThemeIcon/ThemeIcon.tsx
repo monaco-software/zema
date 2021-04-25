@@ -11,7 +11,7 @@ export const ThemeIcon = (
 
   return (
     <Blank {...props}>
-      <path fillRule="nonzero" d={themes[currentTheme].icon} />
+      <path fillRule="nonzero" d={themes[currentTheme]?.icon} />
     </Blank>
   );
 };

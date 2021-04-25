@@ -78,7 +78,7 @@ const clientConfig = {
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
   entry: {
     index: './src/index.ssr.tsx',
-    pwa: './src/index.pwa.tsx',
+    pwa: './src/index.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -141,6 +141,18 @@ const clientConfig = {
         { from: './src/pwa/favicon.ico' },
       ],
     }),
+    new StatsWriterPlugin({
+      filename: 'stats.json',
+      transform(data) {
+        const chunks = data.assetsByChunkName.index.concat(
+          data.assetsByChunkName.vendors
+        );
+        if (isProductionMode) {
+          chunks.push('manifest.json');
+        }
+        return JSON.stringify(chunks);
+      },
+    })
   ],
 };
 
@@ -165,7 +177,7 @@ if (isProductionMode) {
       skipWaiting: true,
       maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       navigateFallback: '/pwa.html',
-      exclude: /.*/
+      exclude: [/index*/]
     })
   );
 } else {
@@ -195,10 +207,8 @@ clientConfig.plugins.push(
         data.assetsByChunkName.vendors
       );
       if (isProductionMode) {
-        chunks.concat(data.assetsByChunkName.vendors);
         chunks.push('manifest.json');
       }
-
       return JSON.stringify(chunks);
     },
   })

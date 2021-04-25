@@ -2,7 +2,7 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Pwa } from '@components/Pwa/Pwa';
+import { App } from '@components/App/App';
 import { createStore } from '@store/store';
 import { BrowserRouter } from 'react-router-dom';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
@@ -13,7 +13,7 @@ ReactDOM.render(
   <AppErrorBoundary>
     <Provider store={store}>
       <BrowserRouter>
-        <Pwa />
+        <App />
       </BrowserRouter>
     </Provider>
   </AppErrorBoundary>,

@@ -25,7 +25,6 @@ export const UserModel = {
         },
       });
     }
-
     return user.themeId;
   },
 
