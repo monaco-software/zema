@@ -3,6 +3,7 @@ on:
     branches:
       - master
       - sdemidov/cloud-deploy
+      - sdemidov/pwa
 
 name: Yandex Cloud deploy
 
@@ -22,6 +23,7 @@ jobs:
         with:
           source: '.'
           target: '/home/ci/zooma'
+          rm: true
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master
@@ -36,3 +38,4 @@ jobs:
             cd zooma
             docker-compose down
             docker-compose up -d --build
+            docker system prune --force

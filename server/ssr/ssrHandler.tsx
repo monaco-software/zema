@@ -48,7 +48,7 @@ const updateChunks = () => {
     if (type === 'css') {
       cssFiles.push(url);
     }
-    if (type === 'manifest') {
+    if (chunk === 'manifest.json') {
       manifestFiles.push(url);
     }
   });
