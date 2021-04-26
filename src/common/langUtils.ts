@@ -89,9 +89,9 @@ const langPack = {
   game_level_title_8: 'In the ancient\ntriangle pyramid',
   game_level_title_9: 'Enigma of\nNazca Lines',
 
-  root_become: 'СТАНЬ',
-  root_a_winner: 'ПОБЕДИТЕЛЕМ',
-  root_slogan: 'когда мы проверяем себя на прочность мы меняем свою жизнь',
+  root_become: 'Стань',
+  root_a_winner: 'Победителем',
+  root_slogan: 'Когда мы проверяем себя на прочность мы меняем свою жизнь',
   root_start: 'Начать'
 };
 

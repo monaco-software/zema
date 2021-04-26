@@ -29,12 +29,8 @@ export const Root: FC = () => {
       <Box
         justify="center"
         align="center"
+        className={block('box')}
         style={{
-          alignContent: 'center',
-          position: 'absolute',
-          width: '100vw',
-          height: '100vh',
-          backgroundColor: '#eee0',
           zIndex: 1,
         }}
       >
@@ -43,13 +39,14 @@ export const Root: FC = () => {
           align="center"
           style={{
             alignContent: 'center',
-            backgroundColor: '#eee0',
+            backgroundColor: '#0000',
           }}
         >
           <Heading
             size="medium"
             margin="small"
-            style={{ fontWeight: 'lighter' }}
+            className={block('text_edging')}
+            style={{ textTransform: 'uppercase', fontWeight: 'lighter' }}
           >
             {getText('root_become')}
           </Heading>
@@ -57,7 +54,11 @@ export const Root: FC = () => {
             className={block('hr')}
             background={{ dark: '#fff', light: '#000' }}
           />
-          <Heading size="large" margin={{ vertical: 'small' }}>
+          <Heading
+            size="large"
+            margin={{ vertical: 'small' }}
+            style={{ textTransform: 'uppercase' }}
+          >
             {getText('root_a_winner')}
           </Heading>
           <Box
@@ -66,9 +67,9 @@ export const Root: FC = () => {
           />
           <Text
             margin="small"
+            className={block('text_edging')}
             style={{
-              fontWeight: 'lighter',
-              maxWidth: '100%',
+              textTransform: 'lowercase',
               fontSize: size === 'small' ? '13px' : '21px',
             }}
           >
@@ -87,11 +88,8 @@ export const Root: FC = () => {
         justify="center"
         align="center"
         pad="medium"
+        className={block('box')}
         style={{
-          alignContent: 'center',
-          position: 'absolute',
-          width: '100vw',
-          height: '100vh',
           zIndex: 0,
         }}
       >
