@@ -41,7 +41,6 @@ if (cluster.isMaster) {
   postgres = spawnPostgres();
   postgres.stderr.on('data', (data) => {
     process.stdout.write(`⚡ ${data}`);
-    // console.log(`⚡ ${data.toString()}`);
   });
 
   const wsConnections = [];
