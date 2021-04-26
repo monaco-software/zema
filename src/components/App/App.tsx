@@ -87,12 +87,6 @@ export const App: FC = () => {
   }, [currentUserId]);
 
   useEffect(() => {
-    if (isSSR) {
-      return;
-    }
-  }, [currentTheme]);
-
-  useEffect(() => {
     if (isServer) {
       return;
     }

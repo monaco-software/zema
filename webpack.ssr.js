@@ -152,7 +152,7 @@ const clientConfig = {
         }
         return JSON.stringify(chunks);
       },
-    })
+    }),
   ],
 };
 
@@ -173,11 +173,21 @@ if (isProductionMode) {
   );
   clientConfig.plugins.push(
     new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
+      clientsClaim: false,
+      skipWaiting: false,
       maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       navigateFallback: '/pwa.html',
-      exclude: [/index*/]
+      exclude: [/index*/],
+      runtimeCaching: [
+        {
+          urlPattern: /\.webp|\.mp3$/,
+          handler: 'CacheFirst',
+        },
+        {
+          urlPattern: /.*/,
+          handler: 'NetworkFirst',
+        },
+      ],
     })
   );
 } else {
@@ -198,20 +208,5 @@ if (isProductionMode) {
     })
   );
 }
-
-clientConfig.plugins.push(
-  new StatsWriterPlugin({
-    filename: 'stats.json',
-    transform(data) {
-      const chunks = data.assetsByChunkName.index.concat(
-        data.assetsByChunkName.vendors
-      );
-      if (isProductionMode) {
-        chunks.push('manifest.json');
-      }
-      return JSON.stringify(chunks);
-    },
-  })
-);
 
 module.exports = [serverConfig, clientConfig];

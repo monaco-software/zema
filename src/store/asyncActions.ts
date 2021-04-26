@@ -81,9 +81,7 @@ export const asyncAppActions = {
   ) => {
     try {
       dispatch(appActions.setCurrentTheme(params.themeId));
-      dispatch(apiUpdateUserTheme(params)).catch((error) => {
-        console.error(error);
-      });
+      await dispatch(apiUpdateUserTheme(params));
     } catch (error) {
       console.log(error);
       throw error;
