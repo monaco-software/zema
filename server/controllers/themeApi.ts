@@ -21,9 +21,10 @@ export const themeApi = (app: Express) => {
     }
   );
 
-  app.get(`${API_PATH.USER_THEME}/:userId`, (req, res) => {
+  app.get(API_PATH.USER_THEME, auth, (_req, res) => {
     (async () => {
-      const userId = Number(req.params.userId);
+      const userId = res.locals.user.id;
+
       const themeId = await UserModel.getUserTheme({ userId });
       res.status(200).json({ themeId });
     })();

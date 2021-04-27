@@ -147,13 +147,12 @@ export const apiUpdateUserTheme = createApiMethod<
   },
 });
 
-export const apiGetUserTheme = (userId: number) =>
-  createApiMethod<undefined, GetUserThemeResponse>(
-    `${API_PATH.USER_THEME}/${userId}`,
-    {
-      method: HTTP_METHODS.GET,
-    }
-  );
+export const apiGetUserTheme = createApiMethod<undefined, GetUserThemeResponse>(
+  API_PATH.USER_THEME,
+  {
+    method: HTTP_METHODS.GET,
+  }
+);
 
 export const apiGetThemes = createApiMethod<undefined, GetThemesResponse>(
   API_PATH.THEMES,

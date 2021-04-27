@@ -2,12 +2,7 @@ import { AppThunk } from './store';
 import { appActions } from './reducer';
 import { Themes } from '@common/types';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
-import {
-  GetUserThemeParams,
-  SignInParams,
-  SignUpParams,
-  UpdateThemeParams,
-} from '@api/schema';
+import { SignInParams, SignUpParams, UpdateThemeParams } from '@api/schema';
 import {
   apiGetThemes,
   apiGetUser,
@@ -83,21 +78,15 @@ export const asyncAppActions = {
       dispatch(appActions.setCurrentTheme(params.themeId));
       await dispatch(apiUpdateUserTheme(params));
     } catch (error) {
-      console.log(error);
       throw error;
     }
   },
 
-  fetchUserTheme: (
-    params: GetUserThemeParams
-  ): AppThunk<Promise<void>> => async (dispatch) => {
+  fetchUserTheme: (): AppThunk<Promise<void>> => async (dispatch) => {
     try {
-      const { themeId } = await dispatch(
-        apiGetUserTheme(params.userId)(undefined, false)
-      );
+      const { themeId } = await dispatch(apiGetUserTheme());
       dispatch(appActions.setCurrentTheme(themeId));
     } catch (error) {
-      console.log(error);
       throw error;
     }
   },

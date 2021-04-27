@@ -87,10 +87,6 @@ export type UpdateThemeResponse = string;
 
 export type GetThemesResponse = Themes[];
 
-export type GetUserThemeParams = {
-  userId: number;
-};
-
 export type GetUserThemeResponse = {
   themeId: number;
 };
