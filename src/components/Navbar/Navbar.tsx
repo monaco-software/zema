@@ -7,16 +7,13 @@ import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@common/constants';
 import { getText } from '@common/langUtils';
 import { useAsyncAction } from '@common/hooks';
-import { getIsSignedInd } from '@store/selectors';
 import { GROMMET_COLORS } from '../App/grommetTheme';
 import { asyncAppActions } from '@store/asyncActions';
+import { ThemeIcon } from '@components/ThemeIcon/ThemeIcon';
+import { getCurrentTheme, getIsSignedInd, getThemes } from '@store/selectors';
 import { Chat, Gamepad, Home, Icon, Logout, Trophy, User } from 'grommet-icons';
 
 const block = b_.lock('navbar');
-
-const Separator = () => {
-  return <div className={block('separator')} />;
-};
 
 interface NavbarLinkItemProps {
   route: ROUTES;
@@ -80,8 +77,11 @@ const NavbarButtonItem: FC<NavbarButtonItemProps> = ({
 
 export const Navbar: FC = () => {
   const signOut = useAsyncAction(asyncAppActions.signOutUser);
+  const updateTheme = useAsyncAction(asyncAppActions.setUserTheme);
 
   const isSignedIn = useSelector(getIsSignedInd);
+  const currentTheme = useSelector(getCurrentTheme);
+  const themes = useSelector(getThemes);
 
   const [isHidden, setIsHidden] = useState(false);
   const [withTransition, setWithTransition] = useState(false);
@@ -89,6 +89,15 @@ export const Navbar: FC = () => {
   const mouseLeaveTimeout = useRef<number>();
 
   const onSignOutClick = () => signOut();
+
+  const setNextTheme = () => {
+    const themeKeys = Object.keys(themes).map(Number);
+    let nextIndex = themeKeys.indexOf(currentTheme) + 1;
+    if (nextIndex >= themeKeys.length) {
+      nextIndex = 0;
+    }
+    updateTheme({ themeId: themeKeys[nextIndex] }).catch(console.error);
+  };
 
   const onMouseEnter = () => {
     clearTimeout(mouseLeaveTimeout.current);
@@ -136,15 +145,11 @@ export const Navbar: FC = () => {
         text={getText('navbar_root')}
       />
 
-      <Separator />
-
       <NavbarLinkItem
         route={ROUTES.GAME_LEVELS}
         IconComponent={Gamepad}
         text={getText('navbar_game')}
       />
-
-      <Separator />
 
       <NavbarLinkItem
         route={ROUTES.LEADERBOARD}
@@ -159,12 +164,16 @@ export const Navbar: FC = () => {
         text={getText('navbar_forum')}
       />
 
-      <Separator />
-
       <NavbarLinkItem
         route={ROUTES.ACCOUNT}
         IconComponent={User}
         text={getText('navbar_account')}
+      />
+
+      <NavbarButtonItem
+        text={getText('navbar_theme')}
+        IconComponent={ThemeIcon}
+        onClick={setNextTheme}
       />
 
       {isSignedIn && (

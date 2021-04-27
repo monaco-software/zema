@@ -1,6 +1,12 @@
 import { createApiMethod, HTTP_METHODS } from './core';
-import { API_PATH, getFullPath, getProxyPath } from '@api/paths';
+import { API_PATH, getFullPath, getProxyPath } from '@server/router/paths';
 import {
+  CreateForumMessageParams,
+  CreateForumMessageResponse,
+  CreateForumTopicParams,
+  CreateForumTopicResponse,
+  GetForumMessagesResponse,
+  GetForumTopicResponse,
   GetLeaderboardParams,
   GetLeaderboardResponse,
   OAuthYandexGetServiceIdResponse,
@@ -17,6 +23,8 @@ import {
   UpdatePasswordResponse,
   UpdateProfileParams,
   UpdateProfileResponse,
+  UpdateThemeParams,
+  UpdateThemeResponse,
   UserObject,
 } from './schema';
 
@@ -58,15 +66,12 @@ export const apiPerformSignOut = createApiMethod<undefined, SignOutResponse>(
   }
 );
 
-export const apiOAuthYandexGetServiceId = (redirectUri: string) =>
-  createApiMethod<undefined, OAuthYandexGetServiceIdResponse>(
-    `${getFullPath(
-      API_PATH.OAUTH_YANDEX_SERVICE_ID
-    )}?redirect_uri=${redirectUri}`,
-    {
-      method: HTTP_METHODS.GET,
-    }
-  );
+export const apiOAuthYandexGetServiceId = createApiMethod<
+  undefined,
+  OAuthYandexGetServiceIdResponse
+>(getFullPath(API_PATH.OAUTH_YANDEX_SERVICE_ID), {
+  method: HTTP_METHODS.GET,
+});
 
 export const apiGetUserById = (userId: number) =>
   createApiMethod<undefined, UserObject>(
@@ -123,6 +128,56 @@ export const apiUpdatePassword = createApiMethod<
   UpdatePasswordResponse
 >(getProxyPath(API_PATH.USER_PASSWORD), {
   method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiUpdateTheme = createApiMethod<
+  UpdateThemeParams,
+  UpdateThemeResponse
+>(API_PATH.USER_THEME, {
+  method: HTTP_METHODS.PUT,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetForumTopics = createApiMethod<
+  undefined,
+  GetForumTopicResponse
+>(API_PATH.FORUM_TOPICS, {
+  method: HTTP_METHODS.GET,
+  credentials: 'include',
+});
+
+export const apiCreateForumTopic = createApiMethod<
+  CreateForumTopicParams,
+  CreateForumTopicResponse
+>(API_PATH.FORUM_TOPICS, {
+  method: HTTP_METHODS.POST,
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const apiGetForumTopicMessages = (topicId: number) =>
+  createApiMethod<undefined, GetForumMessagesResponse>(
+    `${API_PATH.FORUM_MESSAGES}?topicId=${topicId}`,
+    {
+      method: HTTP_METHODS.GET,
+      credentials: 'include',
+    }
+  );
+
+export const apiCreateForumMessage = createApiMethod<
+  CreateForumMessageParams,
+  CreateForumMessageResponse
+>(API_PATH.FORUM_MESSAGES, {
+  method: HTTP_METHODS.POST,
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',

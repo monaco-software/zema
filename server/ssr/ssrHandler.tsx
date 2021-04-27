@@ -1,50 +1,30 @@
-/* eslint-disable new-cap */
-import './index.css';
-import * as fs from 'fs';
-import https from 'https';
-import express from 'express';
+import fs from 'fs';
 import fetch from 'node-fetch';
 import root from 'app-root-path';
 import React, { FC } from 'react';
-import enforce from 'express-sslify';
-import cookieParser from 'cookie-parser';
+import { Express } from 'express';
 import { Provider } from 'react-redux';
 import { HTTP_METHODS } from '@api/core';
 import { App } from '@components/App/App';
 import { ROUTES } from '@common/constants';
-import { StaticRouter } from 'react-router';
 import { appActions } from '@store/reducer';
+import { StaticRouter } from 'react-router';
 import { isProduction } from '@common/utils';
-import { cspHeader } from './middlewares/csp';
 import { renderToString } from 'react-dom/server';
-import { API_PATH, getFullPath } from '@api/paths';
-import { RootState, createStore } from '@store/store';
+import { UserModel } from '@server/models/UserModel';
+import { createStore, RootState } from '@store/store';
+import { ThemeModel } from '@server/models/ThemeModel';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
-import { yandexApiProxy } from './middlewares/yandexApiProxy';
+import { API_PATH, getFullPath } from '@server/router/paths';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { AppErrorBoundary } from '@components/AppErrorBoundary/AppErrorBoundary';
 import {
   getCookies,
   getCookiesFromApiResponse,
   setCookies,
-} from './middlewares/helpers';
-
-const port = process.env.PORT || 5000; // yandex OAuth работает только на 5000
+} from '@server/lib/cookies';
 
 const sheet = new ServerStyleSheet();
-const app = express();
-if (isProduction) {
-  // перенаправляет HTTP в HTTPS
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
-}
-app.use(cspHeader);
-
-app.use(cookieParser());
-
-app.use(express.static(root.resolve('ssr/dist')));
-
-yandexApiProxy(app);
-
 const jsFiles: string[] = [];
 const cssFiles: string[] = [];
 const manifestFiles: string[] = [];
@@ -105,7 +85,7 @@ interface Props {
 
 const Html: FC<Props> = ({ children, serverState }) => {
   return (
-    <html>
+    <html lang="ru">
       <head>
         <meta charSet="UTF-8" />
         <meta
@@ -113,7 +93,7 @@ const Html: FC<Props> = ({ children, serverState }) => {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        <title>Zooma</title>
+        <title>Zooma Deluxe</title>
 
         {cssFiles.map((css, index) => (
           <link rel="stylesheet" href={css} key={index} />
@@ -162,79 +142,72 @@ const getAppHtml = (
   );
 };
 
-app.get('*', (req, res) => {
-  if (!isProduction) {
-    getStyles();
-    updateChunks();
-  }
-  console.info(req.method, req.hostname, req.url, res.statusCode);
+export const ssrHandler = (app: Express) => {
+  app.get('*', (req, res) => {
+    if (!isProduction) {
+      getStyles();
+      updateChunks();
+    }
 
-  const store = createStore();
+    console.info(req.method, req.hostname, req.url, res.statusCode);
 
-  const fetchUser = (headers: Record<string, string>) => {
-    fetch(getFullPath(API_PATH.AUTH_USER), {
-      method: HTTP_METHODS.GET,
-      headers: {
-        ...headers,
-      },
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const userData = await response.json();
-          const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
-          store.dispatch(appActions.setUser(userDataWithFullAvatar));
-          store.dispatch(appActions.setIsSignedIn(true));
-        }
+    const store = createStore();
+
+    const fetchUser = (headers: Record<string, string>) => {
+      fetch(getFullPath(API_PATH.AUTH_USER), {
+        method: HTTP_METHODS.GET,
+        headers: {
+          ...headers,
+        },
       })
-      .catch(console.error)
-      .finally(() => {
-        store.dispatch(appActions.setIsSSR(true));
+        .then(async (response) => {
+          const themes = await ThemeModel.getThemes();
+          themes.forEach((theme) => {
+            store.dispatch(appActions.addTheme(theme));
+          });
+          if (response.ok) {
+            const userData = await response.json();
+            const userDataWithFullAvatar = getUserWithFullAvatarUrl(userData);
+            store.dispatch(appActions.setCurrentUser(userDataWithFullAvatar));
+            store.dispatch(appActions.setIsSignedIn(true));
+            const currentTheme = await UserModel.getUserTheme({
+              userId: userData.id,
+            });
+            store.dispatch(appActions.setCurrentTheme(currentTheme));
+          }
+        })
+        .catch(console.error)
+        .finally(() => {
+          store.dispatch(appActions.setIsSSR(true));
 
-        const html = getAppHtml(store, req.url);
-        res.send(html);
-      });
-  };
+          const html = getAppHtml(store, req.url);
+          res.send(html);
+        });
+    };
 
-  const { code } = req.query;
-  // Если есть code, значит происходит Yandex OAuth
-  if (code && typeof code === 'string') {
-    fetch(getFullPath(API_PATH.OAUTH_YANDEX_SIGN_IN), {
-      method: HTTP_METHODS.POST,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code }),
-    })
-      .then((apiResponse) => {
-        setCookies(apiResponse, res);
-
-        fetchUser(getCookiesFromApiResponse(apiResponse));
+    const { code } = req.query;
+    // Если есть code, значит происходит Yandex OAuth
+    if (code && typeof code === 'string') {
+      fetch(getFullPath(API_PATH.OAUTH_YANDEX_SIGN_IN), {
+        method: HTTP_METHODS.POST,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
       })
-      .catch((error) => {
-        console.error(error);
-        fetchUser(getCookies(req));
-      });
+        .then((apiResponse) => {
+          setCookies(apiResponse, res);
 
-    return;
-  }
+          fetchUser(getCookiesFromApiResponse(apiResponse));
+        })
+        .catch((error) => {
+          console.error(error);
+          fetchUser(getCookies(req));
+        });
 
-  fetchUser(getCookies(req));
-});
+      return;
+    }
 
-if (!isProduction) {
-  // ключи созданы командой
-  // mkcert localhost 127.0.0.1 ::1
-  // https://github.com/FiloSottile/mkcert
-  // чтобы не ругался браузер можно добавить локальный CA
-  // пока решил оставить их в git
-  const key = fs.readFileSync(root.resolve('localhost+2-key.pem'));
-  const cert = fs.readFileSync(root.resolve('localhost+2.pem'));
-  const server = https.createServer({ key, cert }, app);
-  server.listen(port, () => {
-    console.info(`HTTPS Listening on port ${port}`);
+    fetchUser(getCookies(req));
   });
-} else {
-  app.listen(port, () => {
-    console.info(`HTTP Listening on port ${port}`);
-  });
-}
+};

@@ -1,13 +1,14 @@
 import { AppThunk } from './store';
 import { appActions } from './reducer';
-import { SignInParams, SignUpParams } from '@api/schema';
 import { getUserWithFullAvatarUrl } from '@common/helpers';
+import { SignInParams, SignUpParams, UpdateThemeParams } from '@api/schema';
 import {
   apiGetUser,
   apiOAuthYandexGetServiceId,
   apiPerformSignIn,
   apiPerformSignOut,
   apiPerformSignUp,
+  apiUpdateTheme,
 } from '@api/methods';
 
 export const asyncAppActions = {
@@ -16,7 +17,7 @@ export const asyncAppActions = {
       const user = await dispatch(apiGetUser(undefined, false));
       const userWithFullAvatarUrl = getUserWithFullAvatarUrl(user);
 
-      dispatch(appActions.setUser(userWithFullAvatarUrl));
+      dispatch(appActions.setCurrentUser(userWithFullAvatarUrl));
       dispatch(appActions.setIsSignedIn(true));
     } catch (error) {
       throw error;
@@ -49,7 +50,7 @@ export const asyncAppActions = {
     try {
       await dispatch(apiPerformSignOut());
 
-      dispatch(appActions.resetUser());
+      dispatch(appActions.resetUsers());
       dispatch(appActions.setIsSignedIn(false));
     } catch (error) {
       throw error;
@@ -58,13 +59,31 @@ export const asyncAppActions = {
 
   oAuthYandexStart: (): AppThunk<Promise<void>> => async (dispatch) => {
     try {
-      const response = await dispatch(
-        apiOAuthYandexGetServiceId(window.location.origin)()
-      );
+      const response = await dispatch(apiOAuthYandexGetServiceId());
 
       // eslint-disable-next-line max-len
       window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${response.service_id}&redirect_uri=${window.location.origin}`;
     } catch (error) {
+      throw error;
+    }
+  },
+
+  setUserTheme: (params: UpdateThemeParams): AppThunk<Promise<void>> => async (
+    dispatch
+  ) => {
+    console.log('THEME UPDATING');
+    console.log(params);
+    try {
+      dispatch(appActions.setCurrentTheme(params.themeId));
+      dispatch(apiUpdateTheme(params))
+        .then(() => {
+          console.log('THEME UPDATED');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   },
