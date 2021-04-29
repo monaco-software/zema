@@ -1,8 +1,8 @@
 import { UserObject } from '@api/schema';
-import { YANDEX_API_DOMAIN } from '@server/router/paths';
+import { API_PATH, getProxyPath } from '@server/router/paths';
 
 export const getAvatarFullPath = (path: string) =>
-  `${YANDEX_API_DOMAIN}${path}`;
+  `${getProxyPath(API_PATH.USER_AVATAR_SRC)}${path}`;
 
 export const getUserWithFullAvatarUrl = (user: UserObject): UserObject => {
   return {

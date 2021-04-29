@@ -118,6 +118,24 @@ const userProxy = (app: Express) => {
         .catch((error) => handleApiError(error, res));
     }
   );
+
+  app.get(`${getProxyPath(API_PATH.USER_AVATAR_SRC)}/*`, (req, res) => {
+    fetch(getFullPathFromProxy(req.url), {
+      method: req.method,
+      headers: {
+        ...getCookies(req),
+      },
+    }).then((response) => {
+      res.set({
+        'content-length': response.headers.get('content-length'),
+        'content-type': response.headers.get('content-type'),
+      });
+      response.body.on('error', (e) => {
+        console.error(e);
+      });
+      response.body.pipe(res);
+    });
+  });
 };
 
 const leaderboardProxy = (app: Express) => {
