@@ -4,6 +4,7 @@ import { API_PATH } from '@server/router/paths';
 import { auth } from '@server/middlewares/auth';
 import { UpdateThemeParams } from '@api/schema';
 import { UserModel } from '@server/models/UserModel';
+import { ThemeModel } from '@server/models/ThemeModel';
 
 export const themeApi = (app: Express) => {
   app.put<any, any, UpdateThemeParams, any, ResLocals>(
@@ -15,8 +16,24 @@ export const themeApi = (app: Express) => {
         const { themeId } = req.body;
 
         await UserModel.setUserTheme({ userId, themeId });
-        res.sendStatus(200);
+        res.status(200).json('Ok');
       })();
     }
   );
+
+  app.get(API_PATH.USER_THEME, auth, (_req, res) => {
+    (async () => {
+      const userId = res.locals.user.id;
+
+      const themeId = await UserModel.getUserTheme({ userId });
+      res.status(200).json({ themeId });
+    })();
+  });
+
+  app.get(API_PATH.THEMES, (_req, res) => {
+    (async () => {
+      const themes = await ThemeModel.getThemes();
+      res.status(200).json(themes);
+    })();
+  });
 };

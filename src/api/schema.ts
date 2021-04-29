@@ -1,3 +1,4 @@
+import { Themes } from '@common/types';
 import { ForumTopic, ForumTopicMessage } from '@prisma/client';
 import { LEADERBOARD_VALUE_FIELD_NAME } from '@pages/leaderboard/constants';
 
@@ -83,6 +84,12 @@ export interface UpdateThemeParams {
 }
 
 export type UpdateThemeResponse = string;
+
+export type GetThemesResponse = Themes[];
+
+export type GetUserThemeResponse = {
+  themeId: number;
+};
 
 export type GetForumTopicResponse = ForumTopic[];
 

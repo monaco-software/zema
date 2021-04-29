@@ -1,9 +1,9 @@
 {
-  "name": "Zooma deluxe",
+  "name": "Zooma Deluxe",
   "short_name": "Zooma",
   "lang": "ru-RU",
   "start_url": "./game/levels",
-  "display": "fullscreen",
+  "display": "browser",
   "background_color": "#7d4cdb",
   "theme_color": "#7d4cdb",
   "orientation": "landscape",

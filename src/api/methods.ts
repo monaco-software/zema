@@ -9,6 +9,8 @@ import {
   GetForumTopicResponse,
   GetLeaderboardParams,
   GetLeaderboardResponse,
+  GetThemesResponse,
+  GetUserThemeResponse,
   OAuthYandexGetServiceIdResponse,
   SignInParams,
   SignInResponse,
@@ -134,7 +136,7 @@ export const apiUpdatePassword = createApiMethod<
   },
 });
 
-export const apiUpdateTheme = createApiMethod<
+export const apiUpdateUserTheme = createApiMethod<
   UpdateThemeParams,
   UpdateThemeResponse
 >(API_PATH.USER_THEME, {
@@ -144,6 +146,23 @@ export const apiUpdateTheme = createApiMethod<
     'Content-Type': 'application/json',
   },
 });
+
+export const apiGetUserTheme = createApiMethod<undefined, GetUserThemeResponse>(
+  API_PATH.USER_THEME,
+  {
+    method: HTTP_METHODS.GET,
+  }
+);
+
+export const apiGetThemes = createApiMethod<undefined, GetThemesResponse>(
+  API_PATH.THEMES,
+  {
+    method: HTTP_METHODS.GET,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
 
 export const apiGetForumTopics = createApiMethod<
   undefined,
