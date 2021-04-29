@@ -22,10 +22,6 @@ export const FullscreenButton: FC<Props> = ({ ratio, x, y }) => {
   const style = useButtonStyle(x, y, ratio);
 
   const setFullscreen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setFullscreenButton({
-      ...fullscreenButton,
-      icon: fullscreenState ? ICONS.EXPAND : ICONS.CONTRACT,
-    });
     setFullscreenState(!fullscreenState);
     e.stopPropagation();
   };
@@ -37,6 +33,13 @@ export const FullscreenButton: FC<Props> = ({ ratio, x, y }) => {
   const handleMouseLeave = () => {
     setFullscreenButton({ ...fullscreenButton, hovered: false });
   };
+
+  useEffect(() => {
+    setFullscreenButton({
+      ...fullscreenButton,
+      icon: fullscreenState ? ICONS.CONTRACT : ICONS.EXPAND,
+    });
+  }, [fullscreenState]);
 
   useEffect(() => {
     setFullscreenButton({

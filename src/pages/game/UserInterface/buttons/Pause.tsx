@@ -2,10 +2,10 @@ import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAction } from '@common/hooks';
 import { gameActions } from '../../reducer';
-import { GAME_PHASE } from '@pages/game/constants';
 import { ICONS } from '@pages/game/Layers/utils/buttons';
-import { getGamePhase, getPauseButton, getShotPath } from '../../selectors';
+import { BULLET_STATE, GAME_PHASE } from '@pages/game/constants';
 import { useButtonStyle } from '@pages/game/UserInterface/utils/button-style';
+import { getBulletState, getGamePhase, getPauseButton } from '../../selectors';
 
 interface Props {
   ratio: number;
@@ -19,13 +19,11 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
 
   const gamePhase = useSelector(getGamePhase);
   const pauseButton = useSelector(getPauseButton);
-  const shotPath = useSelector(getShotPath);
+  const bulletState = useSelector(getBulletState);
 
   const style = useButtonStyle(x, y, ratio);
 
-  const disabled =
-    shotPath.length ||
-    (gamePhase !== GAME_PHASE.STARTED && gamePhase !== GAME_PHASE.PAUSED);
+  const disabled = bulletState !== BULLET_STATE.ARMED;
 
   const setPause = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -34,15 +32,23 @@ export const PauseButton: FC<Props> = ({ ratio, x, y }) => {
     }
 
     if (gamePhase === GAME_PHASE.STARTED) {
-      setPauseButton({ ...pauseButton, icon: ICONS.PLAY });
       setGamePhase(GAME_PHASE.PAUSED);
     }
 
     if (gamePhase === GAME_PHASE.PAUSED) {
-      setPauseButton({ ...pauseButton, icon: ICONS.PAUSE });
       setGamePhase(GAME_PHASE.STARTED);
     }
   };
+
+  useEffect(() => {
+    if (gamePhase === GAME_PHASE.STARTED) {
+      setPauseButton({ ...pauseButton, icon: ICONS.PLAY });
+    }
+
+    if (gamePhase === GAME_PHASE.PAUSED) {
+      setPauseButton({ ...pauseButton, icon: ICONS.PAUSE });
+    }
+  }, [gamePhase]);
 
   const handleMouseEnter = () => {
     if (disabled) {
