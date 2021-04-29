@@ -1,6 +1,7 @@
 // Модуль взаимодействует с пользователем
 // слушает мышь и рассчитывает путь пули
 
+// слушает мышь и рассчитывает путь пули
 import levels from '../levels';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { gameActions } from '../reducer';
@@ -24,11 +25,18 @@ import { FullscreenButton } from './buttons/Fullscreen';
 import { BULLET_TICK_DISTANCE, DEFAULT_FRAMERATE } from '../setup';
 import { MuteButton } from '@pages/game/UserInterface/buttons/Mute';
 import { PauseButton } from '@pages/game/UserInterface/buttons/Pause';
-import { BULLET_STATE, FRAME, FROG_RADIUS, GAME_PHASE } from '../constants';
 import { DecreaseVolumeButton } from '@pages/game/UserInterface/buttons/DecreaseVolume';
 import { IncreaseVolumeButton } from '@pages/game/UserInterface/buttons/IncreaseVolume';
 import {
+  BULLET_STATE,
+  CONSOLE_MODE,
+  FRAME,
+  FROG_RADIUS,
+  GAME_PHASE,
+} from '../constants';
+import {
   getBulletState,
+  getConsoleMode,
   getCurrentLevel,
   getFullscreenState,
   getGamePhase,
@@ -39,11 +47,14 @@ export const UserInterface: FC = () => {
   const setBulletState = useAction(gameActions.setBulletState);
   const setShotPath = useAction(gameActions.setShotPath);
   const setFullscreenState = useAction(gameActions.setFullscreenState);
+  const setConsoleMode = useAction(gameActions.setConsoleMode);
+  const setGamePhase = useAction(gameActions.setGamePhase);
 
   const bulletState = useSelector(getBulletState);
   const level = useSelector(getCurrentLevel);
   const gamePhase = useSelector(getGamePhase);
   const fullscreenState = useSelector(getFullscreenState);
+  const consoleMode = useSelector(getConsoleMode);
 
   const screenRef = useRef<HTMLDivElement | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
@@ -51,8 +62,9 @@ export const UserInterface: FC = () => {
   const [angle, setAngle] = useState(0);
 
   const performanceRef = useRef(performance.now());
-  const mouseTimeoutRef = useRef<number>();
+  const mouseTimeoutRef = useRef(0);
   const angleRef = useRef(0);
+  const keyboardTimeoutRef = useRef(0);
 
   const ballsPath = useMemo(
     () => getPath(levels[level].start, levels[level].curve),
@@ -152,6 +164,50 @@ export const UserInterface: FC = () => {
     setRatio(1);
   };
 
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (keyboardTimeoutRef.current) {
+      return;
+    }
+    keyboardTimeoutRef.current = window.setTimeout(() => {
+      keyboardTimeoutRef.current = 0;
+    }, 500);
+    const keyName = event.key;
+    switch (keyName) {
+      case keyName.match(/^[Hh]$/)?.input:
+        setConsoleMode(
+          consoleMode === CONSOLE_MODE.HELP
+            ? CONSOLE_MODE.HIDDEN
+            : CONSOLE_MODE.HELP
+        );
+        break;
+
+      case keyName.match(/^[Ss]$/)?.input:
+        setConsoleMode(
+          consoleMode === CONSOLE_MODE.STAT
+            ? CONSOLE_MODE.HIDDEN
+            : CONSOLE_MODE.STAT
+        );
+        break;
+
+      case 'Escape':
+        setConsoleMode(CONSOLE_MODE.HIDDEN);
+        break;
+
+      case keyName.match(/^[Ff]$/)?.input:
+        setFullscreenState(!fullscreenState);
+        break;
+
+      case ' ':
+        if (bulletState !== BULLET_STATE.ARMED) return;
+        setGamePhase(
+          gamePhase === GAME_PHASE.PAUSED
+            ? GAME_PHASE.STARTED
+            : GAME_PHASE.PAUSED
+        );
+        break;
+    }
+  };
+
   useEffect(() => {
     if (!screenRef.current || !boxRef.current) {
       return;
@@ -176,7 +232,10 @@ export const UserInterface: FC = () => {
   useEffect(() => {
     document.addEventListener('fullscreenchange', onFullScreenChange);
     window.addEventListener('resize', onResize);
+    boxRef.current?.focus();
     return () => {
+      clearTimeout(mouseTimeoutRef.current);
+      clearTimeout(keyboardTimeoutRef.current);
       document.removeEventListener('fullscreenchange', onFullScreenChange);
       window.removeEventListener('resize', onResize);
     };
@@ -189,9 +248,12 @@ export const UserInterface: FC = () => {
         onMouseMove={mouseMove}
         onClick={mouseClick}
         onContextMenu={mouseRightClick}
+        onKeyDown={onKeyDown}
+        tabIndex={0}
         style={{
           position: 'relative',
           margin: 'auto',
+          outline: 0,
           width: `${FRAME.WIDTH}px`,
           height: `${FRAME.HEIGHT}px`,
         }}

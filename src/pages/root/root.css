@@ -1,0 +1,17 @@
+.root__hr {
+  display: block;
+  height: 2px;
+  width: 98%;
+}
+
+.root__box {
+  align-content: center;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.root__text_edging {
+  font-weight: lighter;
+  max-width: 100%;
+}

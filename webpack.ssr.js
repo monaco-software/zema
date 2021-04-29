@@ -78,6 +78,7 @@ const clientConfig = {
   target: isProductionMode ? 'browserslist' : 'web', // Fix https://github.com/webpack/webpack-dev-server/issues/2758#issuecomment-710086019
   entry: {
     index: './src/index.ssr.tsx',
+    pwa: './src/index.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -126,7 +127,7 @@ const clientConfig = {
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'index.css',
+      filename: '[name].css',
     }),
     new ESLintPlugin({
       extensions: ['.ts', '.tsx'],
@@ -143,15 +144,53 @@ const clientConfig = {
     new StatsWriterPlugin({
       filename: 'stats.json',
       transform(data) {
-        return JSON.stringify(
-          data.assetsByChunkName.index.concat(data.assetsByChunkName.vendors)
+        const chunks = data.assetsByChunkName.index.concat(
+          data.assetsByChunkName.vendors
         );
+        if (isProductionMode) {
+          chunks.push('manifest.json');
+        }
+        return JSON.stringify(chunks);
       },
     }),
   ],
 };
 
-if (!isProductionMode) {
+if (isProductionMode) {
+  clientConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      inject: 'head',
+      excludeChunks: ['index'],
+      scriptLoading: 'defer',
+      filename: 'pwa.html',
+    })
+  );
+  clientConfig.plugins.push(
+    new CopyWebpackPlugin({
+      patterns: [{ from: './src/pwa/' }],
+    })
+  );
+  clientConfig.plugins.push(
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+      navigateFallback: '/pwa.html',
+      exclude: [/index*/],
+      runtimeCaching: [
+        {
+          urlPattern: /\.webp|\.mp3$/,
+          handler: 'CacheOnly',
+        },
+        {
+          urlPattern: /.*/,
+          handler: 'NetworkFirst',
+        },
+      ],
+    })
+  );
+} else {
   clientConfig.plugins.push(
     new CopyWebpackPlugin({
       patterns: [{ from: './scripts/reload.js' }],

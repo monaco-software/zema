@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@common/constants';
 import { getText } from '@common/langUtils';
-import { useAsyncAction } from '@common/hooks';
+import { appActions } from '@store/reducer';
 import { GROMMET_COLORS } from '../App/grommetTheme';
 import { asyncAppActions } from '@store/asyncActions';
+import { useAction, useAsyncAction } from '@common/hooks';
 import { ThemeIcon } from '@components/ThemeIcon/ThemeIcon';
 import { getCurrentTheme, getIsSignedInd, getThemes } from '@store/selectors';
 import { Chat, Gamepad, Home, Icon, Logout, Trophy, User } from 'grommet-icons';
@@ -79,6 +80,8 @@ export const Navbar: FC = () => {
   const signOut = useAsyncAction(asyncAppActions.signOutUser);
   const updateTheme = useAsyncAction(asyncAppActions.setUserTheme);
 
+  const setCurrentTheme = useAction(appActions.setCurrentTheme);
+
   const isSignedIn = useSelector(getIsSignedInd);
   const currentTheme = useSelector(getCurrentTheme);
   const themes = useSelector(getThemes);
@@ -96,7 +99,11 @@ export const Navbar: FC = () => {
     if (nextIndex >= themeKeys.length) {
       nextIndex = 0;
     }
-    updateTheme({ themeId: themeKeys[nextIndex] }).catch(console.error);
+    if (isSignedIn) {
+      updateTheme({ themeId: themeKeys[nextIndex] }).catch(console.error);
+    } else {
+      setCurrentTheme(themeKeys[nextIndex]);
+    }
   };
 
   const onMouseEnter = () => {

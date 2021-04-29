@@ -21,7 +21,7 @@ interface Theme {
   dark: boolean;
 }
 
-interface Themes {
+export interface Themes {
   [id: number]: Theme;
 }
 

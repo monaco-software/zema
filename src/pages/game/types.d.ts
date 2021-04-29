@@ -1,4 +1,9 @@
-import { BULLET_STATE } from '@pages/game/constants';
+import {
+  BULLET_STATE,
+  CONSOLE_MODE,
+  GAME_PHASE,
+  GAME_RESULT,
+} from '@pages/game/constants';
 
 export interface spriteOptions {
   image: HTMLImageElement;
@@ -49,7 +54,7 @@ export interface GameButton {
 }
 
 export interface Game {
-  phase: number;
+  phase: GAME_PHASE;
   bullet: {
     state: BULLET_STATE;
     color: number;
@@ -64,7 +69,7 @@ export interface Game {
   pusher: number;
   shotPath: number[][];
   shotPosition: number;
-  gameResult: number;
+  gameResult: GAME_RESULT;
   title: string;
   score: number;
   combo: number;
@@ -76,4 +81,5 @@ export interface Game {
   volume: number;
   increaseVolumeButton: GameButton;
   decreaseVolumeButton: GameButton;
+  consoleMode: CONSOLE_MODE;
 }

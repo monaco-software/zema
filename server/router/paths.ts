@@ -28,12 +28,14 @@ export const API_PATH = {
 
   USER_PROFILE: '/user/profile',
   USER_PROFILE_AVATAR: '/user/profile/avatar',
+  USER_AVATAR_SRC: '/resources',
   USER_PASSWORD: '/user/password',
   USER_BY_ID: '/user',
 
   LEADERBOARD_ALL: '/leaderboard/all',
   LEADERBOARD_UPDATE: '/leaderboard',
 
+  THEMES: '/api/themes',
   USER_THEME: '/api/user/theme',
 
   FORUM_TOPICS: '/api/forum/topics',
