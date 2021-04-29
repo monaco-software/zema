@@ -173,15 +173,15 @@ if (isProductionMode) {
   );
   clientConfig.plugins.push(
     new WorkboxPlugin.GenerateSW({
-      clientsClaim: false,
-      skipWaiting: false,
+      clientsClaim: true,
+      skipWaiting: true,
       maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       navigateFallback: '/pwa.html',
       exclude: [/index*/],
       runtimeCaching: [
         {
           urlPattern: /\.webp|\.mp3$/,
-          handler: 'CacheFirst',
+          handler: 'CacheOnly',
         },
         {
           urlPattern: /.*/,

@@ -26,7 +26,6 @@ import { AppNotification } from '../Notification/AppNotification';
 import {
   getCurrentTheme,
   getCurrentUserId,
-  getIsSignedInd,
   getIsSSR,
   getThemes,
 } from '@store/selectors';
@@ -53,7 +52,6 @@ export const App: FC = () => {
   const currentTheme = useSelector(getCurrentTheme);
   const themes = useSelector(getThemes);
   const currentUserId = useSelector(getCurrentUserId);
-  const isSignedIn = useSelector(getIsSignedInd);
 
   const fetchUser = useAsyncAction(asyncAppActions.fetchUser);
   const fetchThemes = useAsyncAction(asyncAppActions.fetchThemes);
@@ -85,7 +83,7 @@ export const App: FC = () => {
     if (isSSR) {
       return;
     }
-    if (isSignedIn) {
+    if (currentUserId) {
       fetchUserTheme().catch(console.error);
     }
   }, [currentUserId]);
