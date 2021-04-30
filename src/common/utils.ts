@@ -22,6 +22,6 @@ export const isServer = !(
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
-export const isMobile = /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+export const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
   typeof navigator !== 'undefined' ? navigator.userAgent : ''
 );
